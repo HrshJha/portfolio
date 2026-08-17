@@ -585,6 +585,7 @@ a:hover {
   max-width: 960px;
   width: 100%;
   padding: 0 16px;
+  transform: translateY(clamp(-48px, -3.2vw, -20px));
 }
 
 /* ── BOTANICAL ORNAMENT ────────────────────────── */
