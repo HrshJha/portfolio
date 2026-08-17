@@ -396,13 +396,13 @@ export default function Home() {
               <a href="#work" className="btn btn-primary">
                 View Work <ArrowUpRight size={16} />
               </a>
-              <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="btn">
+              <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="btn btn-ghost">
                 <ExternalLink size={15} /> GitHub
               </a>
               <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="btn btn-ghost">
                 LinkedIn
               </a>
-              <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="btn btn-ghost">
+              <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="btn btn-ghost btn-x">
                 X
               </a>
             </div>
@@ -485,23 +485,76 @@ export default function Home() {
 
         {/* ── ABOUT ───────────────────────────────────────── */}
         <section id="about" className="about-section section-pad" aria-labelledby="about-heading">
-          <Reveal>
-            <div className="section-header">
-              <p className="section-kicker">03 / About</p>
-              <h2 className="section-title" id="about-heading">
-                Systems over demos. Evidence over adjectives.
-              </h2>
+          <div className="about-grid">
+            <div className="about-left">
+              <Reveal>
+                <div className="section-header">
+                  <p className="section-kicker">03 / About</p>
+                  <h2 className="section-title" id="about-heading">
+                    Systems over demos. Evidence over adjectives.
+                  </h2>
+                </div>
+              </Reveal>
+              <Reveal>
+                <p className="about-body">
+                  I&apos;m an Electronics and Communication Engineering student at MSIT, building toward
+                  <em> research and production AI engineering.</em> I&apos;m drawn to the engineering
+                  work around intelligent systems — how they retrieve, reason, validate, and become
+                  useful in the real world. Photography sharpens how I think about signal versus noise,
+                  and that same instinct runs through every system I build.
+                </p>
+              </Reveal>
             </div>
-          </Reveal>
-          <Reveal>
-            <p className="about-body">
-              I&apos;m an Electronics and Communication Engineering student at MSIT, building toward
-              <em> research and production AI engineering.</em> I&apos;m drawn to the engineering
-              work around intelligent systems — how they retrieve, reason, validate, and become
-              useful in the real world. Photography sharpens how I think about signal versus noise,
-              and that same instinct runs through every system I build.
-            </p>
-          </Reveal>
+
+            {/* Curiosity / Engineering Notebook Column */}
+            <Reveal className="about-right">
+              <aside className="curiosity-panel" aria-label="Currently exploring">
+                <div className="curiosity-header">
+                  <span className="curiosity-kicker">CURRENTLY EXPLORING</span>
+                  <span className="curiosity-now">
+                    <span className="curiosity-dot" aria-hidden="true" />
+                    NOW
+                  </span>
+                </div>
+
+                <div className="curiosity-list">
+                  <div className="curiosity-item">
+                    <div className="curiosity-top">
+                      <span className="curiosity-num">01</span>
+                      <h3 className="curiosity-title">AI AGENTS</h3>
+                      <ArrowUpRight size={14} className="curiosity-arrow" aria-hidden="true" />
+                    </div>
+                    <p className="curiosity-desc">Planning, tool use, memory, evaluation.</p>
+                  </div>
+
+                  <div className="curiosity-item">
+                    <div className="curiosity-top">
+                      <span className="curiosity-num">02</span>
+                      <h3 className="curiosity-title">PHYSICS × AI</h3>
+                      <ArrowUpRight size={14} className="curiosity-arrow" aria-hidden="true" />
+                    </div>
+                    <p className="curiosity-desc">Where engineering intuition becomes machine learning.</p>
+                  </div>
+
+                  <div className="curiosity-item">
+                    <div className="curiosity-top">
+                      <span className="curiosity-num">03</span>
+                      <h3 className="curiosity-title">SYSTEMS THAT HOLD UP</h3>
+                      <ArrowUpRight size={14} className="curiosity-arrow" aria-hidden="true" />
+                    </div>
+                    <p className="curiosity-desc">Reliability, retrieval, validation, and real-world use.</p>
+                  </div>
+                </div>
+
+                <div className="curiosity-footer">
+                  <p className="curiosity-signature">RESEARCH → BUILD → TEST → ITERATE</p>
+                  <div className="curiosity-signal">
+                    <span className="signal-accent">SIGNAL</span> / NOISE
+                  </div>
+                </div>
+              </aside>
+            </Reveal>
+          </div>
         </section>
 
         {/* ── SKILLS / TOOLKIT ────────────────────────────── */}
