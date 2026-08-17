@@ -1193,6 +1193,12 @@ h3.project-title {
   border: 1px solid var(--text);
 }
 
+[data-theme='dark'] .project-action-primary {
+  color: var(--bg);
+  background: var(--button-dark);
+  border-color: var(--button-dark);
+}
+
 .project-action-primary:hover {
   color: var(--accent-text);
   background: var(--accent);
@@ -1517,9 +1523,9 @@ h3.project-title {
   background: transparent;
   border-bottom: none;
   --exp-primary: #17171A;
-  --exp-secondary: #454756;
-  --exp-body: #4F5260;
-  --exp-muted: #6B6D7A;
+  --exp-secondary: #363946;
+  --exp-body: #3D4050;
+  --exp-muted: #626575;
   --exp-rule: rgba(30, 33, 48, 0.10);
   --exp-rule2: rgba(30, 33, 48, 0.06);
   --exp-accent: #C86F35;
@@ -1530,10 +1536,10 @@ h3.project-title {
 }
 
 [data-theme='dark'] .exp-section {
-  --exp-primary: #F1EEE6;
-  --exp-secondary: #C8C5C8;
-  --exp-body: #C7C4C9;
-  --exp-muted: #8E8B93;
+  --exp-primary: #F7F2E9;
+  --exp-secondary: #DDD8D8;
+  --exp-body: #D7D2D5;
+  --exp-muted: #AAA4AD;
   --exp-rule: rgba(255, 255, 255, 0.09);
   --exp-rule2: rgba(255, 255, 255, 0.055);
   --exp-accent: #D9783B;
@@ -1633,8 +1639,8 @@ h3.project-title {
 
 .exp-bullets li {
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: 16.5px;
+  line-height: 1.6;
   letter-spacing: var(--tracking-body);
   color: var(--exp-body);
   padding: 7px 0 7px 16px;
