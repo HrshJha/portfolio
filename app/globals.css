@@ -389,7 +389,6 @@ video {
   padding: 13px 15px !important;
   border: 1px solid var(--line) !important;
   border-radius: 999px;
-  color: var(--text) !important;
   background: var(--text);
   color: var(--bg) !important
 }
