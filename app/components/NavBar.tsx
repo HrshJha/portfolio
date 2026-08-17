@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mail, Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type NavBarProps = {
   theme: string;
@@ -10,15 +10,42 @@ type NavBarProps = {
 };
 
 const links = [
-  { label: "Work", href: "#work" },
-  { label: "Experience", href: "#experience" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "#work", id: "work" },
+  { label: "Experience", href: "#experience", id: "experience" },
+  { label: "About", href: "#about", id: "about" },
+  { label: "Contact", href: "#contact", id: "contact" },
 ];
 
 export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
   const [compact, setCompact] = useState(false);
   const [active, setActive] = useState("#work");
+  const navRef = useRef<HTMLElement>(null);
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number; opacity: number }>({
+    left: 0,
+    width: 36,
+    opacity: 0,
+  });
+
+  const updateIndicator = useCallback(() => {
+    if (!navRef.current) return;
+    const activeEl = navRef.current.querySelector<HTMLAnchorElement>(`a[href="${active}"]`);
+    if (!activeEl) {
+      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
+      return;
+    }
+    const navRect = navRef.current.getBoundingClientRect();
+    const linkRect = activeEl.getBoundingClientRect();
+
+    const indicatorWidth = 36;
+    const center = linkRect.left - navRect.left + linkRect.width / 2;
+    const left = center - indicatorWidth / 2;
+
+    setIndicatorStyle({
+      left,
+      width: indicatorWidth,
+      opacity: 1,
+    });
+  }, [active]);
 
   useEffect(() => {
     const onScroll = () => setCompact(window.scrollY > 28);
@@ -28,20 +55,53 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
   }, []);
 
   useEffect(() => {
-    const sections = links
-      .map(({ href }) => document.querySelector(href))
-      .filter((section): section is Element => Boolean(section));
+    updateIndicator();
+    window.addEventListener("resize", updateIndicator, { passive: true });
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [updateIndicator]);
+
+  useEffect(() => {
+    const sectionIds = ["work", "experience", "about", "contact"];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section));
+
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(`#${visible.target.id}`);
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible.length > 0) {
+          setActive(`#${visible[0].target.id}`);
+        }
       },
-      { rootMargin: "-28% 0px -58% 0px", threshold: [0.1, 0.4, 0.7] },
+      {
+        root: null,
+        threshold: [0.15, 0.35, 0.6, 0.85],
+        rootMargin: "-20% 0px -45% 0px",
+      }
     );
+
     sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+
+    const onScrollEdge = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+
+      if (scrollY < 140) {
+        setActive("#work");
+      } else if (scrollY >= maxScroll - 60) {
+        setActive("#contact");
+      }
+    };
+
+    window.addEventListener("scroll", onScrollEdge, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScrollEdge);
+    };
   }, []);
 
   return (
@@ -55,7 +115,7 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
         HKJ<span className="wordmark-dot">.</span>
       </a>
 
-      <nav className="nav-links" aria-label="Primary navigation">
+      <nav ref={navRef} className="nav-links" aria-label="Primary navigation">
         {links.map((link) => (
           <a
             key={link.href}
@@ -64,15 +124,17 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
             onClick={() => setActive(link.href)}
           >
             {link.label}
-            {active === link.href && (
-              <motion.span
-                className="nav-active-indicator"
-                layoutId="nav-active"
-                transition={{ type: "spring", stiffness: 520, damping: 34, mass: 0.55 }}
-              />
-            )}
           </a>
         ))}
+        <div
+          className="nav-active-indicator"
+          style={{
+            transform: `translateX(${indicatorStyle.left}px)`,
+            width: `${indicatorStyle.width}px`,
+            opacity: indicatorStyle.opacity,
+          }}
+          aria-hidden="true"
+        />
       </nav>
 
       <div className="nav-actions">
