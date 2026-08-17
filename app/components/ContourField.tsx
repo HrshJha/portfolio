@@ -182,15 +182,15 @@ export default function ContourField() {
       // In light mode: soft blue-charcoal / muted periwinkle ink (0.040 to 0.105)
       // In dark mode: cool silver-charcoal (0.045 to 0.105)
       const baseAlpha = isDark
-        ? 0.045 + 0.060 * ((strength - 0.45) / 0.55)
+        ? 0.045 + 0.045 * ((strength - 0.45) / 0.55)
         : 0.040 + 0.065 * ((strength - 0.45) / 0.55);
 
       const grad = ctx.createLinearGradient(0, 0, w, 0);
       if (isDark) {
-        grad.addColorStop(0, `rgba(220, 223, 232, ${(baseAlpha * 1.0).toFixed(4)})`);
-        grad.addColorStop(0.45, `rgba(205, 210, 225, ${(baseAlpha * 0.80).toFixed(4)})`);
-        grad.addColorStop(0.72, `rgba(185, 190, 210, ${(baseAlpha * 0.40).toFixed(4)})`);
-        grad.addColorStop(1, `rgba(165, 170, 190, ${(baseAlpha * 0.10).toFixed(4)})`);
+        grad.addColorStop(0, `rgba(220, 216, 225, ${(baseAlpha * 1.0).toFixed(4)})`);
+        grad.addColorStop(0.45, `rgba(208, 204, 216, ${(baseAlpha * 0.80).toFixed(4)})`);
+        grad.addColorStop(0.72, `rgba(188, 184, 200, ${(baseAlpha * 0.40).toFixed(4)})`);
+        grad.addColorStop(1, `rgba(168, 164, 185, ${(baseAlpha * 0.10).toFixed(4)})`);
       } else {
         grad.addColorStop(0, `rgba(61, 67, 105, ${(baseAlpha * 1.0).toFixed(4)})`);
         grad.addColorStop(0.45, `rgba(75, 82, 125, ${(baseAlpha * 0.80).toFixed(4)})`);
@@ -227,8 +227,8 @@ export default function ContourField() {
       const startX = -w * 0.20;
       const endX = w * 1.05;
       const spanX = endX - startX;
-      // Exact brand accent matching the period '.' in "Harsh Kumar Jha." (#C96F2E)
-      const accentRgb = "201, 111, 46";
+      // Brand accent: #C96F2E in light mode, #D9783B in dark mode
+      const accentRgb = isDark ? "217, 120, 59" : "201, 111, 46";
 
       for (let j = 0; j < subSteps; j++) {
         const t1 = j / subSteps;
