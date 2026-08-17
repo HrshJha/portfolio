@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, ExternalLink, GitFork, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowDownRight, ArrowUpRight, ExternalLink, GitFork, Pause, Play, Volume2, VolumeX, X } from "lucide-react";
 import NavBar from "./components/NavBar";
 import ContourField from "./components/ContourField";
-import CompanionPet, { emitCompanionEvent } from "./components/CompanionPet";
+import CompanionPet from "./components/CompanionPet";
 
 /* ── TYPES ────────────────────────────────────────────── */
 type Project = {
@@ -234,6 +234,12 @@ function VideoPlayer({ project, onActive }: { project: Project; onActive: (v: HT
 /* ── PROJECT SHOWCASE ─────────────────────────────────── */
 function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v: HTMLVideoElement) => void }) {
   const id = project.title.toLowerCase().replace(/\s+/g, "-");
+  const [openSection, setOpenSection] = useState<"approach" | "architecture" | "idea" | null>(null);
+
+  const toggleSection = (key: "approach" | "architecture" | "idea") => {
+    setOpenSection((prev) => (prev === key ? null : key));
+  };
+
   return (
     <motion.article
       className="project-article section-pad"
@@ -267,44 +273,307 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
           </div>
 
           <div className="project-info-panel">
-            {([
-              ["Problem", project.problem],
-              ["Approach", project.approach],
-              ["Architecture", project.architecture],
-            ] as [string, string][]).map(([label, copy]) => (
-              <div className="info-row" key={label}>
-                <span className="detail-label">{label}</span>
-                <p className="detail-body">{copy}</p>
-                {label === "Architecture" && (
-                  <div className="project-stack-chips" aria-label={`${project.title} technology stack`}>
-                    {project.stack.map((name) => {
-                      const chip = stackChips.find((item) => item.name === name);
-                      return (
-                        <motion.span
-                          className="project-stack-chip"
-                          key={name}
-                          whileHover={{ scale: 1.08, y: -1 }}
-                          transition={{ type: "spring", stiffness: 280, damping: 28 }}
-                          style={{ "--chip-color": chip?.color === "currentColor" ? "var(--text)" : chip?.color } as React.CSSProperties}
-                          title={name}
-                        >
-                          <ChipIcon name={name} color={chip?.color || "currentColor"} />
-                          <span>{name}</span>
-                        </motion.span>
-                      );
-                    })}
-                  </div>
+            {/* 1. PROBLEM — Always visible */}
+            <div className="project-detail-block">
+              <span className="project-label">PROBLEM</span>
+              <p className="project-body">{project.problem}</p>
+            </div>
+
+            {/* 2. APPROACH — Expandable */}
+            <div className={`project-expand-row ${openSection === "approach" ? "is-open" : ""}`}>
+              <button
+                type="button"
+                className="project-expand-trigger"
+                onClick={() => toggleSection("approach")}
+                aria-expanded={openSection === "approach"}
+                aria-controls={`${id}-approach-content`}
+                id={`${id}-approach-header`}
+              >
+                <span className="project-label">APPROACH</span>
+                <ArrowDownRight
+                  size={14}
+                  className={`project-expand-arrow ${openSection === "approach" ? "is-open" : ""}`}
+                  aria-hidden="true"
+                />
+              </button>
+              <AnimatePresence initial={false}>
+                {openSection === "approach" && (
+                  <motion.div
+                    id={`${id}-approach-content`}
+                    role="region"
+                    aria-labelledby={`${id}-approach-header`}
+                    className="project-expand-content"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="project-expand-inner">
+                      <p className="project-body">{project.approach}</p>
+                    </div>
+                  </motion.div>
                 )}
+              </AnimatePresence>
+            </div>
+
+            {/* 3. ARCHITECTURE — Expandable */}
+            <div className={`project-expand-row ${openSection === "architecture" ? "is-open" : ""}`}>
+              <button
+                type="button"
+                className="project-expand-trigger"
+                onClick={() => toggleSection("architecture")}
+                aria-expanded={openSection === "architecture"}
+                aria-controls={`${id}-arch-content`}
+                id={`${id}-arch-header`}
+              >
+                <span className="project-label">ARCHITECTURE</span>
+                <ArrowDownRight
+                  size={14}
+                  className={`project-expand-arrow ${openSection === "architecture" ? "is-open" : ""}`}
+                  aria-hidden="true"
+                />
+              </button>
+              <AnimatePresence initial={false}>
+                {openSection === "architecture" && (
+                  <motion.div
+                    id={`${id}-arch-content`}
+                    role="region"
+                    aria-labelledby={`${id}-arch-header`}
+                    className="project-expand-content"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="project-expand-inner">
+                      <p className="project-body">{project.architecture}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* 4. KEY IDEA — Expandable */}
+            <div className={`project-expand-row ${openSection === "idea" ? "is-open" : ""}`}>
+              <button
+                type="button"
+                className="project-expand-trigger"
+                onClick={() => toggleSection("idea")}
+                aria-expanded={openSection === "idea"}
+                aria-controls={`${id}-idea-content`}
+                id={`${id}-idea-header`}
+              >
+                <span className="project-label">KEY IDEA</span>
+                <ArrowDownRight
+                  size={14}
+                  className={`project-expand-arrow ${openSection === "idea" ? "is-open" : ""}`}
+                  aria-hidden="true"
+                />
+              </button>
+              <AnimatePresence initial={false}>
+                {openSection === "idea" && (
+                  <motion.div
+                    id={`${id}-idea-content`}
+                    role="region"
+                    aria-labelledby={`${id}-idea-header`}
+                    className="project-expand-content"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="project-expand-inner">
+                      <p className="project-idea-text">{project.idea}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* 5. TECH STACK — Below Key Idea, Always visible */}
+            <div className="project-detail-block project-stack-block">
+              <span className="project-label">TECH STACK</span>
+              <div className="tech-stack-chips" aria-label={`${project.title} technology stack`}>
+                {project.stack.map((name) => {
+                  const chip = stackChips.find((item) => item.name === name);
+                  return (
+                    <motion.span
+                      className="tech-pill"
+                      key={name}
+                      whileHover={{ scale: 1.08, y: -1 }}
+                      transition={{ type: "spring", stiffness: 280, damping: 28 }}
+                      style={{ "--chip-color": chip?.color === "currentColor" ? "var(--text)" : chip?.color } as React.CSSProperties}
+                      title={name}
+                    >
+                      <ChipIcon name={name} color={chip?.color || "currentColor"} />
+                      <span>{name}</span>
+                    </motion.span>
+                  );
+                })}
               </div>
-            ))}
-            <div className="info-row info-row-idea">
-              <span className="detail-label">Key idea</span>
-              <p className="detail-body idea">{project.idea}</p>
             </div>
           </div>
         </div>
       </Reveal>
     </motion.article>
+  );
+}
+
+/* ── ABOUT: SIGNAL / NOISE DATA ───────────────────────── */
+type SignalItem = {
+  id: string;
+  num: string;
+  title: string;
+  summary: string;
+  body: string;
+  question: string;
+  signalPct: number;
+  noisePct: number;
+};
+
+const signalItems: SignalItem[] = [
+  {
+    id: "agents",
+    num: "01",
+    title: "AI AGENTS",
+    summary: "Planning, tool use, memory, evaluation.",
+    body: "I'm interested in systems that can plan, use tools, remember context, and still be evaluated reliably.",
+    question: "How do you make an agent useful without making it unpredictable?",
+    signalPct: 88,
+    noisePct: 12,
+  },
+  {
+    id: "physics",
+    num: "02",
+    title: "PHYSICS × AI",
+    summary: "Where engineering intuition meets ML.",
+    body: "Exploring how physical intuition, simulation, and machine learning can work together.",
+    question: "Can models learn constraints instead of only correlations?",
+    signalPct: 76,
+    noisePct: 24,
+  },
+  {
+    id: "systems",
+    num: "03",
+    title: "SYSTEMS THAT HOLD UP",
+    summary: "Reliability, retrieval, validation, real-world use.",
+    body: "I care less about demos that look impressive for 30 seconds and more about systems that remain useful after deployment.",
+    question: "Does it still work when the inputs stop being clean?",
+    signalPct: 92,
+    noisePct: 8,
+  },
+];
+
+function AboutSignalPanel() {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const activeId = hoveredId || expandedId;
+  const activeItem = signalItems.find((item) => item.id === activeId);
+  const signalPct = activeItem ? activeItem.signalPct : 82;
+  const noisePct = activeItem ? activeItem.noisePct : 18;
+
+  return (
+    <aside className="signal-panel" aria-label="Signal versus noise engineering note">
+      {/* Header */}
+      <div className="signal-header">
+        <div className="signal-title-wrap">
+          <span className="signal-header-title">SIGNAL / NOISE</span>
+          <span className="signal-live-dot" aria-hidden="true" />
+        </div>
+        <span className="signal-header-sub">01 — HOW I THINK</span>
+      </div>
+
+      {/* Dynamic Signal / Noise Waveform Meter */}
+      <div className="signal-meter" aria-hidden="true">
+        <div className="signal-meter-row">
+          <div className="signal-meter-meta">
+            <span className="signal-bar-label">SIGNAL</span>
+            <span className="signal-bar-val">{signalPct}%</span>
+          </div>
+          <div className="signal-track">
+            <div className="signal-fill" style={{ width: `${signalPct}%` }}>
+              <div className="signal-waveform" />
+            </div>
+          </div>
+        </div>
+
+        <div className="signal-meter-row noise-row">
+          <div className="signal-meter-meta">
+            <span className="signal-bar-label noise-label">NOISE</span>
+            <span className="signal-bar-val noise-val">{noisePct}%</span>
+          </div>
+          <div className="signal-track">
+            <div className="signal-fill noise-fill" style={{ width: `${noisePct}%` }}>
+              <div className="noise-waveform" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3 Interactive Rows */}
+      <div className="signal-list">
+        {signalItems.map((item) => {
+          const isExpanded = expandedId === item.id;
+          return (
+            <div
+              key={item.id}
+              className={`signal-row ${isExpanded ? "is-expanded" : ""}`}
+              onMouseEnter={() => setHoveredId(item.id)}
+              onMouseLeave={() => setHoveredId(null)}
+            >
+              <button
+                type="button"
+                className="signal-row-trigger"
+                onClick={() => setExpandedId(isExpanded ? null : item.id)}
+                aria-expanded={isExpanded}
+              >
+                <div className="signal-row-top">
+                  <span className="signal-row-num">{item.num}</span>
+                  <h3 className="signal-row-title">{item.title}</h3>
+                  <span className="signal-row-action" aria-hidden="true">
+                    {isExpanded ? (
+                      <X size={13} className="signal-action-x" />
+                    ) : (
+                      <ArrowUpRight size={13} className="signal-action-arrow" />
+                    )}
+                  </span>
+                </div>
+                <p className="signal-row-summary">{item.summary}</p>
+              </button>
+
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    className="signal-detail-drawer"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="signal-detail-inner">
+                      <p className="signal-detail-body">{item.body}</p>
+                      <div className="signal-question-card">
+                        <span className="signal-question-tag">CURRENT QUESTION</span>
+                        <p className="signal-question-quote">&ldquo;{item.question}&rdquo;</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Right Side Signature Footer */}
+      <div className="signal-footer">
+        <span className="signal-footer-steps">OBSERVE → FILTER → REASON → BUILD</span>
+        <div className="signal-footer-tag">
+          <span className="tag-signal">SIGNAL</span> / NOISE
+        </div>
+      </div>
+    </aside>
   );
 }
 
@@ -410,7 +679,8 @@ export default function Home() {
         </section>
 
         {/* ── SELECTED WORK ───────────────────────────────── */}
-        <section id="work" className="work-section" aria-labelledby="work-heading">
+        <div id="divider-work" className="section-divider" aria-hidden="true" />
+        <section id="work" data-section="work" className="work-section" aria-labelledby="work-heading">
           <div className="section-pad">
             <Reveal>
               <div className="section-header">
@@ -427,7 +697,8 @@ export default function Home() {
         </section>
 
         {/* ── EXPERIENCE ──────────────────────────────────── */}
-        <section id="experience" className="exp-section section-pad" aria-labelledby="exp-heading">
+        <div id="divider-experience" className="section-divider" aria-hidden="true" />
+        <section id="experience" data-section="experience" className="exp-section section-pad" aria-labelledby="exp-heading">
           <Reveal>
             <div className="section-header">
               <p className="section-kicker">02 / Experience</p>
@@ -484,75 +755,40 @@ export default function Home() {
         </section>
 
         {/* ── ABOUT ───────────────────────────────────────── */}
-        <section id="about" className="about-section section-pad" aria-labelledby="about-heading">
+        <div id="divider-about" className="section-divider" aria-hidden="true" />
+        <section id="about" data-section="about" className="about-section section-pad" aria-labelledby="about-heading">
           <div className="about-grid">
             <div className="about-left">
               <Reveal>
                 <div className="section-header">
                   <p className="section-kicker">03 / About</p>
-                  <h2 className="section-title" id="about-heading">
-                    Systems over demos. Evidence over adjectives.
+                  <h2 className="section-title about-main-heading" id="about-heading">
+                    Systems over demos.<br />
+                    Evidence over<br />
+                    adjectives.
                   </h2>
                 </div>
               </Reveal>
               <Reveal>
-                <p className="about-body">
-                  I&apos;m an Electronics and Communication Engineering student at MSIT, building toward
-                  <em> research and production AI engineering.</em> I&apos;m drawn to the engineering
-                  work around intelligent systems — how they retrieve, reason, validate, and become
-                  useful in the real world. Photography sharpens how I think about signal versus noise,
-                  and that same instinct runs through every system I build.
-                </p>
+                <div className="about-narrative-wrap">
+                  <div className="engineering-note-tag">
+                    <span className="note-tag-text">ENGINEERING NOTE / 01</span>
+                    <span className="note-tag-rule" aria-hidden="true" />
+                  </div>
+                  <p className="about-body">
+                    I&apos;m an Electronics and Communication Engineering student at MSIT, building toward
+                    <em className="about-accent-text"> research and production AI engineering.</em> I&apos;m drawn to the engineering
+                    work around intelligent systems — how they retrieve, reason, validate, and become
+                    useful in the real world. Photography sharpens how I think about signal versus noise,
+                    and that same instinct runs through every system I build.
+                  </p>
+                </div>
               </Reveal>
             </div>
 
-            {/* Curiosity / Engineering Notebook Column */}
+            {/* Signal / Noise Engineering Notebook Layer */}
             <Reveal className="about-right">
-              <aside className="curiosity-panel" aria-label="Currently exploring">
-                <div className="curiosity-header">
-                  <span className="curiosity-kicker">CURRENTLY EXPLORING</span>
-                  <span className="curiosity-now">
-                    <span className="curiosity-dot" aria-hidden="true" />
-                    NOW
-                  </span>
-                </div>
-
-                <div className="curiosity-list">
-                  <div className="curiosity-item">
-                    <div className="curiosity-top">
-                      <span className="curiosity-num">01</span>
-                      <h3 className="curiosity-title">AI AGENTS</h3>
-                      <ArrowUpRight size={14} className="curiosity-arrow" aria-hidden="true" />
-                    </div>
-                    <p className="curiosity-desc">Planning, tool use, memory, evaluation.</p>
-                  </div>
-
-                  <div className="curiosity-item">
-                    <div className="curiosity-top">
-                      <span className="curiosity-num">02</span>
-                      <h3 className="curiosity-title">PHYSICS × AI</h3>
-                      <ArrowUpRight size={14} className="curiosity-arrow" aria-hidden="true" />
-                    </div>
-                    <p className="curiosity-desc">Where engineering intuition becomes machine learning.</p>
-                  </div>
-
-                  <div className="curiosity-item">
-                    <div className="curiosity-top">
-                      <span className="curiosity-num">03</span>
-                      <h3 className="curiosity-title">SYSTEMS THAT HOLD UP</h3>
-                      <ArrowUpRight size={14} className="curiosity-arrow" aria-hidden="true" />
-                    </div>
-                    <p className="curiosity-desc">Reliability, retrieval, validation, and real-world use.</p>
-                  </div>
-                </div>
-
-                <div className="curiosity-footer">
-                  <p className="curiosity-signature">RESEARCH → BUILD → TEST → ITERATE</p>
-                  <div className="curiosity-signal">
-                    <span className="signal-accent">SIGNAL</span> / NOISE
-                  </div>
-                </div>
-              </aside>
+              <AboutSignalPanel />
             </Reveal>
           </div>
         </section>
@@ -622,7 +858,8 @@ export default function Home() {
         </section>
 
         {/* ── CONTACT ─────────────────────────────────────── */}
-        <section id="contact" className="contact-section section-pad" aria-labelledby="contact-heading">
+        <div id="divider-contact" className="section-divider" aria-hidden="true" />
+        <section id="contact" data-section="contact" className="contact-section section-pad" aria-labelledby="contact-heading">
           <div className="contact-container">
             <Reveal>
               <p className="section-kicker">06 / Contact</p>
@@ -670,12 +907,10 @@ export default function Home() {
                     className="contact-form"
                     onSubmit={(e) => {
                       e.preventDefault();
-                      emitCompanionEvent({ type: "FORM_SUBMIT_START" });
                       const form = e.currentTarget;
                       const name = (form.elements.namedItem("name") as HTMLInputElement)?.value;
                       const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
                       const message = (form.elements.namedItem("message") as HTMLTextAreaElement)?.value;
-                      window.setTimeout(() => emitCompanionEvent({ type: "FORM_SUBMIT_SUCCESS" }), 420);
                       window.location.href = `mailto:jhaharsh451@gmail.com?subject=Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
                     }}
                   >
