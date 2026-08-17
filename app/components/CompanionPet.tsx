@@ -45,13 +45,15 @@ function FireballVisual({
           <path className="fire-crown-core" d="M34 29c-1-2 0-4 2-6 1 3 3 4 2 7 2-1 3-2 3-4 2 4 0 6-3 7-2 0-3-2-4-4Z" />
           <rect className="fire-head-border" x="13" y="28" width="46" height="37" rx="11" />
           <rect className="fire-head-face" x="16" y="31" width="40" height="31" rx="8" />
+          <circle className="fire-ear left" cx="13" cy="47" r="3" />
+          <circle className="fire-ear right" cx="59" cy="47" r="3" />
           <rect className="fire-eye" x="23" y="42" width="7" height="4" rx=".6" />
           <rect className="fire-eye" x="42" y="42" width="7" height="4" rx=".6" />
-          <rect className="fire-cheek" x="19" y="51" width="5" height="3" rx="1.5" />
-          <rect className="fire-cheek" x="48" y="51" width="5" height="3" rx="1.5" />
           <rect className="fire-mouth" x="33" y="51" width="7" height="3" rx="1" />
           <path className="fire-arm left" d="M20 68c-5-2-8 1-7 5 1 3 4 4 7 1" />
           <path className="fire-arm right" d="M52 68c5-2 8 1 7 5-1 3-4 4-7 1" />
+          <circle className="fire-hand" cx="14" cy="73" r="3" />
+          <circle className="fire-hand" cx="58" cy="73" r="3" />
           <path className="fire-body" d="M23 64h26l2 17c-5 3-25 3-30 0Z" />
           <rect className="fire-core-badge" x="30" y="69" width="12" height="11" rx="3" />
           <rect className="fire-core-bar one" x="33" y="71" width="2" height="7" rx="1" />
@@ -59,6 +61,8 @@ function FireballVisual({
           <rect className="fire-core-bar three" x="39" y="71" width="2" height="7" rx="1" />
           <path className="fire-leg left" d="M27 80v6h-5" />
           <path className="fire-leg right" d="M45 80v6h5" />
+          <ellipse className="fire-foot" cx="23" cy="87" rx="5" ry="2" />
+          <ellipse className="fire-foot" cx="49" cy="87" rx="5" ry="2" />
           <path className="fireball-spark spark-a" d="M15 28v6m-3-3h6" />
           <path className="fireball-spark spark-b" d="M57 39v5m-2.5-2.5h5" />
         </g>
