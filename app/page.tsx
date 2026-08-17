@@ -801,42 +801,61 @@ export default function Home() {
           <Reveal>
             <div className="section-header">
               <p className="section-kicker">04 / Toolkit</p>
-              <h2 className="section-title" id="skills-heading">
-                Tools I reach for when the system calls for them.
+              <h2 className="section-title toolkit-heading" id="skills-heading">
+                Tools I reach for<br />
+                when the system calls for them.
               </h2>
             </div>
           </Reveal>
 
-          {/* Categorised groups */}
+          {/* Primary 4-Category Grid */}
           <Reveal>
-            <div className="skill-groups">
-              {([
-                ["Programming", "Python · TypeScript · JavaScript · Java · SQL"],
-                ["AI / ML", "LLMs · RAG · NLP · FAISS · BM25 · Hugging Face · Sentence-Transformers · PyTorch · spaCy · scikit-learn"],
-                ["Backend", "FastAPI · REST APIs · JWT · Pydantic v2 · SQLAlchemy · Alembic"],
-                ["Data / Infra", "PostgreSQL · Redis · SQLite · Supabase · Docker · Nginx · Railway · Vercel"],
-                ["Dev Tools", "Git · GitHub · Jupyter · Postman · VS Code · Linux"],
-              ] as [string, string][]).map(([label, items]) => (
-                <div className="skill-group" key={label}>
-                  <p className="skill-group-label">{label}</p>
-                  <p className="skill-group-items">{items}</p>
-                </div>
-              ))}
+            <div className="toolkit-grid">
+              <div className="toolkit-category">
+                <span className="toolkit-category-label">PROGRAMMING</span>
+                <p className="toolkit-category-items">Python · TypeScript · JavaScript · Java · SQL</p>
+              </div>
+              <div className="toolkit-category">
+                <span className="toolkit-category-label">AI / ML</span>
+                <p className="toolkit-category-items">LLMs · RAG · NLP · FAISS · BM25 · Hugging Face · Sentence-Transformers · PyTorch · spaCy · scikit-learn</p>
+              </div>
+              <div className="toolkit-category">
+                <span className="toolkit-category-label">BACKEND</span>
+                <p className="toolkit-category-items">FastAPI · REST APIs · JWT · Pydantic · SQLAlchemy · Alembic</p>
+              </div>
+              <div className="toolkit-category">
+                <span className="toolkit-category-label">DATA / INFRA</span>
+                <p className="toolkit-category-items">PostgreSQL · Redis · SQLite · Supabase · Docker · Nginx · Railway · Vercel</p>
+              </div>
             </div>
           </Reveal>
 
-          {/* Stack chips — flattened from projects */}
+          {/* Curated Core Stack Strip */}
           <Reveal>
-            <p className="stack-label">Stack</p>
-            <div className="chip-field" role="list">
-              {stackChips.map(({ name, color }) => (
-                <div key={name} className="stack-chip" role="listitem" title={name}>
-                  <ChipIcon name={name} color={color} />
-                  <span className="chip-name">{name}</span>
-                </div>
-              ))}
+            <div className="toolkit-core-stack">
+              <span className="toolkit-sub-label">CORE STACK</span>
+              <div className="toolkit-pill-strip" role="list" aria-label="Core technology stack">
+                {["Python", "TypeScript", "FastAPI", "React", "Next.js", "FAISS", "PostgreSQL", "Redis", "Docker", "PyTorch", "SQLAlchemy"].map((name) => (
+                  <div key={name} className="toolkit-pill" role="listitem" title={name}>
+                    <ChipIcon name={name} color="currentColor" />
+                    <span className="toolkit-pill-name">{name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="chip-divider" aria-hidden="true" />
+          </Reveal>
+
+          {/* Supporting Tools Line + Signature */}
+          <Reveal>
+            <div className="toolkit-supporting-row">
+              <div className="toolkit-tools-meta">
+                <span className="toolkit-sub-label">TOOLS</span>
+                <p className="toolkit-tools-items">Git · GitHub · Jupyter · Postman · VS Code · Linux</p>
+              </div>
+              <div className="toolkit-signature">
+                <span>RESEARCH → BUILD → TEST → ITERATE</span>
+              </div>
+            </div>
           </Reveal>
         </section>
 
