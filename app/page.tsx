@@ -592,28 +592,104 @@ export default function Home() {
 
         {/* ── CONTACT ─────────────────────────────────────── */}
         <section id="contact" className="contact-section section-pad" aria-labelledby="contact-heading">
-          <div>
+          <div className="contact-container">
             <Reveal>
               <p className="section-kicker">06 / Contact</p>
               <h2 className="contact-title" id="contact-heading">
                 Let&apos;s build something<br />
                 <em>that holds up.</em>
               </h2>
-              <a href="mailto:jhaharsh451@gmail.com" className="email-link">
-                jhaharsh451@gmail.com <ArrowUpRight size={22} />
-              </a>
-              <div className="social-row">
-                <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="social-link">
-                  <ArrowUpRight size={15} /> GitHub
-                </a>
-                <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="social-link">
-                  <ArrowUpRight size={15} /> LinkedIn
-                </a>
-                <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="social-link">
-                  <ArrowUpRight size={15} /> X
-                </a>
-              </div>
             </Reveal>
+
+            <div className="contact-grid">
+              {/* Left Column: Contact Info & Socials */}
+              <Reveal className="contact-left">
+                <div className="contact-block">
+                  <span className="contact-label">EMAIL</span>
+                  <a href="mailto:jhaharsh451@gmail.com" className="contact-email-link">
+                    <span className="email-text">jhaharsh451@gmail.com</span>
+                    <ArrowUpRight size={18} className="email-arrow" />
+                  </a>
+                </div>
+
+                <div className="contact-block social-block">
+                  <span className="contact-label">SOCIAL</span>
+                  <div className="social-list">
+                    <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="social-row-link">
+                      <span className="social-row-name">GitHub</span>
+                      <ArrowUpRight size={16} className="social-row-arrow" />
+                    </a>
+                    <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="social-row-link">
+                      <span className="social-row-name">LinkedIn</span>
+                      <ArrowUpRight size={16} className="social-row-arrow" />
+                    </a>
+                    <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="social-row-link">
+                      <span className="social-row-name">X</span>
+                      <ArrowUpRight size={16} className="social-row-arrow" />
+                    </a>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* Right Column: Send A Message Form */}
+              <Reveal className="contact-right">
+                <div className="contact-form-wrap">
+                  <span className="contact-label">SEND A MESSAGE</span>
+                  <form
+                    className="contact-form"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const form = e.currentTarget;
+                      const name = (form.elements.namedItem("name") as HTMLInputElement)?.value;
+                      const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
+                      const message = (form.elements.namedItem("message") as HTMLTextAreaElement)?.value;
+                      window.location.href = `mailto:jhaharsh451@gmail.com?subject=Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
+                    }}
+                  >
+                    <div className="form-group">
+                      <label htmlFor="contact-name" className="form-label">Name</label>
+                      <input
+                        id="contact-name"
+                        name="name"
+                        type="text"
+                        required
+                        placeholder="Your name"
+                        className="form-input"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="contact-email" className="form-label">Email</label>
+                      <input
+                        id="contact-email"
+                        name="email"
+                        type="email"
+                        required
+                        placeholder="Your email"
+                        className="form-input"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="contact-message" className="form-label">Message</label>
+                      <textarea
+                        id="contact-message"
+                        name="message"
+                        required
+                        rows={5}
+                        placeholder="Tell me about your project..."
+                        className="form-textarea"
+                      />
+                    </div>
+
+                    <button type="submit" className="contact-submit-btn">
+                      <span>Send message</span>
+                      <ArrowUpRight size={16} className="submit-arrow" />
+                    </button>
+                  </form>
+                </div>
+              </Reveal>
+            </div>
           </div>
         </section>
       </main>

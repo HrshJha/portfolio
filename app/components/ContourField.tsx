@@ -28,9 +28,11 @@ export default function ContourField() {
     let width = 0;
     let height = 0;
     let dpr = 1;
-    let lastTime = 0;
     let curves: Curve[] = [];
     let traces: Trace[] = [];
+    let lineColor = "#1e2841";
+    let accentColor = "#d96f32";
+    let colorTick = 0;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const readColor = (name: string, fallback: string) => {
@@ -52,31 +54,33 @@ export default function ContourField() {
       curves = Array.from({ length: count }, (_, index) => {
         const points: Point[] = [];
         const normalized = index / Math.max(1, count - 1);
-        const centerX = -width * 0.78;
-        const centerY = height * (0.48 + normalized * 0.055);
-        const axisX = width * (1.34 + normalized * 0.018);
-        const axisY = height * (0.16 + normalized * 0.0052);
-        const start = -Math.PI * (0.86 - normalized * 0.035);
-        const end = 0.08 + normalized * 0.01;
         const samples = 170;
 
         for (let step = 0; step <= samples; step += 1) {
           const progress = step / samples;
-          const t = start + (end - start) * progress;
-          const opticalBend = Math.sin(progress * Math.PI) * (height * 0.014) * (1 - normalized * 0.6);
+          const startX = -width * 0.12;
+          const startY = height * (0.04 + normalized * 0.92);
+          const endX = width * (0.76 - normalized * 0.08);
+          const endY = height * (0.51 + (normalized - 0.5) * 0.09);
+          const bend = (0.5 - normalized) * height * 0.56;
+          const control1X = width * (0.08 + normalized * 0.02);
+          const control1Y = startY + bend;
+          const control2X = width * (0.42 + normalized * 0.06);
+          const control2Y = endY + bend * 0.16;
+          const inverse = 1 - progress;
           points.push({
-            x: centerX + axisX * Math.cos(t),
-            y: centerY + axisY * Math.sin(t) + opticalBend,
+            x: inverse ** 3 * startX + 3 * inverse ** 2 * progress * control1X + 3 * inverse * progress ** 2 * control2X + progress ** 3 * endX,
+            y: inverse ** 3 * startY + 3 * inverse ** 2 * progress * control1Y + 3 * inverse * progress ** 2 * control2Y + progress ** 3 * endY,
           });
         }
 
         return {
           points,
-          alpha: 0.032 + (1 - normalized) * 0.038,
+          alpha: 0.022 + (1 - normalized) * 0.026,
         };
       });
 
-      const traceCount = Math.round(clamp(width / 135, 5, 13));
+      const traceCount = Math.round(clamp(width / 110, 8, 16));
       traces = Array.from({ length: traceCount }, (_, index) => ({
         curve: Math.floor(seeded(index + 7) * curves.length * 0.82),
         phase: seeded(index + 21),
@@ -87,8 +91,10 @@ export default function ContourField() {
     };
 
     const draw = (time: number) => {
-      const line = readColor("--field-line", "rgba(30, 40, 65, .055)");
-      const accent = readColor("--field-accent", "#d96f32");
+      if (colorTick++ % 30 === 0) {
+        lineColor = readColor("--field-line", "#1e2841");
+        accentColor = readColor("--field-accent", "#d96f32");
+      }
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, width, height);
       context.lineWidth = 0.62;
@@ -101,10 +107,12 @@ export default function ContourField() {
           const current = curve.points[index];
           const midpoint = (previous.x + current.x) / 2;
           const spatialFade = clamp(1 - (midpoint / width - 0.02) / 0.78, 0, 1);
-          const contentFade = 1 - 0.44 * Math.exp(-Math.pow((midpoint / width - 0.48) / 0.24, 2));
+          const midY = (previous.y + current.y) / 2;
+          const contentZone = Math.exp(-Math.pow((midpoint / width - 0.52) / 0.28, 2)) * Math.exp(-Math.pow((midY / height - 0.56) / 0.32, 2));
+          const contentFade = 1 - 0.78 * contentZone;
           const alpha = curve.alpha * (0.24 + spatialFade * 0.76) * contentFade;
-          context.strokeStyle = line;
-          context.globalAlpha = clamp(alpha, 0.008, 0.085);
+          context.strokeStyle = lineColor;
+          context.globalAlpha = clamp(alpha * 2.2, 0.012, 0.1);
           context.beginPath();
           context.moveTo(previous.x, previous.y);
           context.lineTo(current.x, current.y);
@@ -125,9 +133,10 @@ export default function ContourField() {
         const local = curve.points[center];
         if (!local) return;
         const spatialFade = clamp(1 - (local.x / width - 0.02) / 0.8, 0, 1);
-        context.strokeStyle = accent;
-        context.globalAlpha = (0.18 + trace.seed * 0.38) * life * spatialFade;
-        context.lineWidth = 0.72 + trace.seed * 0.16;
+        const traceContentZone = Math.exp(-Math.pow((local.x / width - 0.52) / 0.28, 2)) * Math.exp(-Math.pow((local.y / height - 0.56) / 0.32, 2));
+        context.strokeStyle = accentColor;
+        context.globalAlpha = (0.28 + trace.seed * 0.42) * life * spatialFade * (1 - 0.65 * traceContentZone);
+        context.lineWidth = 0.78 + trace.seed * 0.18;
         context.beginPath();
         context.moveTo(curve.points[start].x, curve.points[start].y);
         for (let point = start + 1; point <= end; point += 1) {
