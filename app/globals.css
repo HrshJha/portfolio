@@ -660,116 +660,188 @@ h1.hero-name .accent-dot {
   flex-wrap: wrap;
 }
 
-/* ── BUTTONS (CANONICAL LIGHT / TONAL DARK) ───────── */
+/* ── HERO CTA BUTTONS (CINEMATIC CONTROL CLUSTER) ──── */
+.hero-btn,
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font: 500 12.5px/1 var(--font-mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0 28px;
-  height: 52px;
+  height: 54px;
   border-radius: 999px;
-  min-width: 130px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  text-transform: none;
   text-decoration: none;
-  transition: background-color .2s, color .2s, border-color .2s, transform .15s, box-shadow .2s;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              color 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+  user-select: none;
 }
 
+.hero-btn:active,
+.btn:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 6px rgba(35, 38, 56, 0.05) !important;
+  transition-duration: 120ms;
+}
+
+/* Primary CTA: View Work */
+.hero-btn-primary,
 .btn-primary {
   background: #292D4A;
-  color: #FFFFFF !important;
+  color: #F7F5EF !important;
   border: 1px solid transparent;
+  box-shadow: 0 8px 22px rgba(35, 38, 56, 0.08);
+  min-width: 172px;
+  padding: 0 24px;
 }
 
+.hero-btn-primary:hover,
 .btn-primary:hover {
-  background: #232740;
+  background: #1f233a;
   color: #FFFFFF !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(35, 38, 56, 0.12);
 }
 
+[data-theme='dark'] .hero-btn-primary,
 [data-theme='dark'] .btn-primary {
   background: #F1EFE8;
-  color: #252633 !important;
+  color: #252638 !important;
   border: 1px solid #F1EFE8;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
 }
 
+[data-theme='dark'] .hero-btn-primary:hover,
 [data-theme='dark'] .btn-primary:hover {
   background: #FFFFFF;
   border-color: #FFFFFF;
   color: #17171A !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
 }
 
+/* Secondary CTA Buttons: GitHub, LinkedIn, X */
+.hero-btn-secondary,
 .btn-ghost,
-.btn:not(.btn-primary) {
-  background: rgba(248, 250, 252, 0.88);
-  color: #292D4A;
-  border: 1px solid rgba(41, 45, 74, 0.12);
-}
-
-.btn-ghost:hover,
-.btn:not(.btn-primary):hover {
-  background: #FFFFFF;
-  border-color: rgba(41, 45, 74, 0.20);
-  color: #292D4A;
-  transform: translateY(-1px);
-}
-
-[data-theme='dark'] .btn-ghost,
-[data-theme='dark'] .btn:not(.btn-primary) {
-  background: rgba(255, 255, 255, 0.06);
-  color: #F1EFE8;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-[data-theme='dark'] .btn-ghost:hover,
-[data-theme='dark'] .btn:not(.btn-primary):hover {
-  background: rgba(255, 255, 255, 0.10);
-  border-color: rgba(255, 255, 255, 0.22);
-  color: #FFFFFF;
-  transform: translateY(-1px);
-}
-
-/* ── COMPACT X SOCIAL BUTTON ──────────────────────── */
-.btn-x {
-  width: auto !important;
-  min-width: 90px !important;
-  max-width: 110px;
-  padding: 0 30px !important;
-  font-size: 15px !important;
-  font-family: var(--font-mono) !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.04em !important;
-  justify-content: center;
-}
-
-:root[data-theme='light'] .btn-x,
-.btn-x {
-  background: rgba(248, 250, 252, 0.9);
+.btn:not(.btn-primary):not(.hero-btn-primary) {
+  background: rgba(248, 250, 252, 0.82);
   border: 1px solid rgba(41, 45, 74, 0.10);
   color: #292D4A;
+  box-shadow: 0 4px 14px rgba(35, 38, 56, 0.035);
 }
 
-.btn-x:hover {
+.hero-btn-secondary:hover,
+.btn-ghost:hover,
+.btn:not(.btn-primary):not(.hero-btn-primary):hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(201, 111, 46, 0.35);
+  color: #17171A;
   transform: translateY(-2px);
-  border-color: rgba(217, 106, 50, 0.35);
-  color: var(--accent) !important;
-  background: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(35, 38, 56, 0.06);
 }
 
-[data-theme='dark'] .btn-x {
+[data-theme='dark'] .hero-btn-secondary,
+[data-theme='dark'] .btn-ghost,
+[data-theme='dark'] .btn:not(.btn-primary):not(.hero-btn-primary) {
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.13);
-  color: #F2F0EA;
+  color: #F1EFE8;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
 }
 
-[data-theme='dark'] .btn-x:hover {
-  transform: translateY(-2px);
-  border-color: rgba(217, 106, 50, 0.35);
-  color: var(--accent) !important;
+[data-theme='dark'] .hero-btn-secondary:hover,
+[data-theme='dark'] .btn-ghost:hover,
+[data-theme='dark'] .btn:not(.btn-primary):not(.hero-btn-primary):hover {
   background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(201, 111, 46, 0.35);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.20);
+}
+
+/* Individual Content-Responsive Dimensions */
+.hero-btn-github {
+  min-width: 142px;
+  padding: 0 20px;
+}
+
+.hero-btn-linkedin {
+  min-width: 148px;
+  padding: 0 22px;
+}
+
+.hero-btn-x,
+.btn-x {
+  min-width: 92px !important;
+  max-width: 104px !important;
+  padding: 0 18px !important;
+  font-family: var(--font-body) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Icon & Arrow Micro-Interactions */
+.hero-btn-arrow {
+  flex-shrink: 0;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), color 200ms ease;
+}
+
+.hero-btn:hover .hero-btn-arrow,
+.btn:hover .hero-btn-arrow,
+.btn:hover svg {
+  transform: translate(3px, -3px);
+}
+
+.hero-btn-primary:hover .hero-btn-arrow,
+.btn-primary:hover svg {
+  color: var(--accent);
+}
+
+.hero-btn-secondary:hover .hero-btn-arrow,
+.btn-ghost:hover svg {
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .hero-ctas {
+    gap: 10px;
+  }
+  
+  .hero-btn,
+  .btn {
+    height: 48px;
+    font-size: 13.5px;
+  }
+  
+  .hero-btn-primary,
+  .btn-primary {
+    min-width: 155px;
+    padding: 0 20px;
+  }
+  
+  .hero-btn-github {
+    min-width: 125px;
+    padding: 0 16px;
+  }
+  
+  .hero-btn-linkedin {
+    min-width: 130px;
+    padding: 0 16px;
+  }
+  
+  .hero-btn-x,
+  .btn-x {
+    min-width: 80px !important;
+    padding: 0 14px !important;
+  }
 }
 
 /* Nav Pills */

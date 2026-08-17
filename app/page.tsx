@@ -662,17 +662,19 @@ export default function Home() {
               Building AI systems through machine learning and engineering.
             </p>
             <div className="hero-ctas">
-              <a href="#work" className="btn btn-primary">
-                View Work <ArrowUpRight size={16} />
+              <a href="#work" className="hero-btn hero-btn-primary">
+                <span>View Work</span>
+                <ArrowUpRight size={15} className="hero-btn-arrow" />
               </a>
-              <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="btn btn-ghost">
-                <ExternalLink size={15} /> GitHub
+              <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="hero-btn hero-btn-secondary hero-btn-github">
+                <span>GitHub</span>
+                <ExternalLink size={14} className="hero-btn-arrow" />
               </a>
-              <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="btn btn-ghost">
-                LinkedIn
+              <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="hero-btn hero-btn-secondary hero-btn-linkedin">
+                <span>LinkedIn</span>
               </a>
-              <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="btn btn-ghost btn-x">
-                X
+              <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="hero-btn hero-btn-secondary hero-btn-x">
+                <span>X</span>
               </a>
             </div>
           </div>
