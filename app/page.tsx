@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ExternalLink, GitFork, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import NavBar from "./components/NavBar";
 import ContourField from "./components/ContourField";
+import CompanionPet, { emitCompanionEvent } from "./components/CompanionPet";
 
 /* ── TYPES ────────────────────────────────────────────── */
 type Project = {
@@ -310,31 +311,11 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
 /* ── HOME ─────────────────────────────────────────────── */
 export default function Home() {
   const [theme, setTheme] = useState("light");
-  const [scrollPct, setScrollPct] = useState(0);
   const currentVideo = useRef<HTMLVideoElement | null>(null);
 
   /* Sync theme from DOM */
   useEffect(() => {
     setTheme(document.documentElement.dataset.theme || "light");
-  }, []);
-
-  /* Scroll progress */
-  useEffect(() => {
-    const onScroll = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scrollTop / maxScroll)) : 0;
-      const pct = Math.round(progress * 100);
-      setScrollPct(pct);
-    };
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
   }, []);
 
   const toggleTheme = () => {
@@ -356,18 +337,8 @@ export default function Home() {
     <>
       <div className="grain" aria-hidden="true" />
 
-      {/* GLOBAL SCROLL PROGRESS INDICATOR */}
-      <div className={`scroll-progress ${scrollPct <= 0 ? "at-top" : ""}`} aria-hidden="true">
-        <div className="scroll-progress-bar">
-          <div
-            className="scroll-progress-fill"
-            style={{ transform: `scaleX(${scrollPct / 100})` }}
-          />
-        </div>
-        <span className="scroll-progress-value">{scrollPct}%</span>
-      </div>
-
       <NavBar theme={theme} onToggleTheme={toggleTheme} />
+      <CompanionPet />
 
       <main id="top">
         {/* ── HERO ────────────────────────────────────────── */}
@@ -435,10 +406,6 @@ export default function Home() {
                 X
               </a>
             </div>
-          </div>
-          <div className="hero-scroll" aria-hidden="true">
-            Scroll to explore
-            <span className="scroll-arrow">↓</span>
           </div>
         </section>
 
@@ -650,10 +617,12 @@ export default function Home() {
                     className="contact-form"
                     onSubmit={(e) => {
                       e.preventDefault();
+                      emitCompanionEvent({ type: "FORM_SUBMIT_START" });
                       const form = e.currentTarget;
                       const name = (form.elements.namedItem("name") as HTMLInputElement)?.value;
                       const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
                       const message = (form.elements.namedItem("message") as HTMLTextAreaElement)?.value;
+                      window.setTimeout(() => emitCompanionEvent({ type: "FORM_SUBMIT_SUCCESS" }), 420);
                       window.location.href = `mailto:jhaharsh451@gmail.com?subject=Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
                     }}
                   >
