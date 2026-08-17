@@ -2008,10 +2008,10 @@ h3.project-title {
   color: var(--about-accent);
 }
 
-/* ── SKILLS / STACK ──────────────────────────────── */
+/* ── SKILLS / TOOLKIT ────────────────────────────── */
 .skills-section {
-  padding-top: 56px;
-  padding-bottom: 64px;
+  padding-top: 48px;
+  padding-bottom: 56px;
   background: transparent;
   border-bottom: none;
   min-height: auto;
@@ -2019,121 +2019,174 @@ h3.project-title {
 }
 
 .skills-section .section-header {
-  padding: 0 0 28px;
+  padding: 0 0 24px;
   border-bottom: 1px solid var(--line2);
 }
 
-.skills-section h2.section-title {
-  max-width: 580px;
-  font: 500 var(--text-display-lg)/var(--leading-display) var(--font-display);
-  letter-spacing: var(--tracking-display);
+.toolkit-heading {
+  max-width: 680px !important;
+  font-size: clamp(38px, 4.2vw, 58px) !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.045em !important;
 }
 
-.skill-groups {
+.toolkit-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 80px;
+  column-gap: clamp(48px, 6vw, 96px);
   row-gap: 0;
   margin-top: 36px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
-.skill-group {
-  padding: 14px 0;
-  border-bottom: 1px solid var(--line2);
-}
-
-.skill-group-label {
-  font: 500 var(--text-micro)/1 var(--font-mono);
-  letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-
-.skill-group-items {
-  font-family: var(--font-body);
-  font-size: 15.5px;
-  line-height: 1.52;
-  letter-spacing: -0.005em;
-  color: var(--text2);
-}
-
-/* Stack chip row */
-.stack-label {
-  font: 500 var(--text-micro)/1 var(--font-mono);
-  letter-spacing: var(--tracking-micro);
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 14px;
-  margin-top: 32px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.stack-label::before {
-  content: '';
-  width: 16px;
-  height: 1px;
-  background: var(--accent);
-}
-
-.chip-field {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-
-.stack-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 28px;
-  padding: 0 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-chip);
-  background: var(--surface);
-  transition: border-color .2s, background .2s;
-  white-space: nowrap;
-}
-
-@media(hover:hover) {
-  .stack-chip:hover {
-    border-color: rgba(var(--accent-rgb), .38);
-    background: var(--surface2);
+@media (max-width: 768px) {
+  .toolkit-grid {
+    grid-template-columns: 1fr;
+    margin-top: 28px;
+    margin-bottom: 20px;
   }
 }
 
-.chip-icon {
+.toolkit-category {
+  padding: 16px 0 18px;
+  border-bottom: 1px solid rgba(35, 40, 60, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+[data-theme='dark'] .toolkit-category {
+  border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+
+.toolkit-category-label {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+}
+
+.toolkit-category-items {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.48;
+  letter-spacing: -0.005em;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Curated Core Stack Strip */
+.toolkit-core-stack {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toolkit-sub-label {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolkit-sub-label::before {
+  content: '';
   width: 14px;
-  height: 14px;
+  height: 1px;
+  background: var(--accent);
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
 }
 
-.chip-icon svg,
-.chip-icon img {
-  width: 14px;
-  height: 14px;
-  object-fit: contain;
+.toolkit-pill-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.chip-name {
+.toolkit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface2) 65%, transparent);
+  color: var(--text2);
   font: 500 11px/1 var(--font-mono);
   letter-spacing: 0.02em;
-  color: var(--text2);
+  transition: color .2s, border-color .2s, background .2s, transform .15s;
+  cursor: default;
 }
 
-.stack-chip:hover .chip-name {
+.toolkit-pill .chip-icon {
+  width: 13px;
+  height: 13px;
+  opacity: 0.7;
+  filter: grayscale(1);
+  transition: opacity .2s, filter .2s;
+}
+
+.toolkit-pill .chip-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.toolkit-pill:hover {
   color: var(--text);
+  border-color: rgba(var(--accent-rgb), 0.40);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface2));
+  transform: translateY(-1px);
 }
 
-.chip-divider {
-  height: 1px;
-  background: var(--line2);
-  margin-top: 32px;
+.toolkit-pill:hover .chip-icon {
+  opacity: 1;
+  filter: grayscale(0);
+}
+
+.toolkit-pill-name {
+  color: inherit;
+}
+
+/* Supporting Tools Line + Signature */
+.toolkit-supporting-row {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.toolkit-tools-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolkit-tools-items {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--text2);
+  margin: 0;
+}
+
+.toolkit-signature {
+  font: 500 10.5px/1 var(--font-mono);
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-left: auto;
 }
 
 /* ── EDUCATION ────────────────────────────────────── */
