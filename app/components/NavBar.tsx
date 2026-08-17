@@ -210,7 +210,7 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
 
       <div className="nav-actions">
         <motion.a
-          href="/harshahha.pdf"
+    href="/harshaha.pdf"
           target="_blank"
           rel="noreferrer"
           className="nav-pill nav-pill-primary"
