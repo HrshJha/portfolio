@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { ArrowUpRight, ExternalLink, Menu, Moon, Pause, Play, Sun, X } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Pause, Play } from "lucide-react";
+import NavBar from "./components/NavBar";
 
 /* ── TYPES ────────────────────────────────────────────── */
 type Project = {
@@ -268,7 +269,6 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
 /* ── HOME ─────────────────────────────────────────────── */
 export default function Home() {
   const [theme, setTheme] = useState("dark");
-  const [menu, setMenu] = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
   const currentVideo = useRef<HTMLVideoElement | null>(null);
 
@@ -315,41 +315,7 @@ export default function Home() {
         <span>{Math.round(scrollPct)}%</span>
       </div>
 
-      {/* NAVBAR */}
-      <header className="nav" role="banner">
-        <a href="#top" className="wordmark" aria-label="Harsh Kumar Jha — home">
-          HKJ<span className="wordmark-dot">.</span>
-        </a>
-        <nav className="nav-links" role="navigation" aria-label="Primary navigation">
-          {["Work", "Experience", "About", "Contact"].map(item => (
-            <a key={item} href={`#${item.toLowerCase()}`}>{item}</a>
-          ))}
-        </nav>
-        <div className="nav-actions">
-          <button
-            className="icon-btn"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-          >
-            {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
-          </button>
-          <button
-            className="icon-btn menu-btn"
-            onClick={() => setMenu(!menu)}
-            aria-label={menu ? "Close navigation" : "Open navigation"}
-            aria-expanded={menu}
-          >
-            {menu ? <X size={18} /> : <Menu size={18} />}
-          </button>
-        </div>
-      </header>
-
-      {/* MOBILE MENU */}
-      <div className={`mobile-menu${menu ? " open" : ""}`} aria-hidden={!menu}>
-        {["Work", "Experience", "About", "Contact"].map(item => (
-          <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setMenu(false)}>{item}</a>
-        ))}
-      </div>
+      <NavBar theme={theme} onToggleTheme={toggleTheme} />
 
       <main id="top">
         {/* ── HERO ────────────────────────────────────────── */}

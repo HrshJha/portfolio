@@ -190,20 +190,30 @@ video {
 
 /* ── NAVIGATION ───────────────────────────────────── */
 .nav {
-  height: 64px;
+  height: 68px;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 18px;
+  left: clamp(14px, 4vw, 64px);
+  right: clamp(14px, 4vw, 64px);
   z-index: 50;
-  padding: 0 clamp(20px, 4vw, 64px);
+  padding: 0 14px 0 24px;
+  border: 1px solid rgba(var(--accent-rgb), .2);
+  border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(14px) saturate(160%);
-  transition: background .3s
+  background: linear-gradient(105deg, color-mix(in srgb, var(--surface) 86%, transparent), color-mix(in srgb, var(--accent) 12%, transparent), color-mix(in srgb, var(--surface) 82%, transparent));
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .12), inset 0 1px 0 rgba(255, 255, 255, .1);
+  backdrop-filter: blur(22px) saturate(170%);
+  transition: height .3s, padding .3s, background .3s, box-shadow .3s, border-color .3s
+}
+
+.nav-compact {
+  height: 56px;
+  padding-left: 20px;
+  background: linear-gradient(105deg, color-mix(in srgb, var(--surface) 94%, transparent), color-mix(in srgb, var(--accent) 8%, transparent), color-mix(in srgb, var(--surface) 92%, transparent));
+  border-color: var(--line);
+  box-shadow: 0 14px 42px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .08)
 }
 
 .wordmark {
@@ -219,7 +229,7 @@ video {
 
 .nav-links {
   display: flex;
-  gap: 32px;
+  gap: clamp(18px, 2.8vw, 44px);
   align-items: center
 }
 
@@ -228,7 +238,7 @@ video {
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--muted);
-  transition: color .2s;
+  transition: color .2s, transform .2s;
   position: relative
 }
 
@@ -246,7 +256,8 @@ video {
 }
 
 .nav-links a:hover {
-  color: var(--text)
+  color: var(--text);
+  transform: translateY(-1px)
 }
 
 .nav-links a:hover::after,
@@ -258,10 +269,58 @@ video {
   color: var(--text)
 }
 
+.nav-active-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 14px rgba(var(--accent-rgb), .65)
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 4px
+  gap: 7px
+}
+
+.nav-pill {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font: 500 10px/1 var(--mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  transition: color .2s, background .2s, border-color .2s
+}
+
+.nav-pill-primary {
+  background: var(--text);
+  color: var(--bg);
+  border: 1px solid var(--text)
+}
+
+.nav-pill-primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text)
+}
+
+.nav-pill-secondary {
+  border: 1px solid var(--line);
+  color: var(--text2);
+  background: color-mix(in srgb, var(--bg) 18%, transparent)
+}
+
+.nav-pill-secondary:hover {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), .45)
 }
 
 .icon-btn {
@@ -269,7 +328,7 @@ video {
   height: 38px;
   display: grid;
   place-items: center;
-  border-radius: 2px;
+  border-radius: 999px;
   color: var(--muted);
   transition: color .2s, background .2s
 }
@@ -285,12 +344,14 @@ video {
 
 .mobile-menu {
   position: fixed;
-  top: 64px;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
-  padding: 12px clamp(20px, 4vw, 64px) 20px;
+  top: 86px;
+  left: 14px;
+  right: 14px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 12px 20px 20px;
+  backdrop-filter: blur(22px) saturate(170%);
   display: none;
   flex-direction: column;
   gap: 0;
@@ -314,6 +375,23 @@ video {
 
 .mobile-menu a:last-child {
   border-bottom: none
+}
+
+.mobile-menu a.active {
+  color: var(--text)
+}
+
+.mobile-contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 13px 15px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 999px;
+  color: var(--text) !important;
+  background: var(--text);
+  color: var(--bg) !important
 }
 
 .mobile-menu a:hover {
@@ -344,7 +422,22 @@ video {
   display: flex;
   align-items: center;
   position: relative;
-  padding-top: 64px
+  padding-top: 96px;
+  isolation: isolate
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -8%;
+  left: -12%;
+  right: -12%;
+  height: 68%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 52% 6%, rgba(var(--accent-rgb), .2), transparent 58%), radial-gradient(ellipse at 14% 12%, rgba(108, 126, 255, .12), transparent 48%);
+  filter: blur(28px);
+  opacity: .9
 }
 
 .hero-inner {
@@ -1180,11 +1273,13 @@ footer {
 /* ── MOBILE ───────────────────────────────────────── */
 @media(max-width:700px) {
   .nav {
-    height: 56px
+    height: 58px;
+    top: 12px;
+    padding: 0 10px 0 18px
   }
 
   .mobile-menu {
-    top: 56px
+    top: 78px
   }
 
   .menu-btn {
@@ -1195,9 +1290,17 @@ footer {
     display: none
   }
 
+  .nav-pill {
+    display: none
+  }
+
+  .nav-actions {
+    gap: 2px
+  }
+
   .hero {
     min-height: 92svh;
-    padding-top: 56px
+    padding-top: 84px
   }
 
   .hero-scroll {
