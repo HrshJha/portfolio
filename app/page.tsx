@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowDownRight, ArrowUpRight, ExternalLink, GitFork, Pause, Play, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, ExternalLink, GitFork, X } from "lucide-react";
 import NavBar from "./components/NavBar";
 import ContourField from "./components/ContourField";
 import CompanionPet from "./components/CompanionPet";
@@ -151,88 +151,33 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
 }
 
 /* ── VIDEO PLAYER ─────────────────────────────────────── */
-function VideoPlayer({ project, onActive }: { project: Project; onActive: (v: HTMLVideoElement) => void }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [started, setStarted] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(false);
+function VideoPlayer({ project }: { project: Project }) {
+  const reduceMotion = useReducedMotion();
   const [error, setError] = useState(false);
 
-  const playVideo = useCallback((muted = false) => {
-    const v = videoRef.current; if (!v) return;
-    setStarted(true); v.muted = muted; setMuted(muted); onActive(v);
-    v.play().then(() => setPlaying(true)).catch(() => setError(true));
-  }, [onActive]);
-
-  const pauseVideo = useCallback((reset = false) => {
-    const v = videoRef.current; if (!v) return;
-    v.pause();
-    if (reset) { v.currentTime = 0; setStarted(false); }
-    setPlaying(false);
-    setMuted(false);
-  }, []);
-
-  const toggleMute = useCallback(() => {
-    const v = videoRef.current; if (!v) return;
-    v.muted = !v.muted;
-    setMuted(v.muted);
-  }, []);
-
-  const handleMouseEnter = useCallback(() => {
-    if (matchMedia("(hover: hover) and (prefers-reduced-motion: no-preference)").matches && !started) {
-      playVideo(true);
-    }
-  }, [started, playVideo]);
-
   return (
-    <div
-      className="video-shell"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={() => pauseVideo(true)}
-    >
+    <div className="video-shell">
       <video
-        ref={videoRef}
-        preload="none"
-        poster={project.poster}
+        autoPlay={!reduceMotion}
+        muted
+        loop
         playsInline
-        aria-label={`${project.title} product demo video`}
-        onEnded={() => pauseVideo(true)}
+        preload="metadata"
+        poster={project.poster}
+        aria-hidden="true"
         onError={() => setError(true)}
       >
         <source src={project.video} type="video/mp4" />
       </video>
-
-      {!playing && (
-        <div className="video-overlay clickable">
-          <button
-            className="video-play-btn"
-            onClick={() => playVideo(false)}
-            aria-label={`Play ${project.title} demo`}
-          >
-            <Play size={22} fill="currentColor" />
-          </button>
-        </div>
-      )}
-      {playing && (
-        <div className="video-controls">
-          <button className="video-control-btn" onClick={toggleMute} aria-label={muted ? `Unmute ${project.title} demo` : `Mute ${project.title} demo`}>
-            {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-          </button>
-          <button className="video-pause-btn" onClick={() => pauseVideo(false)} aria-label={`Pause ${project.title} demo`}>
-            <Pause size={14} fill="currentColor" />
-            <span>Pause</span>
-          </button>
-        </div>
-      )}
       {error && (
-        <p className="video-error-msg">Video unavailable — click play to retry.</p>
+        <p className="video-error-msg">Video unavailable.</p>
       )}
     </div>
   );
 }
 
 /* ── PROJECT SHOWCASE ─────────────────────────────────── */
-function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v: HTMLVideoElement) => void }) {
+function ProjectShowcase({ project }: { project: Project }) {
   const id = project.title.toLowerCase().replace(/\s+/g, "-");
   const [openSection, setOpenSection] = useState<"approach" | "architecture" | "idea" | null>(null);
 
@@ -259,7 +204,7 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
       <Reveal>
         <div className="project-card">
           <div className="project-media-panel">
-            <VideoPlayer project={project} onActive={onActive} />
+            <VideoPlayer project={project} />
             <div className="project-media-actions">
               <a href={project.github} target="_blank" rel="noreferrer" className="project-action project-action-primary">
                 <GitFork size={14} /> View Code
@@ -580,7 +525,6 @@ function AboutSignalPanel() {
 /* ── HOME ─────────────────────────────────────────────── */
 export default function Home() {
   const [theme, setTheme] = useState("light");
-  const currentVideo = useRef<HTMLVideoElement | null>(null);
 
   /* Sync theme from DOM */
   useEffect(() => {
@@ -592,14 +536,6 @@ export default function Home() {
     document.documentElement.dataset.theme = next;
     localStorage.setItem("harsh-theme", next);
     setTheme(next);
-  };
-
-  const onActive = (video: HTMLVideoElement) => {
-    if (currentVideo.current && currentVideo.current !== video) {
-      currentVideo.current.pause();
-      currentVideo.current.currentTime = 0;
-    }
-    currentVideo.current = video;
   };
 
   return (
@@ -654,9 +590,12 @@ export default function Home() {
 
             <p className="hero-eyebrow">ECE · AI/ML · Software</p>
             <div className="eyebrow-rule" aria-hidden="true" />
-            <h1 className="hero-name" id="hero-heading">
-              <span className="name-line">Harsh</span>
-              <span className="name-line">Kumar Jha<span className="accent-dot">.</span></span>
+            <h1 className="hero-name hero-wordmark" id="hero-heading">
+              <span className="wm-word wm-first">Harsh</span>
+              <span className="wm-word wm-middle">Kumar</span>
+              <span className="wm-word wm-last">
+                Jha<span className="wm-mark" aria-hidden="true" />
+              </span>
             </h1>
             <p className="hero-copy">
               Building AI systems through machine learning and engineering.
@@ -696,7 +635,7 @@ export default function Home() {
             </Reveal>
           </div>
           {projects.map(p => (
-            <ProjectShowcase key={p.title} project={p} onActive={onActive} />
+            <ProjectShowcase key={p.title} project={p} />
           ))}
         </section>
 
