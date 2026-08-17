@@ -1,18 +1,19 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Moon, X } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 
 type PetState =
   | "IDLE"
+  | "WALKING"
   | "CURIOUS"
   | "READING"
   | "EXPLORING"
   | "THINKING"
   | "WORKING"
-  | "SUCCESS"
+  | "PHOTOGRAPHING"
+  | "CELEBRATING"
   | "ATTENTION"
   | "SLEEPING";
 
@@ -35,33 +36,16 @@ const sectionStates: Record<string, PetState> = {
   contact: "ATTENTION",
 };
 
-const stateLabel: Record<PetState, string> = {
-  IDLE: "At rest",
-  CURIOUS: "Looking closer",
-  READING: "Reading the room",
-  EXPLORING: "Exploring",
-  THINKING: "Thinking through it",
-  WORKING: "Working",
-  SUCCESS: "Nice and done",
-  ATTENTION: "Ready when you are",
-  SLEEPING: "Taking a quiet break",
-};
-
-const actionItems = [
-  { label: "View work", target: "work" },
-  { label: "Experience", target: "experience" },
-  { label: "About Harsh", target: "about" },
-  { label: "Contact Harsh", target: "contact" },
-];
-
 const statePose: Record<PetState, { y: number | number[]; rotate: number | number[]; scale?: number | number[] }> = {
   IDLE: { y: [0, -1, 0], rotate: [0, -1, 0], scale: [1, 1.012, 1] },
+  WALKING: { y: [0, -1, 0], rotate: [0, -2, 0], scale: [1, 1.014, 1] },
   CURIOUS: { y: -2, rotate: -3, scale: 1.025 },
   READING: { y: -1, rotate: 1, scale: 1.01 },
   EXPLORING: { y: [0, -1, 0], rotate: [0, -2, 0], scale: [1, 1.01, 1] },
   THINKING: { y: -1, rotate: [0, 2, 0], scale: [1, 1.008, 1] },
   WORKING: { y: [0, -1, 0], rotate: [0, 1, 0], scale: [1, 0.985, 1] },
-  SUCCESS: { y: [0, -5, 0], rotate: [0, -3, 0], scale: [1, 1.035, 1] },
+  PHOTOGRAPHING: { y: [0, -2, 0], rotate: [0, 2, 0], scale: [1, 1.02, 1] },
+  CELEBRATING: { y: [0, -5, 0], rotate: [0, -3, 0], scale: [1, 1.035, 1] },
   ATTENTION: { y: -1, rotate: [0, 3, 0], scale: 1.018 },
   SLEEPING: { y: 1, rotate: -2, scale: [1, 0.99, 1] },
 };
@@ -76,7 +60,7 @@ function SignalScout({ state, reducedMotion, direction, tilt }: {
   const transition = reducedMotion
     ? { duration: 0.18 }
     : Array.isArray(pose.y)
-      ? { duration: state === "SUCCESS" ? 0.72 : state === "IDLE" ? 4.4 : 2.4, ease: "easeInOut" as const, repeat: Infinity, repeatType: "mirror" as const }
+      ? { duration: state === "CELEBRATING" ? 0.72 : state === "IDLE" ? 4.4 : 2.4, ease: "easeInOut" as const, repeat: Infinity, repeatType: "mirror" as const }
       : { type: "spring" as const, stiffness: 280, damping: 24 };
 
   return (
@@ -90,6 +74,11 @@ function SignalScout({ state, reducedMotion, direction, tilt }: {
       <svg className="companion-pet-svg" viewBox="0 0 72 72" aria-hidden="true">
         <ellipse className="companion-pet-shadow" cx="36" cy="65" rx="21" ry="3.4" />
         <path className="companion-pet-orbit" d="M13 41C7 31 10 20 21 16c11-4 28-2 36 7 6 7 4 16-3 21" />
+        <g className="companion-flame">
+          <path className="companion-flame-outer" d="M36 18c-5-4-3-8 1-13 1 4 6 6 5 10 4-2 5-5 5-7 4 5 3 10-1 13-3 2-7 1-10-3Z" />
+          <path className="companion-flame-mid" d="M37 17c-2-3 0-5 2-8 1 3 4 4 3 7 2-1 3-2 3-4 2 4 0 8-3 9-2 0-4-2-5-4Z" />
+          <path className="companion-flame-core" d="M39 17c-1-2 0-3 1-5 1 2 2 3 1 5 0 1-1 1-2 0Z" />
+        </g>
         <path className="companion-pet-fin" d="M57 28c6-2 10-1 12 2-3 1-6 4-9 8l-5-4z" />
         <path className="companion-pet-fin-detail" d="M59 30l7 1-6 4" />
         <path className="companion-pet-body-shell" d="M17 39c0-11 8-19 19-19s20 7 20 18c0 10-8 18-19 19-11 0-20-7-20-18Z" />
@@ -104,7 +93,8 @@ function SignalScout({ state, reducedMotion, direction, tilt }: {
         <path className="companion-pet-foot left" d="M25 55c-1 4-4 6-7 6" />
         <path className="companion-pet-foot right" d="M47 55c1 4 4 6 7 6" />
         {state === "WORKING" && <circle className="companion-pet-processing" cx="52" cy="19" r="2" />}
-        {(state === "SUCCESS" || state === "ATTENTION") && (
+        {state === "PHOTOGRAPHING" && <path className="companion-camera-glyph" d="M51 15h6l1 2v5h-8v-5l1-2Zm2 2h2m-1 1.5v2" />}
+        {(state === "CELEBRATING" || state === "ATTENTION" || state === "PHOTOGRAPHING") && (
           <path className="companion-pet-spark" d="M12 20v7m-3.5-3.5h7M58 53v6m-3-3h6" />
         )}
       </svg>
@@ -118,6 +108,8 @@ export default function CompanionPet() {
   const reactionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sleepTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastCopy = useRef(0);
   const lastScroll = useRef(0);
   const lastProjectReaction = useRef(0);
   const visibleProjects = useRef(new Set<Element>());
@@ -127,8 +119,10 @@ export default function CompanionPet() {
   const [scrolling, setScrolling] = useState(false);
   const [sleeping, setSleeping] = useState(false);
   const [tilt, setTilt] = useState(0);
-  const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [focusedTarget, setFocusedTarget] = useState("top");
+  const [copied, setCopied] = useState(false);
+  const [longPressTriggered, setLongPressTriggered] = useState(false);
 
   const setTemporaryReaction = useCallback((next: PetState, duration = 720) => {
     if (reactionTimer.current) clearTimeout(reactionTimer.current);
@@ -164,6 +158,7 @@ export default function CompanionPet() {
       if (!visible) return;
       const next = sectionStates[(visible.target as HTMLElement).id] || "IDLE";
       setSectionState(next);
+      setFocusedTarget((visible.target as HTMLElement).id);
       companionBus.dispatchEvent(new CustomEvent("companion", { detail: { type: "SECTION_ENTER", section: (visible.target as HTMLElement).id } }));
     }, { threshold: [0, 0.2, 0.45, 0.7], rootMargin: "-18% 0px -42%" });
 
@@ -180,6 +175,8 @@ export default function CompanionPet() {
       entries.forEach((entry) => {
         if (entry.isIntersecting && !visibleProjects.current.has(entry.target)) {
           visibleProjects.current.add(entry.target);
+          const projectId = (entry.target as HTMLElement).closest(".project-article")?.id;
+          if (projectId) setFocusedTarget(projectId);
           if (now - lastProjectReaction.current > 1400) {
             lastProjectReaction.current = now;
             setTemporaryReaction("CURIOUS", 680);
@@ -215,7 +212,7 @@ export default function CompanionPet() {
       if (!detail) return;
       wake();
       if (detail.type === "FORM_SUBMIT_START") setTemporaryReaction("WORKING", 900);
-      if (detail.type === "FORM_SUBMIT_SUCCESS") setTemporaryReaction("SUCCESS", 780);
+      if (detail.type === "FORM_SUBMIT_SUCCESS") setTemporaryReaction("CELEBRATING", 780);
       if (detail.type === "FORM_SUBMIT_ERROR") setTemporaryReaction("ATTENTION", 780);
     };
     companionBus.addEventListener("companion", onCompanionEvent);
@@ -259,6 +256,7 @@ export default function CompanionPet() {
 
   useEffect(() => () => {
     if (reactionTimer.current) clearTimeout(reactionTimer.current);
+    if (holdTimer.current) clearTimeout(holdTimer.current);
   }, []);
 
   const state = useMemo<PetState>(() => {
@@ -268,10 +266,42 @@ export default function CompanionPet() {
     return sectionState;
   }, [reaction, scrolling, sectionState, sleeping]);
 
-  const goTo = (target: string) => {
-    document.getElementById(target)?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
-    setOpen(false);
-    setTemporaryReaction("EXPLORING", 620);
+  const copyFocusedLink = useCallback(async () => {
+    const now = Date.now();
+    if (now - lastCopy.current < 2000) return;
+    lastCopy.current = now;
+    const target = focusedTarget || "top";
+    const url = `${window.location.origin}${window.location.pathname}#${target}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const fallback = document.createElement("textarea");
+      fallback.value = url;
+      fallback.setAttribute("readonly", "true");
+      fallback.style.position = "fixed";
+      fallback.style.opacity = "0";
+      document.body.appendChild(fallback);
+      fallback.select();
+      document.execCommand("copy");
+      fallback.remove();
+    }
+    setCopied(true);
+    setTemporaryReaction("CELEBRATING", 820);
+    window.setTimeout(() => setCopied(false), 1400);
+  }, [focusedTarget, setTemporaryReaction]);
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType !== "touch") return;
+    setLongPressTriggered(false);
+    holdTimer.current = setTimeout(() => {
+      setLongPressTriggered(true);
+      void copyFocusedLink();
+    }, 560);
+  };
+
+  const clearHold = () => {
+    if (holdTimer.current) clearTimeout(holdTimer.current);
+    holdTimer.current = null;
   };
 
   if (hidden) {
