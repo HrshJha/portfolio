@@ -369,7 +369,38 @@ export default function Home() {
             <path d="M460 100l360 360M820 100L460 460" />
           </svg>
           <div className="hero-inner">
+            {/* Sarvam botanical ornament — visible in light mode only */}
+            <svg
+              className="hero-ornament"
+              viewBox="0 0 280 68"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              {/* left flourish */}
+              <path d="M16 44 C16 44 8 36 12 26 C16 16 28 18 28 26 C28 34 20 38 16 44 Z" stroke="white" strokeWidth="1.2" fill="none" opacity=".9"/>
+              <path d="M16 44 C16 44 6 40 4 30 C2 20 10 14 18 20 C24 24 22 34 16 44 Z" stroke="white" strokeWidth="1" fill="none" opacity=".75"/>
+              <path d="M16 44 C16 44 10 48 6 44 C2 40 4 34 10 36 C14 38 16 44 16 44 Z" stroke="white" strokeWidth=".9" fill="none" opacity=".65"/>
+              <path d="M14 46 Q12 50 10 52" stroke="white" strokeWidth=".8" fill="none" opacity=".5"/>
+              <path d="M18 46 Q16 52 14 56" stroke="white" strokeWidth=".8" fill="none" opacity=".5"/>
+              {/* center dot cluster */}
+              <circle cx="140" cy="48" r="1.8" fill="white" opacity=".7"/>
+              <circle cx="140" cy="40" r="1.2" fill="white" opacity=".5"/>
+              {/* right flourish (mirrored) */}
+              <path d="M264 44 C264 44 272 36 268 26 C264 16 252 18 252 26 C252 34 260 38 264 44 Z" stroke="white" strokeWidth="1.2" fill="none" opacity=".9"/>
+              <path d="M264 44 C264 44 274 40 276 30 C278 20 270 14 262 20 C256 24 258 34 264 44 Z" stroke="white" strokeWidth="1" fill="none" opacity=".75"/>
+              <path d="M264 44 C264 44 270 48 274 44 C278 40 276 34 270 36 C266 38 264 44 264 44 Z" stroke="white" strokeWidth=".9" fill="none" opacity=".65"/>
+              <path d="M266 46 Q268 50 270 52" stroke="white" strokeWidth=".8" fill="none" opacity=".5"/>
+              <path d="M262 46 Q264 52 266 56" stroke="white" strokeWidth=".8" fill="none" opacity=".5"/>
+              {/* horizontal base line */}
+              <line x1="28" y1="52" x2="252" y2="52" stroke="white" strokeWidth=".8" opacity=".45"/>
+              {/* small mid ticks */}
+              <line x1="100" y1="48" x2="100" y2="56" stroke="white" strokeWidth=".7" opacity=".35"/>
+              <line x1="180" y1="48" x2="180" y2="56" stroke="white" strokeWidth=".7" opacity=".35"/>
+            </svg>
+
             <p className="hero-eyebrow">ECE · AI/ML · Software</p>
+            <div className="eyebrow-rule" aria-hidden="true" />
             <h1 className="hero-name" id="hero-heading">
               <span className="name-line">Harsh</span>
               <span className="name-line">Kumar Jha<span className="accent-dot">.</span></span>
