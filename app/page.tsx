@@ -686,7 +686,9 @@ export default function Home() {
               <div className="section-header">
                 <p className="section-kicker">01 / Selected Work</p>
                 <h2 className="section-title" id="work-heading">
-                  Four systems, each grounded in a real product workflow.
+                  Four systems,<br />
+                  each grounded in a real<br />
+                  product workflow.
                 </h2>
               </div>
             </Reveal>
@@ -703,7 +705,8 @@ export default function Home() {
             <div className="section-header">
               <p className="section-kicker">02 / Experience</p>
               <h2 className="section-title" id="exp-heading">
-                Where the questions got sharper.
+                Where the questions<br />
+                got sharper.
               </h2>
             </div>
           </Reveal>
