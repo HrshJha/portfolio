@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ExternalLink, GitFork, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import NavBar from "./components/NavBar";
+import ContourField from "./components/ContourField";
 
 /* ── TYPES ────────────────────────────────────────────── */
 type Project = {
@@ -361,6 +362,7 @@ export default function Home() {
         {/* ── HERO ────────────────────────────────────────── */}
         <section className="hero section-pad" aria-labelledby="hero-heading">
           <div className="hero-blob" aria-hidden="true" />
+          <ContourField />
           <svg className="aperture-motif" viewBox="0 0 900 700" aria-hidden="true">
             <circle cx="640" cy="280" r="255" />
             <circle cx="640" cy="280" r="205" />
@@ -418,7 +420,7 @@ export default function Home() {
               <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="btn btn-ghost">
                 LinkedIn
               </a>
-              <a href="https://x.com/m_eharsh" target="_blank" rel="noreferrer" className="btn btn-ghost">
+              <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="btn btn-ghost">
                 X
               </a>
             </div>
@@ -426,16 +428,6 @@ export default function Home() {
           <div className="hero-scroll" aria-hidden="true">
             Scroll to explore
             <span className="scroll-arrow">↓</span>
-          </div>
-        </section>
-
-        <section className="tools-marquee" aria-label="Toolkit highlights">
-          <div className="marquee-track">
-            {[...stackChips.slice(0, 12), ...stackChips.slice(0, 12)].map(({ name }, index) => (
-              <span className="marquee-item" key={`${name}-${index}`}>
-                <span className="marquee-dot" aria-hidden="true" />{name}
-              </span>
-            ))}
           </div>
         </section>
 
@@ -617,7 +609,7 @@ export default function Home() {
                 <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="social-link">
                   <ArrowUpRight size={15} /> LinkedIn
                 </a>
-                <a href="https://x.com/m_eharsh" target="_blank" rel="noreferrer" className="social-link">
+                <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="social-link">
                   <ArrowUpRight size={15} /> X
                 </a>
               </div>

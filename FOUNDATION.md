@@ -392,7 +392,7 @@ LinkedIn:
 https://www.linkedin.com/in/hrshjha/
 
 X:
-https://x.com/m_eharsh
+https://x.com/haarshjha
 
 ---
 

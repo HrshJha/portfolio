@@ -27,6 +27,9 @@
   --sky-ice: #f5f7fc;
   --atmosphere: #f5f7fc;
   --technical: #0a0a0c;
+  --field-line: rgb(255 255 255);
+  --field-line-soft: rgb(255 255 255);
+  --field-accent: #c96f2e;
   --radius: 14px;
   --radius-chip: 999px;
   --display: 'Playfair Display', Georgia, serif;
@@ -63,6 +66,9 @@
   --cta-primary: #292E4E;
   --cta-secondary:#F8FAFC;
   --eyebrow-blue:#173FA8;
+  --field-line: rgb(30 40 65);
+  --field-line-soft: rgb(30 40 65);
+  --field-accent: #d96f32;
   color-scheme: light;
 }
 
@@ -89,78 +95,9 @@ body {
   overflow-x: hidden
 }
 
-/* Sarvam atmospheric body background (light only) */
+/* Light mode canvas */
 :root[data-theme='light'] body {
-  background:
-    /* strong warm orange ellipse — upper-center, navbar belt */
-    radial-gradient(ellipse 90% 55% at 50% 22%, #F77821 0%, #F67E32 18%, transparent 62%),
-    /* secondary orange spread — broader warm field */
-    radial-gradient(ellipse 110% 48% at 50% 28%, rgba(238,141,84,.72) 0%, transparent 58%),
-    /* peach-lavender transition zone */
-    radial-gradient(ellipse 95% 52% at 50% 46%, rgba(214,177,172,.65) 0%, transparent 58%),
-    /* powder blue middle field */
-    radial-gradient(ellipse 100% 60% at 50% 64%, rgba(193,202,240,.75) 0%, transparent 58%),
-    /* soft blue lower field */
-    radial-gradient(ellipse 85% 55% at 50% 78%, rgba(203,215,253,.65) 0%, transparent 56%),
-    /* very pale blue fading to white */
-    radial-gradient(ellipse 100% 50% at 50% 92%, rgba(232,237,252,.7) 0%, transparent 70%),
-    /* base near-white canvas */
-    linear-gradient(180deg, rgba(246,210,187,.38) 0%, rgba(248,250,255,1) 100%);
-  min-height: 100vh
-}
-
-a {
-  color: inherit;
-  text-decoration: none
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-  border: none;
-  background: none
-}
-
-h1,
-h2,
-h3,
-p {
-  margin: 0
-}
-
-img,
-video {
-  display: block;
-  max-width: 100%
-}
-
-/* ── GRAIN (dark only, never over video) ─────────── */
-.grain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: .04;
-  z-index: 100;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
-  mix-blend-mode: soft-light
-}
-
-:root[data-theme='light'] .grain {
-  display: none
-}
-
-/* ── SARVAM: animated atmospheric shift (light only) ── */
-@keyframes atmShift {
-  0%   { background-position: 50% 22%, 50% 28%, 50% 46%, 50% 64%, 50% 78%, 50% 92%, 0% 0% }
-  33%  { background-position: 52% 20%, 50% 30%, 48% 48%, 50% 66%, 52% 80%, 50% 93%, 0% 0% }
-  66%  { background-position: 48% 24%, 51% 26%, 51% 44%, 50% 62%, 48% 76%, 50% 91%, 0% 0% }
-  100% { background-position: 50% 22%, 50% 28%, 50% 46%, 50% 64%, 50% 78%, 50% 92%, 0% 0% }
-}
-
-:root[data-theme='light'] body {
-  background-size:
-    200% 120%, 220% 130%, 200% 120%, 210% 130%, 200% 130%, 210% 120%, 100% 100%;
-  animation: atmShift 22s ease-in-out infinite
+  background: var(--bg);
 }
 
 /* ── HERO BLOB (dark mode only) ─────────────────── */
@@ -193,6 +130,23 @@ video {
   0%   { transform: translate(0, 0) scale(1) }
   50%  { transform: translate(-2vw, 3vh) scale(1.06) }
   100% { transform: translate(2vw, -3vh) scale(.97) }
+}
+
+/* ── V7-INSPIRED CONTOUR FIELD ───────────────────── */
+.contour-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  opacity: .92;
+  mix-blend-mode: normal
+}
+
+:root[data-theme='light'] .contour-field {
+  opacity: .8
 }
 
 /* ── NAVIGATION ───────────────────────────────────── */
@@ -530,20 +484,60 @@ video {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-top: 108px;
-  padding-bottom: 60px;
+  padding-top: 100px;
+  padding-bottom: 50px;
   isolation: isolate;
   overflow: hidden;
-  /* dark mode subtle overlay */
-  background:
-    radial-gradient(ellipse at 50% -5%, rgba(229, 138, 79, .32), transparent 58%),
-    radial-gradient(ellipse at 54% 26%, rgba(185, 196, 232, .3), transparent 66%),
-    linear-gradient(180deg, rgba(245, 247, 252, .9) 0%, rgba(246, 247, 251, .62) 62%, transparent 100%)
 }
 
-/* Light: hero has transparent background — body gradient shows through */
+/* ── SARVAM: Exact atmospheric diffusion for light mode ── */
 :root[data-theme='light'] .hero {
-  background: transparent
+  background:
+    /* 1. Core glowing vibrant orange radiant dome centered right under navbar (12%–32% zone) */
+    radial-gradient(ellipse 72% 35% at 50% 18%, #F77821 0%, rgba(247, 120, 33, 0.95) 28%, rgba(246, 126, 50, 0.45) 55%, transparent 75%),
+    
+    /* 2. Wider soft peach / warm glow horizon diffusion */
+    radial-gradient(ellipse 110% 45% at 50% 22%, rgba(246, 120, 33, 0.7) 0%, rgba(238, 141, 84, 0.35) 45%, transparent 72%),
+    
+    /* 3. Subtle lavender / lilac / light purple haze transition zone (32%–52% zone) */
+    radial-gradient(ellipse 95% 38% at 50% 44%, rgba(214, 177, 172, 0.65) 0%, rgba(203, 182, 216, 0.4) 40%, rgba(193, 202, 240, 0.25) 60%, transparent 78%),
+    
+    /* 4. Soft powder periwinkle blue middle field (48%–70% zone) */
+    radial-gradient(ellipse 100% 45% at 50% 62%, rgba(193, 202, 240, 0.9) 0%, rgba(203, 215, 253, 0.6) 45%, transparent 75%),
+    
+    /* 5. Very pale icy blue airy transition (68%–88% zone) */
+    radial-gradient(ellipse 110% 40% at 50% 80%, rgba(232, 237, 252, 0.95) 0%, rgba(240, 244, 254, 0.6) 50%, transparent 80%),
+    
+    /* 6. Base continuous diffusion layer matching reference proportions */
+    linear-gradient(180deg,
+      #F6D2BB 0%,
+      #F6D2BB 10%,
+      #F77821 20%,
+      #F67E32 28%,
+      #EE8D54 38%,
+      #D6B1AC 48%,
+      #C1CAF0 60%,
+      #CBD7FD 72%,
+      #E8EDFC 84%,
+      #F8FAFF 94%,
+      #FFFFFF 100%
+    );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+:root[data-theme='light'] .hero::before,
+:root[data-theme='light'] .aperture-motif,
+:root[data-theme='light'] .hero-scroll {
+  display: none;
+}
+
+/* Dark mode hero background */
+:root:not([data-theme='light']) .hero {
+  background:
+    radial-gradient(ellipse at 50% -5%, rgba(229, 138, 79, .2), transparent 58%),
+    radial-gradient(ellipse at 54% 26%, rgba(120, 135, 205, .16), transparent 66%),
+    linear-gradient(180deg, #16171d 0%, var(--bg) 78%);
 }
 
 .hero::before {
@@ -559,7 +553,7 @@ video {
     radial-gradient(ellipse at 52% 6%, rgba(229, 138, 79, .16), transparent 58%),
     radial-gradient(ellipse at 14% 12%, rgba(185, 196, 232, .16), transparent 48%);
   filter: blur(34px);
-  opacity: .9
+  opacity: .9;
 }
 
 .aperture-motif {
@@ -572,72 +566,16 @@ video {
   fill: none;
   stroke: currentColor;
   stroke-width: 1;
-  color: rgba(104, 112, 145, .13);
+  color: rgba(245, 247, 252, .1);
   transform: rotate(-8deg);
-  pointer-events: none
-}
-
-:root:not([data-theme='light']) .hero {
-  background:
-    radial-gradient(ellipse at 50% -5%, rgba(229, 138, 79, .2), transparent 58%),
-    radial-gradient(ellipse at 54% 26%, rgba(120, 135, 205, .16), transparent 66%),
-    linear-gradient(180deg, #16171d 0%, var(--bg) 78%)
-}
-
-:root:not([data-theme='light']) .aperture-motif {
-  color: rgba(245, 247, 252, .1)
-}
-
-/* ── TOOL STRIP ──────────────────────────────────── */
-.tools-marquee {
-  position: relative;
-  overflow: hidden;
-  padding: 22px 0;
-  border-top: 1px solid var(--line2);
-  border-bottom: 1px solid var(--line2);
-  background: color-mix(in srgb, var(--atmosphere) 72%, transparent)
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  gap: 34px;
-  animation: marquee 34s linear infinite;
-  will-change: transform
-}
-
-.tools-marquee:hover .marquee-track {
-  animation-play-state: paused
-}
-
-.marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-  color: var(--muted);
-  font: 11px/1 var(--mono);
-  letter-spacing: .08em;
-  text-transform: uppercase
-}
-
-.marquee-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: .55
-}
-
-@keyframes marquee {
-  to { transform: translateX(-50%) }
+  pointer-events: none;
 }
 
 .hero-inner {
   position: relative;
   z-index: 1;
   max-width: 900px;
-  text-align: left
+  text-align: left;
 }
 
 /* Light: Sarvam — fully centered column */
@@ -646,8 +584,9 @@ video {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 820px;
-  width: 100%
+  max-width: 860px;
+  width: 100%;
+  padding: 0 16px;
 }
 
 .hero-eyebrow {
@@ -1797,10 +1736,6 @@ footer {
 
   .hero-blob::before,
   .hero-blob::after {
-    animation: none
-  }
-
-  .marquee-track {
     animation: none
   }
 
