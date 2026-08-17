@@ -274,7 +274,20 @@ export default function CompanionPet() {
     setTemporaryReaction("EXPLORING", 620);
   };
 
-  if (hidden) return null;
+  if (hidden) {
+    return (
+      <div className="companion-pet companion-pet-hidden" ref={petRef}>
+        <button
+          type="button"
+          className="companion-restore"
+          aria-label="Show portfolio companion"
+          onClick={() => { setHidden(false); wake(); setTemporaryReaction("CURIOUS", 560); }}
+        >
+          <span aria-hidden="true">+</span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="companion-pet" ref={petRef} data-open={open ? "true" : "false"}>
