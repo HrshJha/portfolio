@@ -2,14 +2,14 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, ExternalLink, Pause, Play } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Github, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import NavBar from "./components/NavBar";
 
 /* ── TYPES ────────────────────────────────────────────── */
 type Project = {
   index: string; title: string; category: string; thesis: string;
   video: string; poster: string; github: string; stack: string[];
-  problem: string; approach: string; architecture: string; idea: string;
+  problem: string; approach: string; architecture: string; idea: string; liveDemo?: string;
 };
 
 /* ── DATA ─────────────────────────────────────────────── */
@@ -153,11 +153,12 @@ function VideoPlayer({ project, onActive }: { project: Project; onActive: (v: HT
   const videoRef = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
   const [error, setError] = useState(false);
 
   const playVideo = useCallback((muted = false) => {
     const v = videoRef.current; if (!v) return;
-    setStarted(true); v.muted = muted; onActive(v);
+    setStarted(true); v.muted = muted; setMuted(muted); onActive(v);
     v.play().then(() => setPlaying(true)).catch(() => setError(true));
   }, [onActive]);
 
@@ -166,6 +167,13 @@ function VideoPlayer({ project, onActive }: { project: Project; onActive: (v: HT
     v.pause();
     if (reset) { v.currentTime = 0; setStarted(false); }
     setPlaying(false);
+    setMuted(false);
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    const v = videoRef.current; if (!v) return;
+    v.muted = !v.muted;
+    setMuted(v.muted);
   }, []);
 
   const handleMouseEnter = useCallback(() => {
@@ -204,14 +212,15 @@ function VideoPlayer({ project, onActive }: { project: Project; onActive: (v: HT
         </div>
       )}
       {playing && (
-        <button
-          className="video-pause-btn"
-          onClick={() => pauseVideo(false)}
-          aria-label={`Pause ${project.title} demo`}
-        >
-          <Pause size={14} fill="currentColor" />
-          <span>Pause</span>
-        </button>
+        <div className="video-controls">
+          <button className="video-control-btn" onClick={toggleMute} aria-label={muted ? `Unmute ${project.title} demo` : `Mute ${project.title} demo`}>
+            {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+          </button>
+          <button className="video-pause-btn" onClick={() => pauseVideo(false)} aria-label={`Pause ${project.title} demo`}>
+            <Pause size={14} fill="currentColor" />
+            <span>Pause</span>
+          </button>
+        </div>
       )}
       {error && (
         <p className="video-error-msg">Video unavailable — click play to retry.</p>
@@ -240,33 +249,57 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
       </Reveal>
 
       <Reveal>
-        <VideoPlayer project={project} onActive={onActive} />
-      </Reveal>
-
-      <div className="project-details">
-        {([
-          ["Problem",      project.problem,      ""],
-          ["Approach",     project.approach,     ""],
-          ["Architecture", project.architecture, ""],
-          ["Key idea",     project.idea,         "idea"],
-        ] as [string, string, string][]).map(([label, copy, extraClass]) => (
-          <Reveal key={label}>
-            <div className="detail-row">
-              <span className="detail-label">{label}</span>
-              <p className={`detail-body ${extraClass}`}>{copy}</p>
+        <div className="project-card">
+          <div className="project-media-panel">
+            <VideoPlayer project={project} onActive={onActive} />
+            <div className="project-media-actions">
+              <a href={project.github} target="_blank" rel="noreferrer" className="project-action project-action-primary">
+                <Github size={14} /> View Code
+              </a>
+              {project.liveDemo && (
+                <a href={project.liveDemo} target="_blank" rel="noreferrer" className="project-action project-action-secondary">
+                  Live Demo <ArrowUpRight size={14} />
+                </a>
+              )}
             </div>
-          </Reveal>
-        ))}
-      </div>
-
-      <Reveal>
-        <div className="project-footer">
-          <div className="stack-tags">
-            {project.stack.map(t => <span key={t} className="stack-tag">{t}</span>)}
           </div>
-          <a href={project.github} target="_blank" rel="noreferrer" className="text-link">
-            GitHub <ArrowUpRight size={14} />
-          </a>
+
+          <div className="project-info-panel">
+            {([
+              ["Problem", project.problem],
+              ["Approach", project.approach],
+              ["Architecture", project.architecture],
+            ] as [string, string][]).map(([label, copy]) => (
+              <div className="info-row" key={label}>
+                <span className="detail-label">{label}</span>
+                <p className="detail-body">{copy}</p>
+                {label === "Architecture" && (
+                  <div className="project-stack-chips" aria-label={`${project.title} technology stack`}>
+                    {project.stack.map((name) => {
+                      const chip = stackChips.find((item) => item.name === name);
+                      return (
+                        <motion.span
+                          className="project-stack-chip"
+                          key={name}
+                          whileHover={{ scale: 1.08, y: -1 }}
+                          transition={{ type: "spring", stiffness: 280, damping: 28 }}
+                          style={{ "--chip-color": chip?.color === "currentColor" ? "var(--text)" : chip?.color } as React.CSSProperties}
+                          title={name}
+                        >
+                          <ChipIcon name={name} color={chip?.color || "currentColor"} />
+                          <span>{name}</span>
+                        </motion.span>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div className="info-row info-row-idea">
+              <span className="detail-label">Key idea</span>
+              <p className="detail-body idea">{project.idea}</p>
+            </div>
+          </div>
         </div>
       </Reveal>
     </motion.article>
