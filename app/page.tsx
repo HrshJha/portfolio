@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, ExternalLink, Github, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowUpRight, ExternalLink, GitFork, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import NavBar from "./components/NavBar";
 
 /* ── TYPES ────────────────────────────────────────────── */
@@ -254,7 +254,7 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
             <VideoPlayer project={project} onActive={onActive} />
             <div className="project-media-actions">
               <a href={project.github} target="_blank" rel="noreferrer" className="project-action project-action-primary">
-                <Github size={14} /> View Code
+                <GitFork size={14} /> View Code
               </a>
               {project.liveDemo && (
                 <a href={project.liveDemo} target="_blank" rel="noreferrer" className="project-action project-action-secondary">

@@ -9,3 +9,5 @@
 - Added a monochrome toolkit marquee directly below the hero. Tool names remain muted so they do not compete with the atmospheric field.
 - Kept Experience, Contact, and the footer near-black so visual intensity decays as information density increases.
 - Preserved real project names, descriptions, experience entries, links, and contact details.
+- Project cards use one unified `1.45fr / 1fr` desktop grid (approximately 58% video / 42% information), a 24px gap, and 20px internal padding; below the `lg` breakpoint they stack, with 12px padding on mobile.
+- Project tech chips use existing inline brand SVGs at 72% default opacity with desaturation, then reveal color, scale to 1.08, and add a low-opacity brand-matched glow on hover using the shared `280 / 28` spring.
