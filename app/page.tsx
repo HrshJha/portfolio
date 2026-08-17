@@ -15,7 +15,7 @@ const projects: Project[] = [
 const socials = [
   { label: "GitHub", href: "https://github.com/HrshJha", icon: Code2 },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/hrshjha", icon: BriefcaseBusiness },
-  { label: "X", href: "https://x.com", icon: ArrowUpRight },
+  { label: "X", href: "https://x.com/haarshjha", icon: ArrowUpRight },
 ];
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
@@ -46,7 +46,7 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
     <Reveal><div className="project-kicker"><span>{project.index} / PROJECT</span><span>{project.category}</span></div><h3>{project.title}</h3><p className="thesis">{project.thesis}</p></Reveal>
     <Reveal><VideoPlayer project={project} onActive={onActive} /></Reveal>
     <div className="project-details">
-      {[ ["Problem", project.problem], ["Approach", project.approach], ["Architecture", project.architecture], ["Key idea", project.idea] ].map(([label, copy]) => <Reveal key={label}><div className="detail"><span>{label}</span><p>{copy}</p></div></Reveal>)}
+      {[["Problem", project.problem], ["Approach", project.approach], ["Architecture", project.architecture], ["Key idea", project.idea]].map(([label, copy]) => <Reveal key={label}><div className="detail"><span>{label}</span><p>{copy}</p></div></Reveal>)}
     </div>
     <Reveal><div className="project-end"><div className="tags">{project.stack.map(item => <span key={item}>{item}</span>)}</div><a href={project.github} target="_blank" rel="noreferrer" className="text-link">GitHub <ArrowUpRight size={15} /></a></div></Reveal>
   </article>;
