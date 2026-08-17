@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ExternalLink, Pause, Play } from "lucide-react";
 import NavBar from "./components/NavBar";
 
@@ -133,17 +134,18 @@ function ChipIcon({ name, color }: { name: string; color: string }) {
 
 /* ── REVEAL ───────────────────────────────────────────── */
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => entry.isIntersecting && el.classList.add("visible"),
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return <div ref={ref} className={`reveal ${className}`}>{children}</div>;
+  const reduceMotion = useReducedMotion();
+  return (
+    <motion.div
+      className={`reveal ${className}`}
+      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 /* ── VIDEO PLAYER ─────────────────────────────────────── */
@@ -222,7 +224,12 @@ function VideoPlayer({ project, onActive }: { project: Project; onActive: (v: HT
 function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v: HTMLVideoElement) => void }) {
   const id = project.title.toLowerCase().replace(/\s+/g, "-");
   return (
-    <article className="project-article section-pad" id={id}>
+    <motion.article
+      className="project-article section-pad"
+      id={id}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 280, damping: 28 }}
+    >
       <Reveal>
         <div className="project-kicker">
           <span className="project-index">{project.index} / PROJECT</span>
@@ -262,13 +269,13 @@ function ProjectShowcase({ project, onActive }: { project: Project; onActive: (v
           </a>
         </div>
       </Reveal>
-    </article>
+    </motion.article>
   );
 }
 
 /* ── HOME ─────────────────────────────────────────────── */
 export default function Home() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
   const [scrollPct, setScrollPct] = useState(0);
   const currentVideo = useRef<HTMLVideoElement | null>(null);
 
@@ -321,6 +328,13 @@ export default function Home() {
         {/* ── HERO ────────────────────────────────────────── */}
         <section className="hero section-pad" aria-labelledby="hero-heading">
           <div className="hero-blob" aria-hidden="true" />
+          <svg className="aperture-motif" viewBox="0 0 900 700" aria-hidden="true">
+            <circle cx="640" cy="280" r="255" />
+            <circle cx="640" cy="280" r="205" />
+            <circle cx="640" cy="280" r="150" />
+            <path d="M386 280h508M640 26v508" />
+            <path d="M460 100l360 360M820 100L460 460" />
+          </svg>
           <div className="hero-inner">
             <p className="hero-eyebrow">ECE · AI/ML · Software</p>
             <h1 className="hero-name" id="hero-heading">
@@ -348,6 +362,16 @@ export default function Home() {
           <div className="hero-scroll" aria-hidden="true">
             Scroll to explore
             <span className="scroll-arrow">↓</span>
+          </div>
+        </section>
+
+        <section className="tools-marquee" aria-label="Toolkit highlights">
+          <div className="marquee-track">
+            {[...stackChips.slice(0, 12), ...stackChips.slice(0, 12)].map(({ name }, index) => (
+              <span className="marquee-item" key={`${name}-${index}`}>
+                <span className="marquee-dot" aria-hidden="true" />{name}
+              </span>
+            ))}
           </div>
         </section>
 
@@ -539,7 +563,7 @@ export default function Home() {
       </main>
 
       {/* FOOTER */}
-      <footer role="contentinfo">
+      <footer className="site-footer" role="contentinfo">
         <span className="footer-name">HARSH KUMAR JHA</span>
         <span className="footer-line">Building things. Learning systems. Exploring AI.</span>
         <span className="footer-copy">© 2026</span>

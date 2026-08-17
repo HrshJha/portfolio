@@ -1,29 +1,34 @@
 /* ========================================================
-   HARSH KUMAR JHA — Portfolio v1.1
-   Dark: Vercel-tone near-pure-black
-   Light: Sarvam AI-tone warm cream with animated gradient blobs
+   HARSH KUMAR JHA — Golden Hour atmospheric system
+   Warm dawn light diffuses into powder sky, then resolves into
+   a quiet near-black technical surface.
    ======================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,700&display=swap');
 
 /* ── TOKEN PAIRS (dark default / light override) ──── */
 :root {
-  /* Dark: Vercel-tone */
-  --bg: #000000;
-  --bg2: #0a0a0a;
-  --surface: #111111;
-  --surface2: #181818;
-  --text: #ededed;
-  --text2: #a1a1a1;
-  --muted: #555555;
+  --bg: #0a0a0c;
+  --bg2: #111216;
+  --surface: #17181d;
+  --surface2: #21232a;
+  --text: #f5f7fc;
+  --text2: #b7bbc8;
+  --muted: #747987;
   --line: rgba(255, 255, 255, .07);
   --line2: rgba(255, 255, 255, .04);
-  --accent: #e8c354;
-  --accent-rgb: 232, 195, 84;
-  --accent-text: #000;
-  --glow: rgba(232, 195, 84, .1);
-  --radius: 2px;
-  --radius-chip: 4px;
+  --accent: #df8051;
+  --accent-rgb: 223, 128, 81;
+  --accent-text: #101014;
+  --glow: rgba(223, 128, 81, .16);
+  --sky-dawn: #e58a4f;
+  --sky-peach: #f8c08a;
+  --sky-blue: #b9c4e8;
+  --sky-ice: #f5f7fc;
+  --atmosphere: #f5f7fc;
+  --technical: #0a0a0c;
+  --radius: 14px;
+  --radius-chip: 999px;
   --display: 'Playfair Display', Georgia, serif;
   --body: 'DM Sans', Arial, sans-serif;
   --mono: 'DM Mono', monospace;
@@ -31,20 +36,21 @@
 }
 
 :root[data-theme='light'] {
-  /* Light: Sarvam AI-tone */
-  --bg: #faf8f5;
-  --bg2: #f4f1ed;
-  --surface: #edeae6;
-  --surface2: #e5e1dc;
-  --text: #1a1a1a;
-  --text2: #4a4846;
-  --muted: #888480;
+  --bg: #f6f7fb;
+  --bg2: #eef1f8;
+  --surface: rgba(255, 255, 255, .62);
+  --surface2: rgba(255, 255, 255, .82);
+  --text: #17181d;
+  --text2: #4f5564;
+  --muted: #858a98;
   --line: rgba(26, 26, 26, .09);
   --line2: rgba(26, 26, 26, .055);
-  --accent: #e05a1c;
-  --accent-rgb: 224, 90, 28;
+  --accent: #df6f3f;
+  --accent-rgb: 223, 111, 63;
   --accent-text: #fff;
-  --glow: rgba(224, 90, 28, .07);
+  --glow: rgba(223, 111, 63, .14);
+  --atmosphere: #f6f7fb;
+  --technical: #0a0a0c;
   color-scheme: light;
 }
 
@@ -135,7 +141,7 @@ video {
   height: 55vw;
   top: -20%;
   left: 30%;
-  background: radial-gradient(circle, rgba(230, 110, 40, .36) 0%, rgba(224, 90, 28, .16) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(229, 138, 79, .34) 0%, rgba(248, 192, 138, .18) 50%, transparent 70%);
   animation: blobA 18s ease-in-out infinite alternate;
   opacity: 1
 }
@@ -145,7 +151,7 @@ video {
   height: 45vw;
   top: 5%;
   left: -10%;
-  background: radial-gradient(circle, rgba(180, 160, 240, .26) 0%, rgba(150, 130, 210, .10) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(185, 196, 232, .3) 0%, rgba(185, 196, 232, .12) 50%, transparent 70%);
   animation: blobB 22s ease-in-out infinite alternate;
   opacity: 1
 }
@@ -202,7 +208,7 @@ video {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(105deg, color-mix(in srgb, var(--surface) 86%, transparent), color-mix(in srgb, var(--accent) 12%, transparent), color-mix(in srgb, var(--surface) 82%, transparent));
+  background: linear-gradient(105deg, color-mix(in srgb, var(--surface) 84%, transparent), color-mix(in srgb, var(--sky-peach) 20%, transparent), color-mix(in srgb, var(--sky-blue) 10%, transparent), color-mix(in srgb, var(--surface) 82%, transparent));
   box-shadow: 0 14px 40px rgba(0, 0, 0, .12), inset 0 1px 0 rgba(255, 255, 255, .1);
   backdrop-filter: blur(22px) saturate(170%);
   transition: height .3s, padding .3s, background .3s, box-shadow .3s, border-color .3s
@@ -211,7 +217,7 @@ video {
 .nav-compact {
   height: 56px;
   padding-left: 20px;
-  background: linear-gradient(105deg, color-mix(in srgb, var(--surface) 94%, transparent), color-mix(in srgb, var(--accent) 8%, transparent), color-mix(in srgb, var(--surface) 92%, transparent));
+  background: linear-gradient(105deg, color-mix(in srgb, var(--surface) 95%, transparent), color-mix(in srgb, var(--sky-peach) 12%, transparent), color-mix(in srgb, var(--sky-blue) 8%, transparent), color-mix(in srgb, var(--surface) 92%, transparent));
   border-color: var(--line);
   box-shadow: 0 14px 42px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .08)
 }
@@ -422,7 +428,12 @@ video {
   align-items: center;
   position: relative;
   padding-top: 96px;
-  isolation: isolate
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% -5%, rgba(229, 138, 79, .32), transparent 58%),
+    radial-gradient(ellipse at 54% 26%, rgba(185, 196, 232, .3), transparent 66%),
+    linear-gradient(180deg, rgba(245, 247, 252, .9) 0%, rgba(246, 247, 251, .62) 62%, transparent 100%)
 }
 
 .hero::before {
@@ -434,9 +445,80 @@ video {
   right: -12%;
   height: 68%;
   pointer-events: none;
-  background: radial-gradient(ellipse at 52% 6%, rgba(var(--accent-rgb), .2), transparent 58%), radial-gradient(ellipse at 14% 12%, rgba(108, 126, 255, .12), transparent 48%);
-  filter: blur(28px);
+  background: radial-gradient(ellipse at 52% 6%, rgba(229, 138, 79, .16), transparent 58%), radial-gradient(ellipse at 14% 12%, rgba(185, 196, 232, .16), transparent 48%);
+  filter: blur(34px);
   opacity: .9
+}
+
+.aperture-motif {
+  position: absolute;
+  width: min(72vw, 900px);
+  height: auto;
+  right: -10vw;
+  top: 12%;
+  z-index: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  color: rgba(104, 112, 145, .13);
+  transform: rotate(-8deg);
+  pointer-events: none
+}
+
+:root:not([data-theme='light']) .hero {
+  background:
+    radial-gradient(ellipse at 50% -5%, rgba(229, 138, 79, .2), transparent 58%),
+    radial-gradient(ellipse at 54% 26%, rgba(120, 135, 205, .16), transparent 66%),
+    linear-gradient(180deg, #16171d 0%, var(--bg) 78%)
+}
+
+:root:not([data-theme='light']) .aperture-motif {
+  color: rgba(245, 247, 252, .1)
+}
+
+/* ── TOOL STRIP ──────────────────────────────────── */
+.tools-marquee {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 0;
+  border-top: 1px solid var(--line2);
+  border-bottom: 1px solid var(--line2);
+  background: color-mix(in srgb, var(--atmosphere) 72%, transparent)
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 34px;
+  animation: marquee 34s linear infinite;
+  will-change: transform
+}
+
+.tools-marquee:hover .marquee-track {
+  animation-play-state: paused
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  color: var(--muted);
+  font: 11px/1 var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase
+}
+
+.marquee-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .55
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%) }
 }
 
 .hero-inner {
@@ -504,7 +586,7 @@ h1.hero-name .accent-dot {
   text-transform: uppercase;
   padding: 12px 18px;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: 999px;
   transition: background .2s, color .2s, border-color .2s
 }
 
@@ -601,14 +683,22 @@ h2.section-title {
 
 /* ── WORK SECTION ────────────────────────────────── */
 .work-section {
-  border-top: 1px solid var(--line)
+  border-top: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(185, 196, 232, .16), transparent 48%),
+    linear-gradient(180deg, color-mix(in srgb, var(--atmosphere) 86%, transparent), var(--bg) 88%)
 }
 
 /* ── PROJECT ─────────────────────────────────────── */
 .project-article {
   min-height: 92svh;
   padding: 80px 0 100px;
-  border-bottom: 1px solid var(--line)
+  border-bottom: 1px solid var(--line);
+  transition: border-color .3s, background .3s
+}
+
+.project-article:hover {
+  border-color: rgba(var(--accent-rgb), .22)
 }
 
 .project-kicker {
@@ -654,7 +744,8 @@ h3.project-title {
   background: var(--bg2);
   aspect-ratio: 16/9;
   overflow: hidden;
-  border-radius: var(--radius);
+  border-radius: 24px;
+  box-shadow: 0 20px 70px rgba(10, 10, 12, .08);
   margin-bottom: 56px
 }
 
@@ -818,7 +909,15 @@ h3.project-title {
 /* ── EXPERIENCE ───────────────────────────────────── */
 .exp-section {
   padding-bottom: 112px;
-  border-bottom: 1px solid var(--line)
+  border-bottom: 1px solid rgba(255, 255, 255, .09);
+  background-color: var(--technical);
+  background-image: radial-gradient(ellipse at 76% 0%, rgba(229, 138, 79, .09), transparent 34%);
+  --text: #f5f7fc;
+  --text2: #b7bbc8;
+  --muted: #858a98;
+  --line: rgba(255, 255, 255, .12);
+  --line2: rgba(255, 255, 255, .07);
+  color: var(--text)
 }
 
 .exp-list {
@@ -898,7 +997,10 @@ h3.project-title {
 /* ── ABOUT ─────────────────────────────────────────── */
 .about-section {
   padding-bottom: 112px;
-  border-bottom: 1px solid var(--line)
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 8% 24%, rgba(248, 192, 138, .14), transparent 35%),
+    linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--sky-peach) 7%, var(--bg)) 100%)
 }
 
 .about-body {
@@ -916,7 +1018,8 @@ h3.project-title {
 /* ── SKILLS / STACK ──────────────────────────────── */
 .skills-section {
   padding-bottom: 112px;
-  border-bottom: 1px solid var(--line)
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--sky-blue) 6%, var(--bg)), var(--bg))
 }
 
 .skill-groups {
@@ -1025,7 +1128,8 @@ h3.project-title {
 /* ── EDUCATION ────────────────────────────────────── */
 .education-section {
   padding-bottom: 112px;
-  border-bottom: 1px solid var(--line)
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--bg), color-mix(in srgb, var(--sky-peach) 6%, var(--bg)))
 }
 
 .edu-block {
@@ -1069,7 +1173,15 @@ h3.project-title {
   min-height: 65svh;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--line)
+  border-bottom: 1px solid rgba(255, 255, 255, .09);
+  background-color: var(--technical);
+  background-image: radial-gradient(ellipse at 70% 10%, rgba(229, 138, 79, .16), transparent 38%);
+  --text: #f5f7fc;
+  --text2: #b7bbc8;
+  --muted: #858a98;
+  --line: rgba(255, 255, 255, .12);
+  --line2: rgba(255, 255, 255, .07);
+  color: var(--text)
 }
 
 h2.contact-title {
@@ -1128,7 +1240,12 @@ footer {
   gap: 16px;
   flex-wrap: wrap;
   align-items: center;
-  border-top: 1px solid var(--line)
+  border-top: 1px solid rgba(255, 255, 255, .09);
+  background: var(--technical);
+  --text: #f5f7fc;
+  --muted: #858a98;
+  --line: rgba(255, 255, 255, .12);
+  color: var(--text)
 }
 
 .footer-name {
@@ -1177,14 +1294,11 @@ footer {
 
 /* ── REVEAL ───────────────────────────────────────── */
 .reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity .75s ease-out, transform .75s ease-out
+  will-change: opacity, transform
 }
 
 .reveal.visible {
-  opacity: 1;
-  transform: translateY(0)
+  opacity: 1
 }
 
 .reveal-d1 {
@@ -1246,6 +1360,10 @@ footer {
     animation: none
   }
 
+  .marquee-track {
+    animation: none
+  }
+
   .scroll-arrow {
     animation: none
   }
@@ -1300,6 +1418,13 @@ footer {
   .hero {
     min-height: 92svh;
     padding-top: 84px
+  }
+
+  .aperture-motif {
+    width: 120vw;
+    right: -48vw;
+    top: 18%;
+    opacity: .7
   }
 
   .hero-scroll {
