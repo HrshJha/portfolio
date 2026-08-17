@@ -315,7 +315,7 @@ export default function Home() {
 
   /* Sync theme from DOM */
   useEffect(() => {
-    setTheme(document.documentElement.dataset.theme || "dark");
+    setTheme(document.documentElement.dataset.theme || "light");
   }, []);
 
   /* Scroll progress */
