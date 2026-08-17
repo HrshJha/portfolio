@@ -18,34 +18,36 @@ const links = [
 
 export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
   const [compact, setCompact] = useState(false);
-  const [active, setActive] = useState("#work");
+  const [active, setActive] = useState("work");
   const navRef = useRef<HTMLElement>(null);
+  const isNavigatingRef = useRef(false);
+
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number; opacity: number }>({
     left: 0,
     width: 36,
     opacity: 0,
   });
 
-  const updateIndicator = useCallback(() => {
+  const updateIndicator = useCallback((activeTarget: string) => {
     if (!navRef.current) return;
-    const activeEl = navRef.current.querySelector<HTMLAnchorElement>(`a[href="${active}"]`);
-    if (!activeEl) {
-      setIndicatorStyle((prev) => ({ ...prev, opacity: 0 }));
-      return;
-    }
+    const activeEl = navRef.current.querySelector<HTMLAnchorElement>(`a[data-section="${activeTarget}"]`);
+    if (!activeEl) return;
+
     const navRect = navRef.current.getBoundingClientRect();
     const linkRect = activeEl.getBoundingClientRect();
 
+    if (linkRect.width === 0) return;
+
     const indicatorWidth = 36;
-    const center = linkRect.left - navRect.left + linkRect.width / 2;
-    const left = center - indicatorWidth / 2;
+    const centerX = linkRect.left - navRect.left + linkRect.width / 2;
+    const targetLeft = centerX - indicatorWidth / 2;
 
     setIndicatorStyle({
-      left,
+      left: targetLeft,
       width: indicatorWidth,
       opacity: 1,
     });
-  }, [active]);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setCompact(window.scrollY > 28);
@@ -55,10 +57,70 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
   }, []);
 
   useEffect(() => {
-    updateIndicator();
-    window.addEventListener("resize", updateIndicator, { passive: true });
-    return () => window.removeEventListener("resize", updateIndicator);
-  }, [updateIndicator]);
+    updateIndicator(active);
+    const timer = setTimeout(() => updateIndicator(active), 60);
+    const onResize = () => updateIndicator(active);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [active, updateIndicator]);
+
+  // Premium smooth scroll with 820ms ease-out (1 - (1-t)^4)
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, sectionId: string) => {
+    e.preventDefault();
+    const targetEl = document.getElementById(sectionId);
+    if (!targetEl) return;
+
+    isNavigatingRef.current = true;
+    setActive(sectionId);
+    updateIndicator(sectionId);
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const navHeight = navRef.current?.closest(".nav")?.getBoundingClientRect().height || 64;
+    const targetY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navHeight - 24);
+
+    // Subtle destination section entry emphasis
+    const dividerEl = document.getElementById(`divider-${sectionId}`);
+    if (dividerEl) {
+      dividerEl.classList.add("is-highlighted");
+      setTimeout(() => dividerEl.classList.remove("is-highlighted"), 380);
+    }
+    targetEl.classList.remove("section-arriving");
+    void targetEl.offsetWidth; // trigger reflow
+    targetEl.classList.add("section-arriving");
+    setTimeout(() => targetEl.classList.remove("section-arriving"), 550);
+
+    if (prefersReducedMotion) {
+      window.scrollTo(0, targetY);
+      isNavigatingRef.current = false;
+      return;
+    }
+
+    const startY = window.scrollY;
+    const diff = targetY - startY;
+    const duration = 820;
+    const startTime = performance.now();
+    const ease = (t: number) => 1 - Math.pow(1 - t, 4);
+
+    function step(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const currentY = startY + diff * ease(progress);
+      window.scrollTo(0, currentY);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        window.scrollTo(0, targetY);
+        setTimeout(() => {
+          isNavigatingRef.current = false;
+        }, 100);
+      }
+    }
+    requestAnimationFrame(step);
+  };
 
   useEffect(() => {
     const sectionIds = ["work", "experience", "about", "contact"];
@@ -68,17 +130,22 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (isNavigatingRef.current) return;
+
         const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
         if (visible.length > 0) {
-          setActive(`#${visible[0].target.id}`);
+          const sectionId = visible[0].target.id || visible[0].target.getAttribute("data-section");
+          if (sectionId && links.some((l) => l.id === sectionId)) {
+            setActive(sectionId);
+          }
         }
       },
       {
         root: null,
-        threshold: [0.15, 0.35, 0.6, 0.85],
+        threshold: [0.25, 0.5, 0.75],
         rootMargin: "-20% 0px -45% 0px",
       }
     );
@@ -86,13 +153,14 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
     sections.forEach((section) => observer.observe(section));
 
     const onScrollEdge = () => {
+      if (isNavigatingRef.current) return;
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
       if (scrollY < 140) {
-        setActive("#work");
+        setActive("work");
       } else if (scrollY >= maxScroll - 60) {
-        setActive("#contact");
+        setActive("contact");
       }
     };
 
@@ -120,8 +188,9 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
           <a
             key={link.href}
             href={link.href}
-            className={active === link.href ? "active" : ""}
-            onClick={() => setActive(link.href)}
+            data-section={link.id}
+            className={active === link.id ? "active" : ""}
+            onClick={(e) => handleNavClick(e, link.href, link.id)}
           >
             {link.label}
           </a>
@@ -134,7 +203,9 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
             opacity: indicatorStyle.opacity,
           }}
           aria-hidden="true"
-        />
+        >
+          <span className="indicator-line" />
+        </div>
       </nav>
 
       <div className="nav-actions">
