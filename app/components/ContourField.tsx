@@ -11,23 +11,23 @@ class Trace {
 
   constructor(lineIndex: number, isDark: boolean) {
     this.lineIndex = lineIndex;
-    this.u = Math.random() * 0.65; // Concentrated on the left & mid regions
-    this.speed = 0.022 + Math.random() * 0.030;
-    this.length = 0.012 + Math.random() * 0.025;
+    this.u = Math.random() * 0.60; // Concentrated on the left & mid-left regions
+    this.speed = 0.022 + Math.random() * 0.028;
+    this.length = 0.012 + Math.random() * 0.024;
     this.alpha = isDark
-      ? 0.22 + Math.random() * 0.26 // 0.22 to 0.48 in dark mode
-      : 0.18 + Math.random() * 0.17; // 0.18 to 0.35 in light mode
+      ? 0.24 + Math.random() * 0.28 // 0.24 to 0.52 in dark mode
+      : 0.20 + Math.random() * 0.22; // 0.20 to 0.42 in light mode
   }
 
   update(dt: number, isDark: boolean) {
     this.u += this.speed * dt;
-    if (this.u > 0.88) {
+    if (this.u > 0.85) {
       this.u = -0.06 - Math.random() * 0.12;
-      this.speed = 0.022 + Math.random() * 0.030;
-      this.length = 0.012 + Math.random() * 0.025;
+      this.speed = 0.022 + Math.random() * 0.028;
+      this.length = 0.012 + Math.random() * 0.024;
       this.alpha = isDark
-        ? 0.22 + Math.random() * 0.26
-        : 0.18 + Math.random() * 0.17;
+        ? 0.24 + Math.random() * 0.28
+        : 0.20 + Math.random() * 0.22;
     }
   }
 }
@@ -89,23 +89,43 @@ export default function ContourField() {
       const nameY = headlineMetrics.nameCenterY || h * 0.48;
       const normalized = index / Math.max(1, lineCount - 1) - 0.5; // -0.5 to +0.5
       const sourceSpread = h * 0.72;
-      const convergence = Math.pow(1 - u, 1.65);
+      // Exponential convergence decaying toward nameCenterY
+      const convergence = Math.pow(1 - Math.min(1, u * 1.15), 1.70);
       const base = normalized * sourceSpread * convergence;
-      const organic = Math.sin(u * Math.PI * 1.1 + index * 0.12) * 8 * convergence;
+      const organic = Math.sin(u * Math.PI * 1.12 + index * 0.12) * 7.5 * convergence;
       const drift = Math.sin(time * 0.08 + index * 0.07) * 1.2;
       const breathing = Math.sin(time * 0.05) * 0.01 * sourceSpread * convergence;
 
       return nameY + base + organic + drift + breathing;
     }
 
-    // Name safe zone: soft attenuation centered directly on "Harsh Kumar Jha."
-    function headlineMask(x: number, y: number): number {
+    // Continuous name-safe atmospheric diffusion using smoothstep
+    function getDiffusion(x: number, y: number): number {
       const { nameCenterX, nameCenterY, headlineWidth, headlineHeight } = headlineMetrics;
-      const dx = (x - nameCenterX) / (headlineWidth * 0.72);
-      const dy = (y - nameCenterY) / (headlineHeight * 2.2);
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      const dx = (x - nameCenterX) / (headlineWidth * 0.70);
+      const dy = (y - nameCenterY) / (headlineHeight * 2.4);
+      const d = Math.sqrt(dx * dx + dy * dy);
 
-      return Math.min(1, 0.25 + distance * 0.9);
+      // Smoothstep between 0.35 and 1.15
+      const t = Math.max(0, Math.min(1, (d - 0.35) / (1.15 - 0.35)));
+      const smoothT = t * t * (3 - 2 * t);
+      const nameInfluence = 1 - smoothT;
+
+      // Softens line opacity by ~55% around the headline, leaving a quiet readable pocket
+      return 1 - nameInfluence * 0.55;
+    }
+
+    // Spatial opacity falloff: Left 100% -> Mid 85% -> Center 55% -> Right fading away smoothly
+    function getSpatialFade(u: number): number {
+      if (u < 0.25) {
+        return 1.0 - u * 0.60;
+      } else if (u < 0.65) {
+        const progress = (u - 0.25) / 0.40;
+        return 0.85 - progress * 0.35;
+      } else {
+        const progress = (u - 0.65) / 0.35;
+        return Math.max(0.06, 0.50 * Math.pow(1 - progress, 1.8));
+      }
     }
 
     function resize() {
@@ -129,7 +149,7 @@ export default function ContourField() {
           ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
-        const newLineCount = width < 600 ? 55 : width < 1024 ? 85 : Math.min(160, Math.floor(width / 16));
+        const newLineCount = width < 600 ? 55 : width < 1024 ? 85 : Math.min(155, Math.floor(width / 16));
         lineCount = newLineCount;
 
         if (traces.length === 0) {
@@ -148,31 +168,34 @@ export default function ContourField() {
       updateHeadlineMetrics();
     }
 
-    function drawFieldLine(i: number, time: number, w: number, h: number) {
+    function drawFieldLine(i: number, time: number, w: number, h: number, pass: "hairline" | "halo") {
       if (!ctx) return;
       const steps = 160;
       const startX = -w * 0.20;
       const endX = w * 1.05;
       const spanX = endX - startX;
 
-      const indexRatio = Math.pow(1 - i / lineCount, 0.45);
+      // 3-level line hierarchy (soft ~60%, normal ~32%, strong ~8%)
+      const strength = i % 11 === 0 ? 1.0 : i % 3 === 0 ? 0.72 : 0.45;
 
-      // Color-aware, atmospheric line rendering:
-      // In light mode: delicate blue-charcoal / periwinkle-gray dissolved into the atmosphere (0.018 - 0.045)
-      // In dark mode: restrained cool silver-white (0.030 - 0.065)
+      // Base line opacity by theme:
+      // In light mode: soft blue-charcoal / muted periwinkle ink (0.040 to 0.105)
+      // In dark mode: cool silver-charcoal (0.045 to 0.105)
       const baseAlpha = isDark
-        ? 0.030 + 0.035 * indexRatio
-        : 0.018 + 0.027 * indexRatio;
+        ? 0.045 + 0.060 * ((strength - 0.45) / 0.55)
+        : 0.040 + 0.065 * ((strength - 0.45) / 0.55);
 
       const grad = ctx.createLinearGradient(0, 0, w, 0);
       if (isDark) {
-        grad.addColorStop(0, `rgba(240, 240, 235, ${(baseAlpha * 1.0).toFixed(4)})`);
-        grad.addColorStop(0.5, `rgba(225, 228, 240, ${(baseAlpha * 0.75).toFixed(4)})`);
-        grad.addColorStop(1, `rgba(200, 204, 220, ${(baseAlpha * 0.25).toFixed(4)})`);
+        grad.addColorStop(0, `rgba(220, 223, 232, ${(baseAlpha * 1.0).toFixed(4)})`);
+        grad.addColorStop(0.45, `rgba(205, 210, 225, ${(baseAlpha * 0.80).toFixed(4)})`);
+        grad.addColorStop(0.72, `rgba(185, 190, 210, ${(baseAlpha * 0.40).toFixed(4)})`);
+        grad.addColorStop(1, `rgba(165, 170, 190, ${(baseAlpha * 0.10).toFixed(4)})`);
       } else {
-        grad.addColorStop(0, `rgba(65, 70, 105, ${(baseAlpha * 1.0).toFixed(4)})`);
-        grad.addColorStop(0.48, `rgba(78, 84, 120, ${(baseAlpha * 0.75).toFixed(4)})`);
-        grad.addColorStop(1, `rgba(100, 105, 140, ${(baseAlpha * 0.25).toFixed(4)})`);
+        grad.addColorStop(0, `rgba(61, 67, 105, ${(baseAlpha * 1.0).toFixed(4)})`);
+        grad.addColorStop(0.45, `rgba(75, 82, 125, ${(baseAlpha * 0.80).toFixed(4)})`);
+        grad.addColorStop(0.72, `rgba(90, 95, 140, ${(baseAlpha * 0.40).toFixed(4)})`);
+        grad.addColorStop(1, `rgba(100, 105, 145, ${(baseAlpha * 0.10).toFixed(4)})`);
       }
 
       ctx.beginPath();
@@ -188,7 +211,13 @@ export default function ContourField() {
       }
 
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 0.60;
+      if (pass === "halo") {
+        ctx.globalAlpha = 0.22;
+        ctx.lineWidth = 1.35;
+      } else {
+        ctx.globalAlpha = 1.0;
+        ctx.lineWidth = 0.55;
+      }
       ctx.stroke();
     }
 
@@ -222,16 +251,17 @@ export default function ContourField() {
         const midY = (y1 + y2) / 2;
 
         const headTail = Math.sin(Math.PI * ((t1 + t2) / 2));
-        const uDecay = Math.pow(1 - midU, 0.3);
-        const mask = headlineMask(midX, midY);
-        const segAlpha = trace.alpha * headTail * uDecay * mask;
+        const spatialFade = getSpatialFade(midU);
+        const diffusion = getDiffusion(midX, midY);
+        const segAlpha = trace.alpha * headTail * spatialFade * diffusion;
 
-        if (segAlpha <= 0.005) continue;
+        if (segAlpha <= 0.004) continue;
 
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.strokeStyle = `rgba(${accentRgb}, ${segAlpha.toFixed(3)})`;
+        ctx.globalAlpha = 1.0;
         ctx.lineWidth = 0.95;
         ctx.stroke();
       }
@@ -251,10 +281,17 @@ export default function ContourField() {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
-      for (let i = 0; i < lineCount; i++) {
-        drawFieldLine(i, time, width, height);
+      // Pass 2: Atmospheric soft halo pass
+      for (let i = 0; i < lineCount; i += 2) {
+        drawFieldLine(i, time, width, height, "halo");
       }
 
+      // Pass 1: Crisp fine hairlines
+      for (let i = 0; i < lineCount; i++) {
+        drawFieldLine(i, time, width, height, "hairline");
+      }
+
+      // Moving orange traces
       for (let k = 0; k < traces.length; k++) {
         drawTrace(traces[k], time, width, height);
       }
