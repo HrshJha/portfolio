@@ -190,6 +190,22 @@ export default function CompanionPet() {
   }, [setTemporaryReaction]);
 
   useEffect(() => {
+    const ambientObserver = new IntersectionObserver((entries) => {
+      const now = Date.now();
+      if (now - lastProjectReaction.current < 2600) return;
+      const entry = entries.find((item) => item.isIntersecting);
+      if (!entry) return;
+      lastProjectReaction.current = now;
+      const node = entry.target as HTMLElement;
+      setFocusedTarget(node.closest("section, article")?.id || "top");
+      if (node.matches("img")) setTemporaryReaction("PHOTOGRAPHING", 900);
+      if (node.matches(".exp-card")) setTemporaryReaction("WORKING", 1100);
+    }, { threshold: 0.55 });
+    document.querySelectorAll("img, .exp-card").forEach((element) => ambientObserver.observe(element));
+    return () => ambientObserver.disconnect();
+  }, [setTemporaryReaction]);
+
+  useEffect(() => {
     const onScroll = () => {
       const current = window.scrollY;
       setDirection(current >= lastScroll.current ? "down" : "up");
@@ -246,18 +262,22 @@ export default function CompanionPet() {
     return () => document.removeEventListener("pointerover", onPointerOver);
   }, [setTemporaryReaction]);
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
-
   useEffect(() => () => {
     if (reactionTimer.current) clearTimeout(reactionTimer.current);
     if (holdTimer.current) clearTimeout(holdTimer.current);
   }, []);
+
+  useEffect(() => {
+    let idleTimer: ReturnType<typeof setTimeout> | null = null;
+    const schedule = () => {
+      idleTimer = setTimeout(() => {
+        if (!document.hidden && !reducedMotion) setTemporaryReaction("WALKING", 900);
+        schedule();
+      }, 18000 + Math.round(Math.random() * 18000));
+    };
+    schedule();
+    return () => { if (idleTimer) clearTimeout(idleTimer); };
+  }, [reducedMotion, setTemporaryReaction]);
 
   const state = useMemo<PetState>(() => {
     if (sleeping) return "SLEEPING";
@@ -320,49 +340,29 @@ export default function CompanionPet() {
   }
 
   return (
-    <div className="companion-pet" ref={petRef} data-open={open ? "true" : "false"}>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.section
-            className="companion-panel"
-            aria-label="Companion actions"
-            initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 8, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.97 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="companion-panel-topline">
-              <div>
-                <p className="companion-panel-kicker">Harsh&apos;s companion</p>
-                <p className="companion-panel-state"><span /> {stateLabel[state]}</p>
-              </div>
-              <button className="companion-panel-close" type="button" onClick={() => setOpen(false)} aria-label="Close companion panel"><X size={15} /></button>
-            </div>
-            <div className="companion-actions">
-              {actionItems.map((item) => (
-                <button key={item.target} type="button" className="companion-action" onClick={() => goTo(item.target)}>
-                  <span>{item.label}</span><ArrowUpRight size={14} />
-                </button>
-              ))}
-            </div>
-            <button className="companion-tuck" type="button" onClick={() => { setOpen(false); setHidden(true); }}>
-              <Moon size={13} /> Tuck away
-            </button>
-          </motion.section>
-        )}
-      </AnimatePresence>
-
+    <div className="companion-pet" ref={petRef}>
+      {copied && <span className="companion-toast" role="status">Link copied</span>}
+      <span className="companion-tooltip" role="tooltip">Double-click to copy a link to this section</span>
       <motion.button
         type="button"
         className="companion-pet-hitbox"
-        aria-label="Portfolio companion"
-        aria-expanded={open}
-        onClick={() => { setOpen((current) => !current); wake(); setTemporaryReaction("CURIOUS", 560); }}
+        aria-label="Portfolio companion — double-click to copy a link to this section"
+        onClick={() => {
+          if (longPressTriggered) { setLongPressTriggered(false); return; }
+          wake();
+          setTemporaryReaction("CURIOUS", 560);
+        }}
+        onDoubleClick={() => void copyFocusedLink()}
+        onPointerDown={handlePointerDown}
+        onPointerUp={clearHold}
+        onPointerCancel={clearHold}
+        onPointerLeave={clearHold}
         whileHover={reducedMotion ? undefined : { scale: 1.05 }}
         whileTap={reducedMotion ? undefined : { scale: 0.97 }}
       >
         <SignalScout state={state} reducedMotion={Boolean(reducedMotion)} direction={direction} tilt={tilt} />
       </motion.button>
+      <button className="companion-tuck" type="button" onClick={() => setHidden(true)} aria-label="Tuck away companion">Tuck away</button>
     </div>
   );
 }
