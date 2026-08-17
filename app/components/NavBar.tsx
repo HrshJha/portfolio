@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Mail, Menu, Moon, Sun, X } from "lucide-react";
+import { ArrowUpRight, Mail, Menu, Moon, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type NavBarProps = {
@@ -53,7 +53,7 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
         className={`nav${compact ? " nav-compact" : ""}`}
         role="banner"
         animate={{ y: compact ? 2 : 0 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
       >
         <a href="#top" className="wordmark" aria-label="Harsh Kumar Jha — home">
           HKJ<span className="wordmark-dot">.</span>
@@ -100,10 +100,19 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
           >
             <Mail size={14} /> Email
           </motion.a>
-          <button className="icon-btn" onClick={onToggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>
+          <button
+            className="icon-btn"
+            onClick={onToggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+          >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>
-          <button className="icon-btn menu-btn" onClick={() => setOpen((value) => !value)} aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open}>
+          <button
+            className="icon-btn menu-btn"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? "Close navigation" : "Open navigation"}
+            aria-expanded={open}
+          >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
@@ -112,18 +121,34 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="mobile-menu open"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="mobile-menu"
+            style={{ transformOrigin: "top center" }}
+            initial={{ opacity: 0, y: -10, scaleY: 0.96 }}
+            animate={{ opacity: 1, y: 0, scaleY: 1 }}
+            exit={{ opacity: 0, y: -8, scaleY: 0.96 }}
+            transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
           >
-            {links.map((link) => (
-              <a key={link.href} href={link.href} className={active === link.href ? "active" : ""} onClick={closeMenu}>
-                {link.label}
-              </a>
-            ))}
-            <a href="mailto:jhaharsh451@gmail.com" className="mobile-contact" onClick={closeMenu}>Contact Harsh <Mail size={15} /></a>
+            <div className="mobile-menu-links">
+              {links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`mobile-nav-link ${active === link.href ? "active" : ""}`}
+                  onClick={closeMenu}
+                >
+                  <span>{link.label}</span>
+                  <span className="mobile-nav-arrow">↗</span>
+                </a>
+              ))}
+            </div>
+            <a
+              href="mailto:jhaharsh451@gmail.com"
+              className="mobile-contact"
+              onClick={closeMenu}
+            >
+              <span>Contact Harsh</span>
+              <ArrowUpRight size={16} className="mobile-contact-arrow" />
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

@@ -321,12 +321,20 @@ export default function Home() {
   /* Scroll progress */
   useEffect(() => {
     const onScroll = () => {
-      const el = document.documentElement;
-      const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
-      setScrollPct(Math.min(100, pct));
+      const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scrollTop / maxScroll)) : 0;
+      const pct = Math.round(progress * 100);
+      setScrollPct(pct);
     };
+
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -348,12 +356,15 @@ export default function Home() {
     <>
       <div className="grain" aria-hidden="true" />
 
-      {/* SCROLL PROGRESS */}
-      <div className="scroll-progress" aria-hidden="true">
+      {/* GLOBAL SCROLL PROGRESS INDICATOR */}
+      <div className={`scroll-progress ${scrollPct <= 0 ? "at-top" : ""}`} aria-hidden="true">
         <div className="scroll-progress-bar">
-          <div className="scroll-progress-fill" style={{ width: `${scrollPct}%` }} />
+          <div
+            className="scroll-progress-fill"
+            style={{ transform: `scaleX(${scrollPct / 100})` }}
+          />
         </div>
-        <span>{Math.round(scrollPct)}%</span>
+        <span className="scroll-progress-value">{scrollPct}%</span>
       </div>
 
       <NavBar theme={theme} onToggleTheme={toggleTheme} />
