@@ -1,322 +1,253 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 
-type PetState =
-  | "IDLE"
-  | "WALKING"
-  | "CURIOUS"
-  | "READING"
-  | "EXPLORING"
-  | "THINKING"
-  | "WORKING"
-  | "PHOTOGRAPHING"
-  | "CELEBRATING"
-  | "ATTENTION"
-  | "SLEEPING";
+type FireballState = "IDLE" | "HOVER_HOP" | "HOVER_LOOP" | "WALKING" | "SLEEPING";
 
-type CompanionEvent =
-  | { type: "FORM_SUBMIT_START" }
-  | { type: "FORM_SUBMIT_SUCCESS" }
-  | { type: "FORM_SUBMIT_ERROR" }
-  | { type: "SECTION_ENTER"; section: string };
-
-const companionBus = new EventTarget();
-
-export function emitCompanionEvent(event: CompanionEvent) {
-  companionBus.dispatchEvent(new CustomEvent("companion", { detail: event }));
-}
-
-const sectionStates: Record<string, PetState> = {
-  work: "CURIOUS",
-  experience: "THINKING",
-  about: "CURIOUS",
-  contact: "ATTENTION",
+type Physics = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  hover: boolean;
+  hopping: boolean;
+  hoverStarted: number;
+  landingAt: number;
+  sparkUntil: number;
+  walkUntil: number;
+  walkDistance: number;
+  walkStarted: number;
+  seed: number;
 };
 
-const statePose: Record<PetState, { y: number | number[]; rotate: number | number[]; scale?: number | number[] }> = {
-  IDLE: { y: [0, -1, 0], rotate: [0, -1, 0], scale: [1, 1.012, 1] },
-  WALKING: { y: [0, -1, 0], rotate: [0, -2, 0], scale: [1, 1.014, 1] },
-  CURIOUS: { y: -2, rotate: -3, scale: 1.025 },
-  READING: { y: -1, rotate: 1, scale: 1.01 },
-  EXPLORING: { y: [0, -1, 0], rotate: [0, -2, 0], scale: [1, 1.01, 1] },
-  THINKING: { y: -1, rotate: [0, 2, 0], scale: [1, 1.008, 1] },
-  WORKING: { y: [0, -1, 0], rotate: [0, 1, 0], scale: [1, 0.985, 1] },
-  PHOTOGRAPHING: { y: [0, -2, 0], rotate: [0, 2, 0], scale: [1, 1.02, 1] },
-  CELEBRATING: { y: [0, -5, 0], rotate: [0, -3, 0], scale: [1, 1.035, 1] },
-  ATTENTION: { y: -1, rotate: [0, 3, 0], scale: 1.018 },
-  SLEEPING: { y: 1, rotate: -2, scale: [1, 0.99, 1] },
-};
+const clampDt = (value: number) => Math.min(0.1, Math.max(0, value));
 
-function SignalScout({ state, reducedMotion, direction, tilt }: {
-  state: PetState;
+function FireballVisual({
+  visualRef,
+  shellRef,
+  reducedMotion,
+  state,
+}: {
+  visualRef: React.RefObject<HTMLDivElement | null>;
+  shellRef: React.RefObject<SVGGElement | null>;
   reducedMotion: boolean;
-  direction: "up" | "down";
-  tilt: number;
+  state: FireballState;
 }) {
-  const pose = statePose[state];
-  const transition = reducedMotion
-    ? { duration: 0.18 }
-    : Array.isArray(pose.y)
-      ? { duration: state === "CELEBRATING" ? 0.72 : state === "IDLE" ? 4.4 : 2.4, ease: "easeInOut" as const, repeat: Infinity, repeatType: "mirror" as const }
-      : { type: "spring" as const, stiffness: 280, damping: 24 };
-
   return (
-    <motion.div
-      className="companion-pet-body"
-      data-state={state.toLowerCase()}
-      animate={{ y: pose.y, rotate: pose.rotate, scale: pose.scale, x: direction === "down" ? 1 : direction === "up" ? -1 : 0 }}
-      transition={transition}
-      style={{ "--pet-tilt": `${tilt}deg` } as CSSProperties}
-    >
-      <svg className="companion-pet-svg" viewBox="0 0 72 72" aria-hidden="true">
-        <ellipse className="companion-pet-shadow" cx="36" cy="65" rx="21" ry="3.4" />
-        <path className="companion-pet-orbit" d="M13 41C7 31 10 20 21 16c11-4 28-2 36 7 6 7 4 16-3 21" />
-        <g className="companion-flame">
-          <path className="companion-flame-outer" d="M36 18c-5-4-3-8 1-13 1 4 6 6 5 10 4-2 5-5 5-7 4 5 3 10-1 13-3 2-7 1-10-3Z" />
-          <path className="companion-flame-mid" d="M37 17c-2-3 0-5 2-8 1 3 4 4 3 7 2-1 3-2 3-4 2 4 0 8-3 9-2 0-4-2-5-4Z" />
-          <path className="companion-flame-core" d="M39 17c-1-2 0-3 1-5 1 2 2 3 1 5 0 1-1 1-2 0Z" />
+    <div ref={visualRef} className="companion-pet-body" data-state={state.toLowerCase()}>
+      <svg className="companion-pet-svg" viewBox="0 0 72 92" aria-hidden="true">
+        <ellipse className="companion-pet-shadow" cx="36" cy="87" rx="18" ry="3" />
+        <g ref={shellRef} className="companion-fireball-shell" style={{ "--reduced-motion": reducedMotion ? 0 : 1 } as CSSProperties}>
+          <path className="fire-crown-outer" d="M24 31c-4-4-2-9 3-12-1-5 2-10 7-15 1 6 6 8 6 14 4-3 7-6 8-11 5 7 6 14 3 20 4-1 6-3 7-7 3 8 1 14-5 18-4 3-7 3-10 0-5 5-13 7-19 2Z" />
+          <path className="fire-crown-mid" d="M29 30c-3-3-1-6 2-8-1-3 1-6 3-9 2 4 4 6 3 10 3-1 5-3 6-6 3 5 3 9 1 12 3 0 4-1 6-3 1 6-3 9-8 8-5 3-10 1-13-4Z" />
+          <path className="fire-crown-core" d="M34 29c-1-2 0-4 2-6 1 3 3 4 2 7 2-1 3-2 3-4 2 4 0 6-3 7-2 0-3-2-4-4Z" />
+          <rect className="fire-head-border" x="13" y="28" width="46" height="37" rx="11" />
+          <rect className="fire-head-face" x="16" y="31" width="40" height="31" rx="8" />
+          <rect className="fire-eye" x="23" y="42" width="7" height="4" rx=".6" />
+          <rect className="fire-eye" x="42" y="42" width="7" height="4" rx=".6" />
+          <rect className="fire-cheek" x="19" y="51" width="5" height="3" rx="1.5" />
+          <rect className="fire-cheek" x="48" y="51" width="5" height="3" rx="1.5" />
+          <rect className="fire-mouth" x="33" y="51" width="7" height="3" rx="1" />
+          <path className="fire-arm left" d="M20 68c-5-2-8 1-7 5 1 3 4 4 7 1" />
+          <path className="fire-arm right" d="M52 68c5-2 8 1 7 5-1 3-4 4-7 1" />
+          <path className="fire-body" d="M23 64h26l2 17c-5 3-25 3-30 0Z" />
+          <rect className="fire-core-badge" x="30" y="69" width="12" height="11" rx="3" />
+          <rect className="fire-core-bar one" x="33" y="71" width="2" height="7" rx="1" />
+          <rect className="fire-core-bar two" x="36" y="70" width="2" height="8" rx="1" />
+          <rect className="fire-core-bar three" x="39" y="71" width="2" height="7" rx="1" />
+          <path className="fire-leg left" d="M27 80v6h-5" />
+          <path className="fire-leg right" d="M45 80v6h5" />
+          <path className="fireball-spark spark-a" d="M15 28v6m-3-3h6" />
+          <path className="fireball-spark spark-b" d="M57 39v5m-2.5-2.5h5" />
         </g>
-        <path className="companion-pet-fin" d="M57 28c6-2 10-1 12 2-3 1-6 4-9 8l-5-4z" />
-        <path className="companion-pet-fin-detail" d="M59 30l7 1-6 4" />
-        <path className="companion-pet-body-shell" d="M17 39c0-11 8-19 19-19s20 7 20 18c0 10-8 18-19 19-11 0-20-7-20-18Z" />
-        <path className="companion-pet-topline" d="M25 25c6-4 16-4 23 0" />
-        <path className="companion-pet-sensor" d="M36 17v-5m0 0-3-3m3 3 3-3" />
-        <circle className="companion-pet-sensor-dot" cx="36" cy="9" r="1.7" />
-        <g className="companion-pet-face">
-          <ellipse className="companion-pet-eye" cx="29" cy="40" rx="3.2" ry="4.2" />
-          <ellipse className="companion-pet-eye" cx="43" cy="40" rx="3.2" ry="4.2" />
-          <path className="companion-pet-mouth" d="M33 49c2 1.8 4 1.8 6 0" />
-        </g>
-        <path className="companion-pet-foot left" d="M25 55c-1 4-4 6-7 6" />
-        <path className="companion-pet-foot right" d="M47 55c1 4 4 6 7 6" />
-        {state === "WORKING" && <circle className="companion-pet-processing" cx="52" cy="19" r="2" />}
-        {state === "PHOTOGRAPHING" && <path className="companion-camera-glyph" d="M51 15h6l1 2v5h-8v-5l1-2Zm2 2h2m-1 1.5v2" />}
-        {(state === "CELEBRATING" || state === "ATTENTION" || state === "PHOTOGRAPHING") && (
-          <path className="companion-pet-spark" d="M12 20v7m-3.5-3.5h7M58 53v6m-3-3h6" />
-        )}
       </svg>
-    </motion.div>
+    </div>
   );
 }
 
 export default function CompanionPet() {
-  const reducedMotion = useReducedMotion();
-  const petRef = useRef<HTMLDivElement>(null);
-  const reactionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const sleepTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reducedMotion = Boolean(useReducedMotion());
+  const visualRef = useRef<HTMLDivElement>(null);
+  const shellRef = useRef<SVGGElement>(null);
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastCopy = useRef(0);
-  const lastScroll = useRef(0);
-  const lastProjectReaction = useRef(0);
-  const visibleProjects = useRef(new Set<Element>());
-  const [sectionState, setSectionState] = useState<PetState>("IDLE");
-  const [reaction, setReaction] = useState<PetState | null>(null);
-  const [direction, setDirection] = useState<"up" | "down">("down");
-  const [scrolling, setScrolling] = useState(false);
+  const sleepTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const physics = useRef<Physics>({
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    hover: false,
+    hopping: false,
+    hoverStarted: 0,
+    landingAt: 0,
+    sparkUntil: 0,
+    walkUntil: 0,
+    walkDistance: 0,
+    walkStarted: 0,
+    seed: Math.random() * Math.PI * 2,
+  });
   const [sleeping, setSleeping] = useState(false);
-  const [tilt, setTilt] = useState(0);
-  const [hidden, setHidden] = useState(false);
-  const [focusedTarget, setFocusedTarget] = useState("top");
-  const [copied, setCopied] = useState(false);
-  const [longPressTriggered, setLongPressTriggered] = useState(false);
-
-  const setTemporaryReaction = useCallback((next: PetState, duration = 720) => {
-    if (reactionTimer.current) clearTimeout(reactionTimer.current);
-    setReaction(next);
-    reactionTimer.current = setTimeout(() => setReaction(null), duration);
-  }, []);
+  const [state, setState] = useState<FireballState>("IDLE");
 
   const wake = useCallback(() => {
     setSleeping(false);
     if (sleepTimer.current) clearTimeout(sleepTimer.current);
-    sleepTimer.current = setTimeout(() => setSleeping(true), 5 * 60 * 1000);
+    sleepTimer.current = setTimeout(() => {
+      if (!physics.current.hover) setSleeping(true);
+    }, 5 * 60 * 1000);
   }, []);
+
+  const triggerHop = useCallback((strong = false) => {
+    const p = physics.current;
+    if (reducedMotion) {
+      p.hopping = false;
+      p.y = 0;
+      p.vy = 0;
+      p.sparkUntil = performance.now() + 180;
+      setState("HOVER_HOP");
+      return;
+    }
+    p.hopping = true;
+    p.y = Math.min(0, p.y);
+    p.vy = strong ? -420 : -260;
+    p.vx = strong ? (p.vx >= 0 ? 26 : -26) : p.vx;
+    p.sparkUntil = performance.now() + 280;
+    setState("HOVER_HOP");
+  }, [reducedMotion]);
+
+  const setHover = useCallback((next: boolean) => {
+    const p = physics.current;
+    p.hover = next;
+    wake();
+    if (next) {
+      p.hoverStarted = performance.now();
+      triggerHop(false);
+    } else if (!p.hopping) {
+      setState("IDLE");
+    }
+  }, [triggerHop, wake]);
+
+  useEffect(() => {
+    let frame = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = clampDt((now - last) / 1000);
+      last = now;
+      const p = physics.current;
+      const seconds = now / 1000;
+
+      if (p.hover && !reducedMotion) {
+        if (p.hopping) {
+          p.vy += 2200 * dt;
+          p.y += p.vy * dt;
+          p.x += p.vx * dt;
+          p.vx *= Math.max(0, 1 - dt * 6);
+          if (p.y >= 0) {
+            p.y = 0;
+            p.vy = 0;
+            p.hopping = false;
+            p.landingAt = now;
+            setState("HOVER_LOOP");
+          }
+        } else {
+          const loopT = ((now - p.hoverStarted) % 520) / 520;
+          const bounce = (1 - Math.cos(loopT * Math.PI * 2)) / 2;
+          p.y = -5 * bounce;
+          p.x = 2 * Math.sin((2 * Math.PI * (now - p.hoverStarted)) / 640 + Math.PI / 3);
+          p.vx = 0;
+        }
+      } else if (p.hopping && !reducedMotion) {
+        p.vy += 2200 * dt;
+        p.y += p.vy * dt;
+        if (p.y >= 0) {
+          p.y = 0;
+          p.vy = 0;
+          p.hopping = false;
+          p.landingAt = now;
+          setState("IDLE");
+        }
+      } else {
+        const stiffness = 210;
+        const damping = 14;
+        const acceleration = (-stiffness * p.y - damping * p.vy);
+        p.vy += acceleration * dt;
+        p.y += p.vy * dt;
+        p.x *= Math.max(0, 1 - dt / 0.22);
+        p.vx *= Math.max(0, 1 - dt / 0.22);
+        if (Math.abs(p.y) < 0.5 && Math.abs(p.vy) < 2) { p.y = 0; p.vy = 0; }
+      }
+
+      if (p.walkUntil > now && !p.hover && !p.hopping) {
+        const progress = Math.min(1, (now - p.walkStarted) / 1600);
+        const eased = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        p.x = p.walkDistance * eased;
+        setState("WALKING");
+      }
+
+      const idleBreath = reducedMotion ? 1 : 1 + Math.sin(seconds * (Math.PI * 2 / 4.2)) * 0.01;
+      const landingAge = p.landingAt ? now - p.landingAt : 9999;
+      let scaleX = 1;
+      let scaleY = idleBreath;
+      if (landingAge < 70) { scaleX = 1.18; scaleY = 0.82; }
+      else if (landingAge < 160) { scaleX = 0.95; scaleY = 1.06; }
+      else if (landingAge < 280) { const settle = (landingAge - 160) / 120; scaleX = 0.95 + settle * 0.05; scaleY = 1.06 - settle * 0.06; }
+      if (sleeping) { scaleX *= 1.02; scaleY *= 0.9; }
+
+      const amplitude = p.hover && !reducedMotion ? 1.2 : 1;
+      const turbulence = amplitude * (3 * Math.sin(1.1 * seconds + p.seed) + 1.5 * Math.sin(2.7 * seconds + p.seed * 1.7) + 0.8 * Math.sin(4.3 * seconds + p.seed * 2.3));
+      const flameScale = sleeping ? 0.72 : 1 + (reducedMotion ? 0 : 0.08 * Math.sin(0.9 * seconds + p.seed + 1));
+      const visual = visualRef.current;
+      const shell = shellRef.current;
+      if (visual) visual.style.transform = `translate3d(${p.x}px, ${p.y}px, 0) scale(${scaleX}, ${scaleY})`;
+      if (shell) {
+        shell.style.transform = `translate3d(${turbulence}px, 0, 0) scale(${flameScale}, ${flameScale})`;
+        shell.style.opacity = sleeping ? "0.45" : "1";
+        shell.parentElement?.setAttribute("data-sparks", p.sparkUntil > now ? "true" : "false");
+      }
+
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [reducedMotion, sleeping]);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const scheduleWalk = () => {
+      timer = setTimeout(() => {
+        const p = physics.current;
+        if (!p.hover && !sleeping) {
+          p.walkStarted = performance.now();
+          p.walkUntil = p.walkStarted + 1600;
+          p.walkDistance = (Math.random() > 0.5 ? 1 : -1) * (10 + Math.random() * 20);
+        }
+        scheduleWalk();
+      }, 45000 + Math.random() * 75000);
+    };
+    scheduleWalk();
+    return () => { if (timer) clearTimeout(timer); };
+  }, [sleeping]);
 
   useEffect(() => {
     wake();
-    const resetActivity = () => wake();
-    window.addEventListener("pointerdown", resetActivity, { passive: true });
-    window.addEventListener("keydown", resetActivity);
-    window.addEventListener("visibilitychange", resetActivity);
+    const onActivity = () => wake();
+    window.addEventListener("scroll", onActivity, { passive: true });
+    window.addEventListener("keydown", onActivity);
     return () => {
-      window.removeEventListener("pointerdown", resetActivity);
-      window.removeEventListener("keydown", resetActivity);
-      window.removeEventListener("visibilitychange", resetActivity);
+      window.removeEventListener("scroll", onActivity);
+      window.removeEventListener("keydown", onActivity);
       if (sleepTimer.current) clearTimeout(sleepTimer.current);
     };
   }, [wake]);
 
-  useEffect(() => {
-    const sectionObserver = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      const next = sectionStates[(visible.target as HTMLElement).id] || "IDLE";
-      setSectionState(next);
-      setFocusedTarget((visible.target as HTMLElement).id);
-      companionBus.dispatchEvent(new CustomEvent("companion", { detail: { type: "SECTION_ENTER", section: (visible.target as HTMLElement).id } }));
-    }, { threshold: [0, 0.2, 0.45, 0.7], rootMargin: "-18% 0px -42%" });
-
-    ["work", "experience", "about", "contact"].forEach((id) => {
-      const section = document.getElementById(id);
-      if (section) sectionObserver.observe(section);
-    });
-    return () => sectionObserver.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const projectObserver = new IntersectionObserver((entries) => {
-      const now = Date.now();
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !visibleProjects.current.has(entry.target)) {
-          visibleProjects.current.add(entry.target);
-          const projectId = (entry.target as HTMLElement).closest(".project-article")?.id;
-          if (projectId) setFocusedTarget(projectId);
-          if (now - lastProjectReaction.current > 1400) {
-            lastProjectReaction.current = now;
-            setTemporaryReaction("CURIOUS", 680);
-          }
-        }
-        if (!entry.isIntersecting) visibleProjects.current.delete(entry.target);
-      });
-    }, { threshold: 0.32 });
-    document.querySelectorAll(".project-card").forEach((card) => projectObserver.observe(card));
-    return () => projectObserver.disconnect();
-  }, [setTemporaryReaction]);
-
-  useEffect(() => {
-    const ambientObserver = new IntersectionObserver((entries) => {
-      const now = Date.now();
-      if (now - lastProjectReaction.current < 2600) return;
-      const entry = entries.find((item) => item.isIntersecting);
-      if (!entry) return;
-      lastProjectReaction.current = now;
-      const node = entry.target as HTMLElement;
-      setFocusedTarget(node.closest("section, article")?.id || "top");
-      if (node.matches("img")) setTemporaryReaction("PHOTOGRAPHING", 900);
-      if (node.matches(".exp-card")) setTemporaryReaction("WORKING", 1100);
-    }, { threshold: 0.55 });
-    document.querySelectorAll("img, .exp-card").forEach((element) => ambientObserver.observe(element));
-    return () => ambientObserver.disconnect();
-  }, [setTemporaryReaction]);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const current = window.scrollY;
-      setDirection(current >= lastScroll.current ? "down" : "up");
-      lastScroll.current = current;
-      setScrolling(true);
-      wake();
-      if (scrollTimer.current) clearTimeout(scrollTimer.current);
-      scrollTimer.current = setTimeout(() => setScrolling(false), 520);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (scrollTimer.current) clearTimeout(scrollTimer.current);
-    };
-  }, [wake]);
-
-  useEffect(() => {
-    const onCompanionEvent = (event: Event) => {
-      const detail = (event as CustomEvent<CompanionEvent>).detail;
-      if (!detail) return;
-      wake();
-      if (detail.type === "FORM_SUBMIT_START") setTemporaryReaction("WORKING", 900);
-      if (detail.type === "FORM_SUBMIT_SUCCESS") setTemporaryReaction("CELEBRATING", 780);
-      if (detail.type === "FORM_SUBMIT_ERROR") setTemporaryReaction("ATTENTION", 780);
-    };
-    companionBus.addEventListener("companion", onCompanionEvent);
-    return () => companionBus.removeEventListener("companion", onCompanionEvent);
-  }, [setTemporaryReaction, wake]);
-
-  useEffect(() => {
-    const onPointerMove = (event: PointerEvent) => {
-      if (reducedMotion || !petRef.current) return;
-      const rect = petRef.current.getBoundingClientRect();
-      const dx = event.clientX - (rect.left + rect.width / 2);
-      const dy = event.clientY - (rect.top + rect.height / 2);
-      const distance = Math.hypot(dx, dy);
-      if (distance > 150) {
-        setTilt(0);
-        return;
-      }
-      if (Math.abs(dx) < 20) return;
-      setTilt(Math.max(-8, Math.min(8, (dx / 150) * 8)));
-    };
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onPointerMove);
-  }, [reducedMotion]);
-
-  useEffect(() => {
-    const onPointerOver = (event: PointerEvent) => {
-      const target = event.target as Element | null;
-      if (target?.closest("a, button, .project-card")) setTemporaryReaction("CURIOUS", 520);
-    };
-    document.addEventListener("pointerover", onPointerOver);
-    return () => document.removeEventListener("pointerover", onPointerOver);
-  }, [setTemporaryReaction]);
-
-  useEffect(() => () => {
-    if (reactionTimer.current) clearTimeout(reactionTimer.current);
-    if (holdTimer.current) clearTimeout(holdTimer.current);
-  }, []);
-
-  useEffect(() => {
-    let idleTimer: ReturnType<typeof setTimeout> | null = null;
-    const schedule = () => {
-      idleTimer = setTimeout(() => {
-        if (!document.hidden && !reducedMotion) setTemporaryReaction("WALKING", 900);
-        schedule();
-      }, 18000 + Math.round(Math.random() * 18000));
-    };
-    schedule();
-    return () => { if (idleTimer) clearTimeout(idleTimer); };
-  }, [reducedMotion, setTemporaryReaction]);
-
-  const state = useMemo<PetState>(() => {
-    if (sleeping) return "SLEEPING";
-    if (reaction) return reaction;
-    if (scrolling) return "EXPLORING";
-    return sectionState;
-  }, [reaction, scrolling, sectionState, sleeping]);
-
-  const copyFocusedLink = useCallback(async () => {
-    const now = Date.now();
-    if (now - lastCopy.current < 2000) return;
-    lastCopy.current = now;
-    const target = focusedTarget || "top";
-    const url = `${window.location.origin}${window.location.pathname}#${target}`;
-    try {
-      await navigator.clipboard.writeText(url);
-    } catch {
-      const fallback = document.createElement("textarea");
-      fallback.value = url;
-      fallback.setAttribute("readonly", "true");
-      fallback.style.position = "fixed";
-      fallback.style.opacity = "0";
-      document.body.appendChild(fallback);
-      fallback.select();
-      document.execCommand("copy");
-      fallback.remove();
+  const onPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    wake();
+    if (event.pointerType === "touch") {
+      setHover(true);
+      holdTimer.current = setTimeout(() => setHover(false), 850);
     }
-    setCopied(true);
-    setTemporaryReaction("CELEBRATING", 820);
-    window.setTimeout(() => setCopied(false), 1400);
-  }, [focusedTarget, setTemporaryReaction]);
-
-  const handlePointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
-    if (event.pointerType !== "touch") return;
-    setLongPressTriggered(false);
-    holdTimer.current = setTimeout(() => {
-      setLongPressTriggered(true);
-      void copyFocusedLink();
-    }, 560);
   };
 
   const clearHold = () => {
@@ -324,45 +255,25 @@ export default function CompanionPet() {
     holdTimer.current = null;
   };
 
-  if (hidden) {
-    return (
-      <div className="companion-pet companion-pet-hidden" ref={petRef}>
-        <button
-          type="button"
-          className="companion-restore"
-          aria-label="Show portfolio companion"
-          onClick={() => { setHidden(false); wake(); setTemporaryReaction("CURIOUS", 560); }}
-        >
-          <span aria-hidden="true">+</span>
-        </button>
-      </div>
-    );
-  }
+  const currentState = sleeping ? "SLEEPING" : state;
 
   return (
-    <div className="companion-pet" ref={petRef}>
-      {copied && <span className="companion-toast" role="status">Link copied</span>}
-      <span className="companion-tooltip" role="tooltip">Double-click to copy a link to this section</span>
-      <motion.button
+    <div className="companion-pet" data-fireball-state={currentState.toLowerCase()}>
+      <button
         type="button"
         className="companion-pet-hitbox"
-        aria-label="Portfolio companion — double-click to copy a link to this section"
-        onClick={() => {
-          if (longPressTriggered) { setLongPressTriggered(false); return; }
-          wake();
-          setTemporaryReaction("CURIOUS", 560);
-        }}
-        onDoubleClick={() => void copyFocusedLink()}
-        onPointerDown={handlePointerDown}
+        aria-label="Fireball companion"
+        onPointerEnter={() => setHover(true)}
+        onPointerLeave={() => setHover(false)}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
+        onPointerDown={onPointerDown}
         onPointerUp={clearHold}
         onPointerCancel={clearHold}
-        onPointerLeave={clearHold}
-        whileHover={reducedMotion ? undefined : { scale: 1.05 }}
-        whileTap={reducedMotion ? undefined : { scale: 0.97 }}
+        onClick={() => { wake(); triggerHop(true); }}
       >
-        <SignalScout state={state} reducedMotion={Boolean(reducedMotion)} direction={direction} tilt={tilt} />
-      </motion.button>
-      <button className="companion-tuck" type="button" onClick={() => setHidden(true)} aria-label="Tuck away companion">Tuck away</button>
+        <FireballVisual visualRef={visualRef} shellRef={shellRef} reducedMotion={reducedMotion} state={currentState} />
+      </button>
     </div>
   );
 }
