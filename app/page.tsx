@@ -601,10 +601,6 @@ export default function Home() {
               Building AI systems through machine learning and engineering.
             </p>
             <div className="hero-ctas">
-              <a href="#work" className="hero-btn hero-btn-primary">
-                <span>View Work</span>
-                <ArrowUpRight size={15} className="hero-btn-arrow" />
-              </a>
               <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="hero-btn hero-btn-secondary hero-btn-github">
                 <span>GitHub</span>
                 <ExternalLink size={14} className="hero-btn-arrow" />
