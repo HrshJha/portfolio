@@ -68,20 +68,28 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
               onClick={() => setActive(link.href)}
             >
               {link.label}
-              {active === link.href && <motion.span className="nav-active-indicator" layoutId="nav-active" />}
+              {active === link.href && (
+                <motion.span
+                  className="nav-active-indicator"
+                  layoutId="nav-active"
+                  transition={{ type: "spring", stiffness: 520, damping: 34, mass: 0.55 }}
+                />
+              )}
             </a>
           ))}
         </nav>
 
         <div className="nav-actions">
           <motion.a
-            href="#work"
+            href="/harshahha.pdf"
+            target="_blank"
+            rel="noreferrer"
             className="nav-pill nav-pill-primary"
             whileHover={{ scale: 1.03, boxShadow: "0 10px 30px rgba(var(--accent-rgb), .22)" }}
             whileTap={{ scale: 0.98 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
-            View work
+            Resume
           </motion.a>
           <motion.a
             href="mailto:jhaharsh451@gmail.com"
@@ -90,7 +98,7 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
             whileTap={{ scale: 0.98 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
-            <Mail size={14} /> Contact
+            <Mail size={14} /> Email
           </motion.a>
           <button className="icon-btn" onClick={onToggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
