@@ -408,7 +408,7 @@ export default function Home() {
                 </div>
                 <div className="toolkit-category">
                   <span className="toolkit-category-label">AI / ML</span>
-                  <p className="toolkit-category-items">LLMs · RAG · NLP · FAISS · BM25 · Hugging Face · Sentence-Transformers · PyTorch · spaCy · scikit-learn</p>
+                  <p className="toolkit-category-items">LLMs · RAG · NLP · FAISS · BM25 · Hugging Face · Sentence-Transformers · PyTorch · scikit-learn</p>
                 </div>
                 <div className="toolkit-category">
                   <span className="toolkit-category-label">BACKEND</span>
