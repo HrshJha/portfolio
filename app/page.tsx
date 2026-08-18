@@ -152,17 +152,17 @@ export default function Home() {
                 <div className="exp-meta">
                   <p className="exp-year">2026</p>
                   <h3 className="exp-company">DomainLabs</h3>
-                  <p className="exp-role">AI/ML Intern · AI Safety &amp; Evaluation Research</p>
+                  <p className="exp-role">AI/ML Intern · AI Safety &amp; Evaluation</p>
                   <div className="exp-stack">
-                    {["FastAPI", "NLP", "LLM Evaluation", "Retrieval Systems", "Python"].map((t) => (
+                    {["AI Safety", "LLM Evaluation", "Adversarial Testing", "Red Teaming"].map((t) => (
                       <span key={t} className="exp-chip">{t}</span>
                     ))}
                   </div>
                 </div>
                 <ul className="exp-bullets">
-                  <li>Researched AI safety, adversarial testing, and failure taxonomies for language models deployed in production contexts.</li>
-                  <li>Engineered automated benchmarking pipelines and claim-level hallucination detection tooling using FastAPI and NLP retrieval systems.</li>
-                  <li>Connected evaluation experiments to source-backed reliability themes, developing Hallucination Hunter as the flagship framework.</li>
+                  <li>Researched AI safety, adversarial testing, and LLM evaluation across production-oriented AI workflows.</li>
+                  <li>Built evaluation pipelines and benchmarks to measure model performance, robustness, and safety.</li>
+                  <li>Contributed to <strong>Bayora</strong>, an automated adversarial red-teaming platform, through LLM integration and model testing.</li>
                 </ul>
               </article>
             </Reveal>
@@ -175,14 +175,14 @@ export default function Home() {
                   <h3 className="exp-company">MathonGo</h3>
                   <p className="exp-role">Research &amp; Development Intern</p>
                   <div className="exp-stack">
-                    {["AI Workflows", "Content Validation", "Dataset QA", "Physics"].map((t) => (
+                    {["Data Validation", "AI-Assisted QA", "Physics", "Datasets"].map((t) => (
                       <span key={t} className="exp-chip">{t}</span>
                     ))}
                   </div>
                 </div>
                 <ul className="exp-bullets">
-                  <li>Validated and structured 2,000+ JEE Physics questions, establishing schema standards and consistency across educational question banks.</li>
-                  <li>Applied AI-assisted QA workflows to content validation, improving dataset accuracy and reusability for downstream pipelines.</li>
+                  <li>Validated and structured 2,000+ Physics questions for JEE/NEET question banks.</li>
+                  <li>Applied AI-assisted QA to improve dataset quality and retrieval efficiency.</li>
                 </ul>
               </article>
             </Reveal>
