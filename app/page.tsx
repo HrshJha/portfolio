@@ -252,7 +252,6 @@ export default function Home() {
                   <span className="about-fact-label">BASED IN</span>
                   <p className="about-fact-val">
                     <strong className="fact-primary">Delhi, India</strong>
-                    <span className="fact-secondary">GGSIPU</span>
                   </p>
                 </div>
               </div>
