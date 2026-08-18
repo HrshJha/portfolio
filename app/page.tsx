@@ -189,25 +189,37 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── ABOUT & TOOLKIT (UNIFIED CHAPTER) ─────────── */}
+        {/* ── ABOUT (EDITORIAL PERSONAL PROFILE) ───────── */}
         <div id="divider-about" className="section-divider" aria-hidden="true" />
         <section id="about" data-section="about" className="about-section section-pad" aria-labelledby="about-heading">
-          {/* Section Header across full width */}
-          <Reveal>
-            <div className="about-section-header">
-              <p className="section-kicker">03 / About</p>
-              <h2 className="section-title about-main-heading" id="about-heading">
-                Systems over demos.<br />
-                Evidence over<br />
-                adjectives.
-              </h2>
-            </div>
-          </Reveal>
+          <div className="about-editorial-container">
+            {/* Top: Section Kicker & Monumental Headline */}
+            <Reveal>
+              <div className="about-editorial-header">
+                <p className="section-kicker">03 / About</p>
+                <h2 className="section-title about-profile-title" id="about-heading">
+                  Systems over demos.<br />
+                  Evidence over adjectives.
+                </h2>
+              </div>
+            </Reveal>
 
-          {/* 2-Column Content Below Header: Narrative (Left) + Profile Rail (Right) */}
-          <div className="about-content-grid">
-            <Reveal className="about-narrative-col">
-              <p className="about-body">
+            {/* Middle: Compact Identity Line */}
+            <Reveal>
+              <p className="about-identity-line">
+                <span>ECE @ MSIT</span>
+                <span className="identity-sep" aria-hidden="true">·</span>
+                <span>AI / ML</span>
+                <span className="identity-sep" aria-hidden="true">·</span>
+                <span>BACKEND</span>
+                <span className="identity-sep" aria-hidden="true">·</span>
+                <span>SYSTEMS</span>
+              </p>
+            </Reveal>
+
+            {/* Narrative Paragraph */}
+            <Reveal>
+              <p className="about-editorial-body">
                 I&apos;m an ECE student at MSIT building AI systems around retrieval,
                 evaluation, backend engineering, and reliable automation. I care about
                 what happens after the demo — where systems meet real inputs, failures,
@@ -215,37 +227,33 @@ export default function Home() {
               </p>
             </Reveal>
 
-            <Reveal className="about-meta-col">
-              <div className="about-profile-rail">
-                <div className="about-rail-item">
-                  <div className="about-rail-marker" aria-hidden="true" />
-                  <div className="about-rail-content">
-                    <span className="about-meta-tag">CURRENT FOCUS</span>
-                    <p className="about-meta-value">
-                      AI systems · Backend · Machine Learning
-                    </p>
-                  </div>
+            {/* Bottom: 3-Column Factual Strip */}
+            <Reveal>
+              <div className="about-facts-strip">
+                <div className="about-fact-col">
+                  <span className="about-fact-label">CURRENT FOCUS</span>
+                  <ul className="about-fact-list">
+                    <li>AI systems</li>
+                    <li>Backend</li>
+                    <li>Machine Learning</li>
+                  </ul>
                 </div>
 
-                <div className="about-rail-item">
-                  <div className="about-rail-marker" aria-hidden="true" />
-                  <div className="about-rail-content">
-                    <span className="about-meta-tag">EDUCATION</span>
-                    <p className="about-meta-value">
-                      <strong className="about-edu-degree">B.Tech — Electronics &amp; Communication Engineering</strong>
-                      <span className="about-meta-sub">MSIT · Delhi · GGSIPU · 2025–2029</span>
-                    </p>
-                  </div>
+                <div className="about-fact-col">
+                  <span className="about-fact-label">EDUCATION</span>
+                  <p className="about-fact-val">
+                    <strong className="fact-primary">B.Tech — ECE</strong>
+                    <span className="fact-secondary">MSIT · Delhi</span>
+                    <span className="fact-meta-sub">2025–2029</span>
+                  </p>
                 </div>
 
-                <div className="about-rail-item">
-                  <div className="about-rail-marker" aria-hidden="true" />
-                  <div className="about-rail-content">
-                    <span className="about-meta-tag">BACKGROUND</span>
-                    <p className="about-meta-value">
-                      ECE · AI / ML · Software
-                    </p>
-                  </div>
+                <div className="about-fact-col">
+                  <span className="about-fact-label">BASED IN</span>
+                  <p className="about-fact-val">
+                    <strong className="fact-primary">Delhi, India</strong>
+                    <span className="fact-secondary">GGSIPU</span>
+                  </p>
                 </div>
               </div>
             </Reveal>
