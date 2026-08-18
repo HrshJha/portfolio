@@ -27,163 +27,6 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
   );
 }
 
-/* ── ABOUT: SIGNAL / NOISE DATA ───────────────────────── */
-type SignalItem = {
-  id: string;
-  num: string;
-  title: string;
-  summary: string;
-  body: string;
-  question: string;
-  signalPct: number;
-  noisePct: number;
-};
-
-const signalItems: SignalItem[] = [
-  {
-    id: "agents",
-    num: "01",
-    title: "AI AGENTS",
-    summary: "Planning, tool use, memory, evaluation.",
-    body: "I'm interested in systems that can plan, use tools, remember context, and still be evaluated reliably.",
-    question: "How do you make an agent useful without making it unpredictable?",
-    signalPct: 88,
-    noisePct: 12,
-  },
-  {
-    id: "physics",
-    num: "02",
-    title: "PHYSICS × AI",
-    summary: "Where engineering intuition meets ML.",
-    body: "Exploring how physical intuition, simulation, and machine learning can work together.",
-    question: "Can models learn constraints instead of only correlations?",
-    signalPct: 76,
-    noisePct: 24,
-  },
-  {
-    id: "systems",
-    num: "03",
-    title: "SYSTEMS THAT HOLD UP",
-    summary: "Reliability, retrieval, validation, real-world use.",
-    body: "I care less about demos that look impressive for 30 seconds and more about systems that remain useful after deployment.",
-    question: "Does it still work when the inputs stop being clean?",
-    signalPct: 92,
-    noisePct: 8,
-  },
-];
-
-function AboutSignalPanel() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-
-  const activeId = hoveredId || expandedId;
-  const activeItem = signalItems.find((item) => item.id === activeId);
-  const signalPct = activeItem ? activeItem.signalPct : 82;
-  const noisePct = activeItem ? activeItem.noisePct : 18;
-
-  return (
-    <aside className="signal-panel" aria-label="Signal versus noise engineering note">
-      {/* Header */}
-      <div className="signal-header">
-        <div className="signal-title-wrap">
-          <span className="signal-header-title">SIGNAL / NOISE</span>
-          <span className="signal-live-dot" aria-hidden="true" />
-        </div>
-        <span className="signal-header-sub">01 — HOW I THINK</span>
-      </div>
-
-      {/* Dynamic Signal / Noise Waveform Meter */}
-      <div className="signal-meter" aria-hidden="true">
-        <div className="signal-meter-row">
-          <div className="signal-meter-meta">
-            <span className="signal-bar-label">SIGNAL</span>
-            <span className="signal-bar-val">{signalPct}%</span>
-          </div>
-          <div className="signal-track">
-            <div className="signal-fill" style={{ width: `${signalPct}%` }}>
-              <div className="signal-waveform" />
-            </div>
-          </div>
-        </div>
-
-        <div className="signal-meter-row noise-row">
-          <div className="signal-meter-meta">
-            <span className="signal-bar-label noise-label">NOISE</span>
-            <span className="signal-bar-val noise-val">{noisePct}%</span>
-          </div>
-          <div className="signal-track">
-            <div className="signal-fill noise-fill" style={{ width: `${noisePct}%` }}>
-              <div className="noise-waveform" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3 Interactive Rows */}
-      <div className="signal-list">
-        {signalItems.map((item) => {
-          const isExpanded = expandedId === item.id;
-          return (
-            <div
-              key={item.id}
-              className={`signal-row ${isExpanded ? "is-expanded" : ""}`}
-              onMouseEnter={() => setHoveredId(item.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              <button
-                type="button"
-                className="signal-row-trigger"
-                onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                aria-expanded={isExpanded}
-              >
-                <div className="signal-row-top">
-                  <span className="signal-row-num">{item.num}</span>
-                  <h3 className="signal-row-title">{item.title}</h3>
-                  <span className="signal-row-action" aria-hidden="true">
-                    <ArrowDownRight
-                      size={13}
-                      className={`signal-action-arrow ${isExpanded ? "is-open" : ""}`}
-                    />
-                  </span>
-                </div>
-                <p className="signal-row-summary">{item.summary}</p>
-              </button>
-
-              <AnimatePresence>
-                {isExpanded && (
-                  <motion.div
-                    className="signal-detail-drawer"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <div className="signal-detail-inner">
-                      <p className="signal-detail-body">{item.body}</p>
-                      <div className="signal-question-card">
-                        <span className="signal-question-tag">CURRENT QUESTION</span>
-                        <p className="signal-question-quote">&ldquo;{item.question}&rdquo;</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Right Side Signature Footer */}
-      <div className="signal-footer">
-        <span className="signal-footer-steps">OBSERVE → FILTER → REASON → BUILD</span>
-        <div className="signal-footer-tag">
-          <span className="tag-signal">SIGNAL</span> / NOISE
-        </div>
-      </div>
-    </aside>
-  );
-}
-
 /* ── HOME ─────────────────────────────────────────────── */
 export default function Home() {
   const [theme, setTheme] = useState("light");
@@ -350,6 +193,7 @@ export default function Home() {
         <div id="divider-about" className="section-divider" aria-hidden="true" />
         <section id="about" data-section="about" className="about-section section-pad" aria-labelledby="about-heading">
           <div className="about-grid">
+            {/* Left Column: Heading & Concise Narrative */}
             <div className="about-left">
               <Reveal>
                 <div className="section-header">
@@ -362,33 +206,41 @@ export default function Home() {
                 </div>
               </Reveal>
               <Reveal>
-                <div className="about-narrative-wrap">
-                  <div className="engineering-note-tag">
-                    <span className="note-tag-text">ENGINEERING NOTE / 01</span>
-                    <span className="note-tag-rule" aria-hidden="true" />
-                  </div>
-                  <p className="about-body">
-                    I&apos;m an Electronics and Communication Engineering student at MSIT, building toward
-                    <em className="about-accent-text"> research and production AI engineering.</em> I&apos;m drawn to the engineering
-                    work around intelligent systems — how they retrieve, reason, validate, and remain dependable when inputs stop being clean.
-                    Photography sharpens how I think about signal versus noise, and that same discipline shapes every system I build.
-                  </p>
-
-                  {/* Compact Education Metadata Line */}
-                  <div className="about-education-line">
-                    <span className="about-edu-tag">EDUCATION</span>
-                    <p className="about-edu-text">
-                      <strong>B.Tech — Electronics &amp; Communication Engineering</strong> · MSIT, Delhi · GGSIPU <span className="about-edu-meta-sub">(2025—2029 · CGPA 8.36)</span>
-                    </p>
-                  </div>
-                </div>
+                <p className="about-body">
+                  I&apos;m an ECE student at MSIT building AI systems around retrieval,
+                  evaluation, backend engineering, and reliable automation. I care about
+                  what happens after the demo — where systems meet real inputs, failures,
+                  and users.
+                </p>
               </Reveal>
             </div>
 
-            {/* Signal / Noise Engineering Notebook Layer */}
-            <Reveal className="about-right">
-              <AboutSignalPanel />
-            </Reveal>
+            {/* Right Column: High-Signal Metadata & Philosophy */}
+            <div className="about-right">
+              <Reveal className="about-meta-column">
+                <div className="about-meta-block">
+                  <span className="about-meta-tag">CURRENTLY</span>
+                  <p className="about-meta-value">
+                    AI agents · LLM evaluation · Distributed systems
+                  </p>
+                </div>
+
+                <div className="about-meta-block">
+                  <span className="about-meta-tag">EDUCATION</span>
+                  <p className="about-meta-value">
+                    <strong>B.Tech — Electronics &amp; Communication Engineering</strong><br />
+                    MSIT · Delhi · GGSIPU <span className="about-meta-sub">(2025—2029)</span>
+                  </p>
+                </div>
+
+                <div className="about-meta-block about-signal-block">
+                  <span className="about-meta-tag">SIGNAL / NOISE</span>
+                  <p className="about-signal-signature">
+                    Observe → Filter → Reason → Build
+                  </p>
+                </div>
+              </Reveal>
+            </div>
           </div>
 
           {/* Integrated Curated Toolkit Submodule */}
