@@ -213,9 +213,6 @@ export default function Home() {
                 what happens after the demo — where systems meet real inputs, failures,
                 and users.
               </p>
-              <div className="about-optical-note">
-                <span className="about-note-kicker">01 / SIGNAL FIRST</span>
-              </div>
             </Reveal>
 
             <Reveal className="about-meta-col">
@@ -223,9 +220,9 @@ export default function Home() {
                 <div className="about-rail-item">
                   <div className="about-rail-marker" aria-hidden="true" />
                   <div className="about-rail-content">
-                    <span className="about-meta-tag">CURRENTLY</span>
+                    <span className="about-meta-tag">CURRENT FOCUS</span>
                     <p className="about-meta-value">
-                      <span className="focus-lead">AI agents</span> · LLM evaluation · Distributed systems
+                      AI systems · Backend · Machine Learning
                     </p>
                   </div>
                 </div>
@@ -241,12 +238,12 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="about-rail-item about-rail-signature">
+                <div className="about-rail-item">
                   <div className="about-rail-marker" aria-hidden="true" />
                   <div className="about-rail-content">
-                    <span className="about-meta-tag about-tag-accent">SIGNAL / NOISE</span>
-                    <p className="about-signal-signature">
-                      OBSERVE → FILTER → REASON → BUILD
+                    <span className="about-meta-tag">BACKGROUND</span>
+                    <p className="about-meta-value">
+                      ECE · AI / ML · Software
                     </p>
                   </div>
                 </div>
