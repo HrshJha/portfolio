@@ -198,12 +198,13 @@ export default function Home() {
               <p className="section-kicker">03 / About</p>
               <h2 className="section-title about-main-heading" id="about-heading">
                 Systems over demos.<br />
-                Evidence over adjectives.
+                Evidence over<br />
+                adjectives.
               </h2>
             </div>
           </Reveal>
 
-          {/* 2-Column Content Below Header: Narrative (Left) + Metadata (Right) */}
+          {/* 2-Column Content Below Header: Narrative (Left) + Profile Rail (Right) */}
           <div className="about-content-grid">
             <Reveal className="about-narrative-col">
               <p className="about-body">
@@ -212,30 +213,42 @@ export default function Home() {
                 what happens after the demo — where systems meet real inputs, failures,
                 and users.
               </p>
+              <div className="about-optical-note">
+                <span className="about-note-kicker">01 / SIGNAL FIRST</span>
+              </div>
             </Reveal>
 
             <Reveal className="about-meta-col">
-              <div className="about-meta-column">
-                <div className="about-meta-block">
-                  <span className="about-meta-tag">CURRENTLY</span>
-                  <p className="about-meta-value">
-                    AI agents · LLM evaluation · Distributed systems
-                  </p>
+              <div className="about-profile-rail">
+                <div className="about-rail-item">
+                  <div className="about-rail-marker" aria-hidden="true" />
+                  <div className="about-rail-content">
+                    <span className="about-meta-tag">CURRENTLY</span>
+                    <p className="about-meta-value">
+                      <span className="focus-lead">AI agents</span> · LLM evaluation · Distributed systems
+                    </p>
+                  </div>
                 </div>
 
-                <div className="about-meta-block">
-                  <span className="about-meta-tag">EDUCATION</span>
-                  <p className="about-meta-value">
-                    <strong>B.Tech — Electronics &amp; Communication Engineering</strong><br />
-                    MSIT · Delhi · GGSIPU <span className="about-meta-sub">(2025—2029)</span>
-                  </p>
+                <div className="about-rail-item">
+                  <div className="about-rail-marker" aria-hidden="true" />
+                  <div className="about-rail-content">
+                    <span className="about-meta-tag">EDUCATION</span>
+                    <p className="about-meta-value">
+                      <strong className="about-edu-degree">B.Tech — Electronics &amp; Communication Engineering</strong>
+                      <span className="about-meta-sub">MSIT · Delhi · GGSIPU · 2025–2029</span>
+                    </p>
+                  </div>
                 </div>
 
-                <div className="about-meta-block about-signal-block">
-                  <span className="about-meta-tag">SIGNAL / NOISE</span>
-                  <p className="about-signal-signature">
-                    Observe → Filter → Reason → Build
-                  </p>
+                <div className="about-rail-item about-rail-signature">
+                  <div className="about-rail-marker" aria-hidden="true" />
+                  <div className="about-rail-content">
+                    <span className="about-meta-tag about-tag-accent">SIGNAL / NOISE</span>
+                    <p className="about-signal-signature">
+                      OBSERVE → FILTER → REASON → BUILD
+                    </p>
+                  </div>
                 </div>
               </div>
             </Reveal>
