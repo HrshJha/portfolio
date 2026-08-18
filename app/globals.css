@@ -1145,10 +1145,10 @@ h2.section-title {
   box-shadow: 0 24px 54px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(217, 120, 59, 0.18);
 }
 
-.project-grid-card-link {
+.project-card-main-link {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex-grow: 1;
   color: inherit;
   text-decoration: none;
 }
@@ -1197,7 +1197,7 @@ h2.section-title {
 
 /* Card Content Details */
 .project-card-info {
-  padding: 18px 20px 20px;
+  padding: 18px 20px 14px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1286,17 +1286,59 @@ h2.section-title {
   flex-grow: 1;
 }
 
-/* Action Trigger */
+/* Dual Actions Footer: View Code + View Project */
 .project-card-footer {
-  margin-top: 8px;
-  padding-top: 10px;
+  margin-top: auto;
+  padding: 12px 20px 16px;
   border-top: 1px solid var(--line2);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.project-card-btn {
+.project-card-code-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #191c2c;
+  color: #ffffff;
+  border: 1px solid transparent;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease, border-color 200ms ease;
+}
+
+[data-theme='dark'] .project-card-code-btn {
+  background: #EEE9DF;
+  color: #17151B;
+  border-color: #EEE9DF;
+}
+
+.project-card-code-btn:hover {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .project-card-code-btn:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #17151B;
+  transform: translateY(-1px);
+}
+
+.project-card-code-icon {
+  flex-shrink: 0;
+}
+
+.project-card-view-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1304,14 +1346,21 @@ h2.section-title {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
+  text-decoration: none;
+  padding: 6px 0;
   transition: color 200ms ease;
+}
+
+.project-card-view-btn:hover {
+  color: var(--text-primary);
 }
 
 .project-card-btn-arrow {
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.project-grid-card:hover .project-card-btn-arrow {
+.project-card-view-btn:hover .project-card-btn-arrow,
+.project-grid-card:hover .project-card-view-btn .project-card-btn-arrow {
   transform: translate(3px, -3px);
 }
 
