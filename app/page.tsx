@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDownRight, ArrowUpRight, ExternalLink } from "lucide-react";
@@ -451,107 +452,29 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── CONTACT ─────────────────────────────────────── */}
+        {/* ── CONTEXTUAL END-OF-PAGE CTA ────────────────────── */}
         <div id="divider-contact" className="section-divider" aria-hidden="true" />
-        <section id="contact" data-section="contact" className="contact-section section-pad" aria-labelledby="contact-heading">
-          <div className="contact-container">
+        <section id="contact-cta" className="closing-cta-section section-pad" aria-labelledby="cta-heading">
+          <div className="closing-cta-container">
             <Reveal>
-              <p className="section-kicker">04 / Contact</p>
-              <h2 className="contact-title" id="contact-heading">
-                Let&apos;s build something<br />
-                <em>that holds up.</em>
+              <span className="section-kicker">04 / NEXT STEP</span>
+              <h2 className="closing-cta-title" id="cta-heading">
+                Have something worth building?
               </h2>
+              <p className="closing-cta-sub">
+                Open for AI/ML engineering roles, system architecture, and ambitious technical projects.
+              </p>
+              <div className="closing-cta-actions">
+                <Link href="/contact" className="closing-cta-btn">
+                  <span>Let&apos;s talk</span>
+                  <ArrowUpRight size={17} className="closing-cta-arrow" aria-hidden="true" />
+                </Link>
+                <a href="mailto:jhaharsh451@gmail.com" className="closing-cta-email">
+                  <span>jhaharsh451@gmail.com</span>
+                  <ArrowUpRight size={15} className="closing-cta-email-arrow" aria-hidden="true" />
+                </a>
+              </div>
             </Reveal>
-
-            <div className="contact-grid">
-              {/* Left Column: Contact Info & Socials */}
-              <Reveal className="contact-left">
-                <div className="contact-block">
-                  <span className="contact-label">EMAIL</span>
-                  <a href="mailto:jhaharsh451@gmail.com" className="contact-email-link">
-                    <span className="email-text">jhaharsh451@gmail.com</span>
-                    <ArrowUpRight size={18} className="email-arrow" />
-                  </a>
-                </div>
-
-                <div className="contact-block social-block">
-                  <span className="contact-label">SOCIAL</span>
-                  <div className="social-list">
-                    <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="social-row-link">
-                      <span className="social-row-name">GitHub</span>
-                      <ArrowUpRight size={16} className="social-row-arrow" />
-                    </a>
-                    <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="social-row-link">
-                      <span className="social-row-name">LinkedIn</span>
-                      <ArrowUpRight size={16} className="social-row-arrow" />
-                    </a>
-                    <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="social-row-link">
-                      <span className="social-row-name">X</span>
-                      <ArrowUpRight size={16} className="social-row-arrow" />
-                    </a>
-                  </div>
-                </div>
-              </Reveal>
-
-              {/* Right Column: Send A Message Form */}
-              <Reveal className="contact-right">
-                <div className="contact-form-wrap">
-                  <span className="contact-label">SEND A MESSAGE</span>
-                  <form
-                    className="contact-form"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      const form = e.currentTarget;
-                      const name = (form.elements.namedItem("name") as HTMLInputElement)?.value;
-                      const email = (form.elements.namedItem("email") as HTMLInputElement)?.value;
-                      const message = (form.elements.namedItem("message") as HTMLTextAreaElement)?.value;
-                      window.location.href = `mailto:jhaharsh451@gmail.com?subject=Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
-                    }}
-                  >
-                    <div className="form-group">
-                      <label htmlFor="contact-name" className="form-label">Name</label>
-                      <input
-                        id="contact-name"
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="Your name"
-                        className="form-input"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="contact-email" className="form-label">Email</label>
-                      <input
-                        id="contact-email"
-                        name="email"
-                        type="email"
-                        required
-                        placeholder="Your email"
-                        className="form-input"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="contact-message" className="form-label">Message</label>
-                      <textarea
-                        id="contact-message"
-                        name="message"
-                        required
-                        rows={4}
-                        placeholder="Tell me about your project..."
-                        className="form-textarea"
-                      />
-                    </div>
-
-                    <button type="submit" className="contact-submit-btn">
-                      <span>Send message</span>
-                      <ArrowUpRight size={16} className="submit-arrow" />
-                    </button>
-                  </form>
-                </div>
-              </Reveal>
-            </div>
           </div>
         </section>
       </main>

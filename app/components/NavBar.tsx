@@ -13,7 +13,7 @@ const links = [
   { label: "Work", href: "#work", id: "work" },
   { label: "Experience", href: "#experience", id: "experience" },
   { label: "About", href: "#about", id: "about" },
-  { label: "Contact", href: "#contact", id: "contact" },
+  { label: "Contact", href: "/contact", id: "contact" },
 ];
 
 export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
@@ -67,8 +67,13 @@ export default function NavBar({ theme, onToggleTheme }: NavBarProps) {
     };
   }, [active, updateIndicator]);
 
-  // Premium smooth scroll with 820ms ease-out (1 - (1-t)^4)
+  // Smooth scroll for anchors, normal route change for pages
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, sectionId: string) => {
+    if (!href.startsWith("#")) {
+      // Normal route navigation (e.g. /contact)
+      return;
+    }
+
     e.preventDefault();
     const targetEl = document.getElementById(sectionId);
     if (!targetEl) return;
