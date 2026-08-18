@@ -241,61 +241,42 @@ export default function Home() {
             </Reveal>
           </div>
 
-          {/* Integrated Curated Toolkit Submodule */}
+          {/* Integrated Honest Toolkit */}
           <div className="about-toolkit-wrap">
             <Reveal>
               <div className="toolkit-sub-header">
-                <span className="toolkit-sub-kicker">03.1 / CURATED TOOLKIT</span>
+                <span className="toolkit-sub-kicker">03.1 / TOOLKIT</span>
                 <h3 className="toolkit-sub-heading">Tools I reach for when the system calls for them.</h3>
               </div>
             </Reveal>
 
-            {/* Primary 4-Category Grid */}
+            {/* Single Compact Stack Pill Grid */}
             <Reveal>
-              <div className="toolkit-grid">
-                <div className="toolkit-category">
-                  <span className="toolkit-category-label">PROGRAMMING</span>
-                  <p className="toolkit-category-items">Python · TypeScript · JavaScript · Java · SQL</p>
-                </div>
-                <div className="toolkit-category">
-                  <span className="toolkit-category-label">AI / ML</span>
-                  <p className="toolkit-category-items">LLMs · RAG · NLP · FAISS · BM25 · Hugging Face · Sentence-Transformers · PyTorch · scikit-learn</p>
-                </div>
-                <div className="toolkit-category">
-                  <span className="toolkit-category-label">BACKEND</span>
-                  <p className="toolkit-category-items">FastAPI · REST APIs · JWT · Pydantic · SQLAlchemy · Alembic</p>
-                </div>
-                <div className="toolkit-category">
-                  <span className="toolkit-category-label">DATA / INFRA</span>
-                  <p className="toolkit-category-items">PostgreSQL · Redis · SQLite · Supabase · Docker · Nginx · Railway · Vercel</p>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Curated Core Stack Strip */}
-            <Reveal>
-              <div className="toolkit-core-stack">
-                <span className="toolkit-sub-label">CORE STACK</span>
-                <div className="toolkit-pill-strip" role="list" aria-label="Core technology stack">
-                  {["Python", "TypeScript", "Java", "FastAPI", "React", "Next.js", "FAISS", "PostgreSQL", "Redis", "Docker", "PyTorch", "SQLAlchemy"].map((name) => (
+              <div className="toolkit-stack-block">
+                <span className="toolkit-stack-label">STACK</span>
+                <div className="toolkit-pill-strip" role="list" aria-label="Technology stack">
+                  {[
+                    "Python",
+                    "TypeScript",
+                    "Java",
+                    "JavaScript",
+                    "SQL",
+                    "FastAPI",
+                    "React",
+                    "Next.js",
+                    "Node.js",
+                    "PostgreSQL",
+                    "Redis",
+                    "Docker",
+                    "FAISS",
+                    "PyTorch",
+                    "SQLAlchemy",
+                  ].map((name) => (
                     <div key={name} className="toolkit-pill" role="listitem" title={name}>
                       <ChipIcon name={name} color="currentColor" />
                       <span className="toolkit-pill-name">{name}</span>
                     </div>
                   ))}
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Supporting Tools Line + Signature */}
-            <Reveal>
-              <div className="toolkit-supporting-row">
-                <div className="toolkit-tools-meta">
-                  <span className="toolkit-sub-label">TOOLS</span>
-                  <p className="toolkit-tools-items">Git · GitHub · Jupyter · Postman · VS Code · Linux</p>
-                </div>
-                <div className="toolkit-signature">
-                  <span>RESEARCH → BUILD → TEST → ITERATE</span>
                 </div>
               </div>
             </Reveal>
