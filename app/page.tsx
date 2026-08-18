@@ -192,32 +192,30 @@ export default function Home() {
         {/* ── ABOUT & TOOLKIT (UNIFIED CHAPTER) ─────────── */}
         <div id="divider-about" className="section-divider" aria-hidden="true" />
         <section id="about" data-section="about" className="about-section section-pad" aria-labelledby="about-heading">
-          <div className="about-grid">
-            {/* Left Column: Heading & Concise Narrative */}
-            <div className="about-left">
-              <Reveal>
-                <div className="section-header">
-                  <p className="section-kicker">03 / About</p>
-                  <h2 className="section-title about-main-heading" id="about-heading">
-                    Systems over demos.<br />
-                    Evidence over<br />
-                    adjectives.
-                  </h2>
-                </div>
-              </Reveal>
-              <Reveal>
-                <p className="about-body">
-                  I&apos;m an ECE student at MSIT building AI systems around retrieval,
-                  evaluation, backend engineering, and reliable automation. I care about
-                  what happens after the demo — where systems meet real inputs, failures,
-                  and users.
-                </p>
-              </Reveal>
+          {/* Section Header across full width */}
+          <Reveal>
+            <div className="about-section-header">
+              <p className="section-kicker">03 / About</p>
+              <h2 className="section-title about-main-heading" id="about-heading">
+                Systems over demos.<br />
+                Evidence over adjectives.
+              </h2>
             </div>
+          </Reveal>
 
-            {/* Right Column: High-Signal Metadata & Philosophy */}
-            <div className="about-right">
-              <Reveal className="about-meta-column">
+          {/* 2-Column Content Below Header: Narrative (Left) + Metadata (Right) */}
+          <div className="about-content-grid">
+            <Reveal className="about-narrative-col">
+              <p className="about-body">
+                I&apos;m an ECE student at MSIT building AI systems around retrieval,
+                evaluation, backend engineering, and reliable automation. I care about
+                what happens after the demo — where systems meet real inputs, failures,
+                and users.
+              </p>
+            </Reveal>
+
+            <Reveal className="about-meta-col">
+              <div className="about-meta-column">
                 <div className="about-meta-block">
                   <span className="about-meta-tag">CURRENTLY</span>
                   <p className="about-meta-value">
@@ -239,8 +237,8 @@ export default function Home() {
                     Observe → Filter → Reason → Build
                   </p>
                 </div>
-              </Reveal>
-            </div>
+              </div>
+            </Reveal>
           </div>
 
           {/* Integrated Curated Toolkit Submodule */}
