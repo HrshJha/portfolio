@@ -160,8 +160,52 @@ function ExperienceEntry({
   primary?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
   const reduceMotion = useReducedMotion();
   const detailsId = `${id}-details`;
+  const handleToggle = () => {
+    if (isOpen) {
+      setIsOpen(false);
+      return;
+    }
+
+    setIsRendered(true);
+    setIsOpen(true);
+  };
+
+  const renderToggle = (expanded: boolean) => (
+    <button
+      type="button"
+      className={`portfolio-experience-toggle${expanded ? " portfolio-experience-toggle--inside" : ""}`}
+      aria-expanded={expanded}
+      aria-controls={detailsId}
+      onClick={handleToggle}
+    >
+      <AnimatePresence initial={false} mode="wait">
+        <motion.span
+          key={expanded ? "hide" : "view"}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {expanded ? "HIDE DETAILS" : "VIEW DETAILED WORK"}
+        </motion.span>
+      </AnimatePresence>
+      <AnimatePresence initial={false} mode="wait">
+        <motion.span
+          key={expanded ? "up" : "out"}
+          className="portfolio-experience-toggle-icon"
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {expanded ? <ArrowUp size={14} aria-hidden="true" /> : <ArrowUpRight size={14} aria-hidden="true" />}
+        </motion.span>
+      </AnimatePresence>
+    </button>
+  );
 
   return (
     <article className={`portfolio-experience-entry${primary ? " portfolio-experience-entry--primary" : " portfolio-experience-entry--secondary"}`}>
@@ -179,26 +223,17 @@ function ExperienceEntry({
         {meta.map((item) => <span key={item}>{item}</span>)}
       </div>
 
-      <button
-        type="button"
-        className="portfolio-experience-toggle"
-        aria-expanded={isOpen}
-        aria-controls={detailsId}
-        onClick={() => setIsOpen((open) => !open)}
-      >
-        {isOpen ? "HIDE DETAILS" : "VIEW DETAILED WORK"}
-        {isOpen ? <ArrowUp size={14} aria-hidden="true" /> : <ArrowUpRight size={14} aria-hidden="true" />}
-      </button>
+      {!isRendered && renderToggle(false)}
 
-      <AnimatePresence initial={false}>
+      <AnimatePresence initial={false} onExitComplete={() => setIsRendered(false)}>
         {isOpen && (
           <motion.div
             id={detailsId}
             className="portfolio-experience-details"
-            initial={reduceMotion ? { opacity: 1, height: "auto", y: 0 } : { opacity: 0, height: 0, y: -8 }}
+            initial={reduceMotion ? { opacity: 1, height: "auto", y: 0 } : { opacity: 0, height: 0, y: 10 }}
             animate={{ opacity: 1, height: "auto", y: 0 }}
-            exit={reduceMotion ? { opacity: 1, height: 0, y: 0 } : { opacity: 0, height: 0, y: -8 }}
-            transition={{ duration: reduceMotion ? 0.01 : 0.48, ease: [0.16, 1, 0.3, 1] }}
+            exit={reduceMotion ? { opacity: 1, height: 0, y: 0 } : { opacity: 0, height: 0, y: 10 }}
+            transition={{ duration: reduceMotion ? 0.01 : 0.58, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="portfolio-experience-detail-overview">
               <span>OVERVIEW</span>
@@ -220,6 +255,8 @@ function ExperienceEntry({
                 {detailMeta.map((item) => <span key={item}>{item}</span>)}
               </div>
             )}
+
+            {renderToggle(true)}
           </motion.div>
         )}
       </AnimatePresence>
@@ -233,15 +270,16 @@ export default function Home() {
       <NavBar />
 
         <main id="top" className="portfolio-main">
-          {/* ── Hero Band — existing floral dither artwork + proximity wave ── */}
+          {/* ── 01. Hero Band — PRIMARY ARTWORK: 1-s4 (s4-nest.png) ── */}
           <section className="portfolio-hero-band" id="hero-band">
             <div className="hero-media-slot" aria-hidden="true">
               <DitherArt
                 region="hero"
-                src="/assets/art/dither/s1-hero.png"
-                position="50% 46%"
-                seam="bottom"
-                restOpacity={0.16}
+                src="/assets/art/dither/s4-nest.png"
+                position="50% 50%"
+                fit="contain"
+                seam="none"
+                restOpacity={0.28}
               />
             </div>
             <HeroProximityWave />
@@ -272,65 +310,54 @@ export default function Home() {
             </div>
           </section>
 
-          {/* ── 02. Work Band — clearing dither artwork (s2-clearing.png) ── */}
-          <section className="portfolio-work-band" id="work-band">
-            <div className="work-media-slot" aria-hidden="true">
-              <DitherArt
-                region="clearing"
-                src="/assets/art/dither/s2-clearing.png"
-                position="50% 20%"
-                seam="both"
-                restOpacity={0.14}
-              />
+          {/* ── 02. Selected Work Section (Clean Continuous Warm-Ivory Canvas) ── */}
+          <section id="work" data-section="work" className="portfolio-section portfolio-work-section" aria-labelledby="work-heading">
+            <div className="portfolio-section-heading">
+              <div>
+                <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
+                <h2 id="work-heading">Here&apos;s what I have been<br />engineering..</h2>
+              </div>
+              <p className="portfolio-section-intro">Most of engineering is deciding what you are willing to lose.</p>
             </div>
 
-            <div id="work" data-section="work" className="portfolio-section portfolio-work-section" aria-labelledby="work-heading">
-              <div className="portfolio-section-heading">
-                <div>
-                  <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
-                  <h2 id="work-heading">Here&apos;s what I have been<br />engineering..</h2>
+            {/* ── One Large Continuous Warm-Ivory Project Canvas ── */}
+            <div className="portfolio-work-canvas">
+              <div className="portfolio-work-editorial-grid">
+                {/* Left Column: Featured Project (FrameOS) */}
+                <div className="portfolio-featured-col">
+                  <Reveal className="portfolio-featured-reveal">
+                    <ProjectCard project={showcaseProjects[0]} isFeatured={true} />
+                  </Reveal>
                 </div>
-                <p className="portfolio-section-intro">Most of engineering is deciding what you are willing to lose.</p>
+
+                {/* Right Column: Stacked Secondary Projects (Vera, Hallucination Hunter) */}
+                <div className="portfolio-secondary-col">
+                  {showcaseProjects.slice(1).map((project) => (
+                    <Reveal key={project.id}>
+                      <ProjectCard project={project} isFeatured={false} />
+                    </Reveal>
+                  ))}
+                </div>
               </div>
 
-              {/* ── One Large Continuous Warm-Ivory Project Canvas ── */}
-              <div className="portfolio-work-canvas">
-                <div className="portfolio-work-editorial-grid">
-                  {/* Left Column: Featured Project (FrameOS) */}
-                  <div className="portfolio-featured-col">
-                    <Reveal className="portfolio-featured-reveal">
-                      <ProjectCard project={showcaseProjects[0]} isFeatured={true} />
-                    </Reveal>
-                  </div>
-
-                  {/* Right Column: Stacked Secondary Projects (Vera, Hallucination Hunter) */}
-                  <div className="portfolio-secondary-col">
-                    {showcaseProjects.slice(1).map((project) => (
-                      <Reveal key={project.id}>
-                        <ProjectCard project={project} isFeatured={false} />
-                      </Reveal>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="portfolio-work-see-all">
-                  <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
-                    SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
-                  </a>
-                </div>
+              <div className="portfolio-work-see-all">
+                <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
+                  SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
+                </a>
               </div>
             </div>
           </section>
 
-          {/* ── 03. Experience Band — meadow dither artwork (s3-meadow.png) ── */}
+          {/* ── 03. Experience Band — SECONDARY ARTWORK: 2-s3 (s3-meadow.png) ── */}
           <section className="portfolio-experience-band" id="experience-band">
             <div className="experience-media-slot" aria-hidden="true">
               <DitherArt
                 region="meadow"
                 src="/assets/art/dither/s3-meadow.png"
-                position="50% 35%"
-                seam="both"
-                restOpacity={0.14}
+                position="50% 50%"
+                fit="contain"
+                seam="none"
+                restOpacity={0.16}
               />
             </div>
             <div
@@ -373,15 +400,16 @@ export default function Home() {
             </div>
           </section>
 
-          {/* ── 04 & 05. Closing Band (About + Contact) — nest dither artwork (s4-nest.png) ── */}
+          {/* ── 04 & 05. Closing Band (About + Contact) — SECONDARY ARTWORK: 3-s2 (s2-clearing.png) ── */}
           <section className="portfolio-closing-band" id="closing-band">
             <div className="closing-media-slot" aria-hidden="true">
               <DitherArt
-                region="closing"
-                src="/assets/art/dither/s4-nest.png"
+                region="clearing"
+                src="/assets/art/dither/s2-clearing.png"
                 position="50% 50%"
-                seam="top"
-                restOpacity={0.25}
+                fit="contain"
+                seam="none"
+                restOpacity={0.18}
               />
             </div>
 

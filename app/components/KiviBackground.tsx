@@ -14,6 +14,7 @@ export interface DitherArtProps {
   region: 'hero' | 'clearing' | 'meadow' | 'closing' | 'site';
   src?: string;
   position?: string;
+  fit?: 'contain' | 'cover';
   restOpacity?: number;
   seam?: 'bottom' | 'top' | 'both' | 'none';
   className?: string;
@@ -24,17 +25,18 @@ export function DitherArt({
   region,
   src,
   position = '50% 50%',
-  restOpacity = 0.14,
+  fit = 'contain',
+  restOpacity = 0.16,
   seam = 'none',
   className = '',
   style = {},
 }: DitherArtProps) {
   const defaultSrc = {
-    hero: '/assets/art/dither/s1-hero.png',
+    hero: '/assets/art/dither/s4-nest.png',
     clearing: '/assets/art/dither/s2-clearing.png',
     meadow: '/assets/art/dither/s3-meadow.png',
-    closing: '/assets/art/dither/s4-nest.png',
-    site: '/assets/art/dither/s1-hero.png',
+    closing: '/assets/art/dither/s2-clearing.png',
+    site: '/assets/art/dither/s4-nest.png',
   }[region];
 
   const artSrc = src || defaultSrc;
@@ -46,25 +48,25 @@ export function DitherArt({
   let seamRepeat = 'no-repeat';
 
   if (seam === 'bottom') {
-    seamImage = 'url("/assets/art/dither/mask-dissolve-out.png"),linear-gradient(#000,#000)';
-    seamSize = '16px 128px,100% calc(100% - 128px)';
-    seamPos = 'bottom left,left 0 top 0px';
-    seamRepeat = 'repeat-x,no-repeat';
+    seamImage = 'linear-gradient(to bottom, #000 0%, #000 calc(100% - 140px), transparent 100%)';
+    seamSize = '100% 100%';
+    seamPos = 'top left';
+    seamRepeat = 'no-repeat';
   } else if (seam === 'top') {
-    seamImage = 'url("/assets/art/dither/mask-dissolve-in.png"),linear-gradient(#000,#000)';
-    seamSize = '16px 128px,100% calc(100% - 128px)';
-    seamPos = 'top left,left 0 top 128px';
-    seamRepeat = 'repeat-x,no-repeat';
+    seamImage = 'linear-gradient(to bottom, transparent 0%, #000 140px, #000 100%)';
+    seamSize = '100% 100%';
+    seamPos = 'top left';
+    seamRepeat = 'no-repeat';
   } else if (seam === 'both') {
-    seamImage = 'url("/assets/art/dither/mask-dissolve-in.png"),url("/assets/art/dither/mask-dissolve-out.png"),linear-gradient(#000,#000)';
-    seamSize = '16px 128px,16px 128px,100% calc(100% - 256px)';
-    seamPos = 'top left,bottom left,left 0 top 128px';
-    seamRepeat = 'repeat-x,repeat-x,no-repeat';
+    seamImage = 'linear-gradient(to bottom, transparent 0%, #000 140px, #000 calc(100% - 140px), transparent 100%)';
+    seamSize = '100% 100%';
+    seamPos = 'top left';
+    seamRepeat = 'no-repeat';
   }
 
   const customStyle: React.CSSProperties = {
     ['--art-src' as any]: `url("${artSrc}")`,
-    ['--art-fit' as any]: 'cover',
+    ['--art-fit' as any]: fit,
     ['--art-position' as any]: position,
     ['--art-rest' as any]: restOpacity,
     ['--art-overlap-top' as any]: '0px',
@@ -85,7 +87,7 @@ export function DitherArt({
       data-dither-art
       data-art-region={region}
       data-art-natural="768,512"
-      data-art-fit="cover"
+      data-art-fit={fit}
       data-art-position={position}
       data-art-grid="2"
       style={customStyle}
