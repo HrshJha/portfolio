@@ -1,338 +1,184 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowDownRight, ArrowUpRight, ExternalLink } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import NavBar from "./components/NavBar";
-import ContourField from "./components/ContourField";
-import CompanionPet from "./components/CompanionPet";
-import ChipIcon from "./components/ChipIcon";
-import ProjectGridCard from "./components/ProjectGridCard";
-import { projects } from "./data/projects";
+import PhysicsField from "./components/PhysicsField";
+import { projects, type Project } from "./data/projects";
 
-/* ── REVEAL ───────────────────────────────────────────── */
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const reduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      className={`reveal ${className}`}
-      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      className={className}
+      initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.08 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, amount: 0.14 }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   );
 }
 
-/* ── HOME ─────────────────────────────────────────────── */
+function ProjectFeature({ project, index }: { project: Project; index: number }) {
+  return (
+    <Reveal>
+      <article className={`feature-project${index % 2 === 1 ? " feature-project--reverse" : ""}`}>
+        <div className="feature-project-meta">
+          <span>{project.index}</span>
+          <span>{project.year}</span>
+        </div>
+
+        <div className="feature-project-layout">
+          <Link href={`/work/${project.id}`} className="feature-project-media" aria-label={`Open ${project.title} case study`}>
+            <video autoPlay muted loop playsInline preload="metadata" poster={project.poster}>
+              <source src={project.video} type="video/mp4" />
+            </video>
+            <span className="feature-project-media-note">View case study <ArrowUpRight size={14} /></span>
+          </Link>
+
+          <div className="feature-project-copy">
+            <p className="feature-project-category">{project.category}</p>
+            <h3>{project.title}</h3>
+            <p className="feature-project-thesis">{project.thesis}</p>
+            <p className="feature-project-description">{project.shortDescription}</p>
+
+            <div className="feature-project-footer">
+              <div className="feature-project-stack" aria-label={`${project.title} technology stack`}>
+                {project.cardStack.slice(0, 4).map((item) => <span key={item}>{item}</span>)}
+              </div>
+              <a href={project.github} target="_blank" rel="noreferrer" className="editorial-link">
+                Source <ExternalLink size={13} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
 export default function Home() {
-  const [theme, setTheme] = useState("light");
-
-  /* Sync theme from DOM */
-  useEffect(() => {
-    setTheme(document.documentElement.dataset.theme || "light");
-  }, []);
-
-  const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("harsh-theme", next);
-    setTheme(next);
-  };
-
   return (
     <>
-      <div className="grain" aria-hidden="true" />
+      <PhysicsField />
+      <div className="site-shell">
+        <div className="grain" aria-hidden="true" />
+        <NavBar />
 
-      <NavBar theme={theme} onToggleTheme={toggleTheme} />
-      <CompanionPet />
-
-      <main id="top">
-        {/* ── HERO ────────────────────────────────────────── */}
-        <section className="hero section-pad" aria-labelledby="hero-heading">
-          <div className="hero-blob" aria-hidden="true" />
-          <ContourField />
-          <div className="hero-inner">
-            {/* Sarvam botanical ornament — visible in light mode only */}
-            <svg
-              className="hero-ornament"
-              viewBox="0 0 280 68"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path d="M16 44 C16 44 8 36 12 26 C16 16 28 18 28 26 C28 34 20 38 16 44 Z" stroke="white" strokeWidth="1.2" fill="none" opacity=".9" />
-              <path d="M16 44 C16 44 6 40 4 30 C2 20 10 14 18 20 C24 24 22 34 16 44 Z" stroke="white" strokeWidth="1" fill="none" opacity=".75" />
-              <path d="M16 44 C16 44 10 48 6 44 C2 40 4 34 10 36 C14 38 16 44 16 44 Z" stroke="white" strokeWidth=".9" fill="none" opacity=".65" />
-              <path d="M14 46 Q12 50 10 52" stroke="white" strokeWidth=".8" fill="none" opacity=".5" />
-              <path d="M18 46 Q16 52 14 56" stroke="white" strokeWidth=".8" fill="none" opacity=".5" />
-              <circle cx="140" cy="48" r="1.8" fill="white" opacity=".7" />
-              <circle cx="140" cy="40" r="1.2" fill="white" opacity=".5" />
-              <path d="M264 44 C264 44 272 36 268 26 C264 16 252 18 252 26 C252 34 260 38 264 44 Z" stroke="white" strokeWidth="1.2" fill="none" opacity=".9" />
-              <path d="M264 44 C264 44 274 40 276 30 C278 20 270 14 262 20 C256 24 258 34 264 44 Z" stroke="white" strokeWidth="1" fill="none" opacity=".75" />
-              <path d="M264 44 C264 44 270 48 274 44 C278 40 276 34 270 36 C266 38 264 44 264 44 Z" stroke="white" strokeWidth=".9" fill="none" opacity=".65" />
-              <path d="M266 46 Q268 50 270 52" stroke="white" strokeWidth=".8" fill="none" opacity=".5" />
-              <path d="M262 46 Q264 52 266 56" stroke="white" strokeWidth=".8" fill="none" opacity=".5" />
-              <line x1="28" y1="52" x2="252" y2="52" stroke="white" strokeWidth=".8" opacity=".45" />
-              <line x1="100" y1="48" x2="100" y2="56" stroke="white" strokeWidth=".7" opacity=".35" />
-              <line x1="180" y1="48" x2="180" y2="56" stroke="white" strokeWidth=".7" opacity=".35" />
-            </svg>
-
-            <p className="hero-eyebrow">ECE · AI/ML · Software</p>
-            <div className="eyebrow-rule" aria-hidden="true" />
-            <h1 className="hero-name hero-wordmark" id="hero-heading">
-              <span className="wm-word wm-first">Harsh</span>
-              <span className="wm-word wm-middle">Kumar</span>
-              <span className="wm-word wm-last">
-                Jha<span className="wm-mark" aria-hidden="true" />
-              </span>
-            </h1>
-            <p className="hero-copy">
-              Building AI systems through machine learning and engineering.
-            </p>
-            <div className="hero-ctas">
-              <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="hero-btn hero-btn-secondary hero-btn-github">
-                <span>GitHub</span>
-                <ExternalLink size={14} className="hero-btn-arrow" />
-              </a>
-              <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer" className="hero-btn hero-btn-secondary hero-btn-linkedin">
-                <span>LinkedIn</span>
-              </a>
-              <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer" className="hero-btn hero-btn-secondary hero-btn-x">
-                <span>X</span>
-              </a>
+        <main id="top" className="editorial-main">
+          <section className="editorial-hero section-pad" aria-labelledby="hero-heading">
+            <div className="editorial-hero-topline">
+              <span>01 / INTRO</span>
+              <span>Delhi · India</span>
             </div>
-          </div>
-        </section>
 
-        {/* ── SELECTED WORK ───────────────────────────────── */}
-        <div id="divider-work" className="section-divider" aria-hidden="true" />
-        <section id="work" data-section="work" className="work-section section-pad" aria-labelledby="work-heading">
-          <Reveal>
-            <div className="section-header">
-              <p className="section-kicker">01 / Selected Work</p>
-              <h2 className="section-title" id="work-heading">
-                Four systems,<br />
-                each grounded in a real<br />
-                product workflow.
-              </h2>
-            </div>
-          </Reveal>
-
-          {/* Compact 2-Column Project Grid */}
-          <div className="project-grid">
-            {projects.map((p) => (
-              <Reveal key={p.id}>
-                <ProjectGridCard project={p} />
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
-        {/* ── EXPERIENCE ──────────────────────────────────── */}
-        <div id="divider-experience" className="section-divider" aria-hidden="true" />
-        <section id="experience" data-section="experience" className="exp-section section-pad" aria-labelledby="exp-heading">
-          <Reveal>
-            <div className="section-header">
-              <p className="section-kicker">02 / Experience</p>
-              <h2 className="section-title" id="exp-heading">
-                Where the questions<br />
-                got sharper.
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="exp-list">
-            {/* DomainLabs */}
-            <Reveal>
-              <article className="exp-card">
-                <div className="exp-meta">
-                  <p className="exp-year">2026</p>
-                  <h3 className="exp-company">DomainLabs</h3>
-                  <p className="exp-role">AI/ML Intern · AI Safety &amp; Evaluation</p>
-                  <div className="exp-stack">
-                    {["AI Safety", "LLM Evaluation", "Adversarial Testing", "Red Teaming"].map((t) => (
-                      <span key={t} className="exp-chip">{t}</span>
-                    ))}
-                  </div>
-                </div>
-                <ul className="exp-bullets">
-                  <li>Researched AI safety, adversarial testing, and LLM evaluation across production-oriented AI workflows.</li>
-                  <li>Built evaluation pipelines and benchmarks to measure model performance, robustness, and safety.</li>
-                  <li>Contributed to <strong>Bayora</strong>, an automated adversarial red-teaming platform, through LLM integration and model testing.</li>
-                </ul>
-              </article>
-            </Reveal>
-
-            {/* MathonGo */}
-            <Reveal>
-              <article className="exp-card">
-                <div className="exp-meta">
-                  <p className="exp-year">2025</p>
-                  <h3 className="exp-company">MathonGo</h3>
-                  <p className="exp-role">Research &amp; Development Intern</p>
-                  <div className="exp-stack">
-                    {["Data Validation", "AI-Assisted QA", "Physics", "Datasets"].map((t) => (
-                      <span key={t} className="exp-chip">{t}</span>
-                    ))}
-                  </div>
-                </div>
-                <ul className="exp-bullets">
-                  <li>Validated and structured 2,000+ Physics questions for JEE/NEET question banks.</li>
-                  <li>Applied AI-assisted QA to improve dataset quality and retrieval efficiency.</li>
-                </ul>
-              </article>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ── ABOUT (EDITORIAL PERSONAL PROFILE) ───────── */}
-        <div id="divider-about" className="section-divider" aria-hidden="true" />
-        <section id="about" data-section="about" className="about-section section-pad" aria-labelledby="about-heading">
-          <div className="about-editorial-container">
-            {/* Top: Section Kicker & Monumental Headline */}
-            <Reveal>
-              <div className="about-editorial-header">
-                <p className="section-kicker">03 / About</p>
-                <h2 className="section-title about-profile-title" id="about-heading">
-                  Systems over demos.<br />
-                  Evidence over adjectives.
-                </h2>
+            <div className="editorial-hero-content">
+              <p className="editorial-kicker">AI / SYSTEMS / VISUAL STORYTELLING</p>
+              <h1 id="hero-heading">Harsh Kumar<br /><em>Jha.</em></h1>
+              <p className="editorial-hero-statement">
+                I build AI systems that hold up after the demo — and care about how a story is seen, not only how it runs.
+              </p>
+              <div className="editorial-hero-links">
+                <a href="#work" className="editorial-link editorial-link--large">See the work <ArrowUpRight size={16} /></a>
+                <a href="mailto:jhaharsh451@gmail.com" className="editorial-link">Get in touch <ArrowUpRight size={14} /></a>
               </div>
-            </Reveal>
+            </div>
 
-            {/* Middle: Compact Identity Line */}
-            <Reveal>
-              <p className="about-identity-line">
-                <span>ECE @ MSIT</span>
-                <span className="identity-sep" aria-hidden="true">·</span>
-                <span>AI / ML</span>
-                <span className="identity-sep" aria-hidden="true">·</span>
+            <div className="editorial-hero-bottomline">
+              <span>ECE @ MSIT</span>
+              <span>AI / ML · BACKEND · FILM</span>
+              <span>2025 — 2029</span>
+            </div>
+          </section>
+
+          <div className="editorial-rule" aria-hidden="true" />
+
+          <section id="work" data-section="work" className="editorial-work section-pad" aria-labelledby="work-heading">
+            <div className="editorial-section-lead">
+              <p className="editorial-kicker">02 / SELECTED WORK</p>
+              <h2 id="work-heading">Things I make<br /><em>to understand them.</em></h2>
+              <p>Four systems grounded in a real product workflow — retrieval, evaluation, orchestration, and evidence.</p>
+            </div>
+
+            <div className="feature-project-list">
+              {projects.map((project, index) => <ProjectFeature key={project.id} project={project} index={index} />)}
+            </div>
+          </section>
+
+          <div className="editorial-rule" aria-hidden="true" />
+
+          <section id="experience" data-section="experience" className="editorial-experience section-pad" aria-labelledby="experience-heading">
+            <div className="editorial-section-lead editorial-section-lead--wide">
+              <p className="editorial-kicker">03 / EXPERIENCE</p>
+              <h2 id="experience-heading">Where the questions<br /><em>got sharper.</em></h2>
+            </div>
+
+            <div className="editorial-experience-list">
+              <article className="editorial-experience-row">
+                <div className="editorial-experience-index">01</div>
+                <div>
+                  <p className="editorial-meta">2026 · AI/ML INTERN</p>
+                  <h3>DomainLabs</h3>
+                </div>
+                <p>AI safety, adversarial testing, LLM evaluation, and Bayora — an automated red-teaming platform.</p>
+              </article>
+              <article className="editorial-experience-row">
+                <div className="editorial-experience-index">02</div>
+                <div>
+                  <p className="editorial-meta">2025 · R&amp;D INTERN</p>
+                  <h3>MathonGo</h3>
+                </div>
+                <p>Validated and structured 2,000+ Physics questions with AI-assisted QA for JEE/NEET datasets.</p>
+              </article>
+            </div>
+          </section>
+
+          <div className="editorial-rule" aria-hidden="true" />
+
+          <section id="about" data-section="about" className="editorial-about section-pad" aria-labelledby="about-heading">
+            <div className="editorial-about-label">
+              <p className="editorial-kicker">04 / ABOUT</p>
+              <span>THE SHORT VERSION</span>
+            </div>
+            <div className="editorial-about-content">
+              <h2 id="about-heading">Systems over demos.<br /><em>Evidence over adjectives.</em></h2>
+              <p>I&apos;m an ECE student at MSIT building AI systems around retrieval, evaluation, backend engineering, and reliable automation. I also think in frames, rhythm, and the details that make a piece of work feel human.</p>
+              <div className="editorial-about-notes">
+                <span>AI SYSTEMS</span>
                 <span>BACKEND</span>
-                <span className="identity-sep" aria-hidden="true">·</span>
-                <span>SYSTEMS</span>
-              </p>
-            </Reveal>
-
-            {/* Narrative Paragraph */}
-            <Reveal>
-              <p className="about-editorial-body">
-                I&apos;m an ECE student at MSIT building AI systems around retrieval,
-                evaluation, backend engineering, and reliable automation. I care about
-                what happens after the demo — where systems meet real inputs, failures,
-                and users.
-              </p>
-            </Reveal>
-
-            {/* Bottom: 3-Column Factual Strip */}
-            <Reveal>
-              <div className="about-facts-strip">
-                <div className="about-fact-col">
-                  <span className="about-fact-label">CURRENT FOCUS</span>
-                  <ul className="about-fact-list">
-                    <li>AI systems</li>
-                    <li>Backend</li>
-                    <li>Machine Learning</li>
-                  </ul>
-                </div>
-
-                <div className="about-fact-col">
-                  <span className="about-fact-label">EDUCATION</span>
-                  <p className="about-fact-val">
-                    <strong className="fact-primary">B.Tech — ECE</strong>
-                    <span className="fact-secondary">MSIT · Delhi</span>
-                    <span className="fact-meta-sub">2025–2029</span>
-                  </p>
-                </div>
-
-                <div className="about-fact-col">
-                  <span className="about-fact-label">BASED IN</span>
-                  <p className="about-fact-val">
-                    <strong className="fact-primary">Delhi, India</strong>
-                  </p>
-                </div>
+                <span>MACHINE LEARNING</span>
+                <span>VISUAL STORYTELLING</span>
               </div>
-            </Reveal>
+            </div>
+          </section>
+
+          <div className="editorial-rule" aria-hidden="true" />
+
+          <section id="contact-cta" data-section="contact" className="editorial-contact section-pad" aria-labelledby="contact-heading">
+            <p className="editorial-kicker">05 / NEXT STEP</p>
+            <h2 id="contact-heading">Have something<br /><em>worth building?</em></h2>
+            <div className="editorial-contact-links">
+              <Link href="/contact" className="editorial-link editorial-link--large">Let&apos;s talk <ArrowUpRight size={17} /></Link>
+              <a href="mailto:jhaharsh451@gmail.com" className="editorial-link">jhaharsh451@gmail.com <ArrowUpRight size={14} /></a>
+            </div>
+          </section>
+        </main>
+
+        <footer className="editorial-footer" role="contentinfo">
+          <span>HARSH KUMAR JHA</span>
+          <span>AI / SYSTEMS / FILM</span>
+          <div>
+            <a href="mailto:jhaharsh451@gmail.com">EMAIL</a>
+            <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer">GITHUB</a>
+            <a href="https://www.linkedin.com/in/hrshjha" target="_blank" rel="noreferrer">LINKEDIN</a>
+            <a href="https://x.com/haarshjha" target="_blank" rel="noreferrer">X</a>
           </div>
-
-          {/* Integrated Honest Toolkit */}
-          <div className="about-toolkit-wrap">
-            <Reveal>
-              <div className="toolkit-sub-header">
-                <span className="toolkit-sub-kicker">03.1 / TOOLKIT</span>
-                <h3 className="toolkit-sub-heading">Tools I reach for when the system calls for them.</h3>
-              </div>
-            </Reveal>
-
-            {/* Single Compact Stack Pill Grid */}
-            <Reveal>
-              <div className="toolkit-stack-block">
-                <span className="toolkit-stack-label">STACK</span>
-                <div className="toolkit-pill-strip" role="list" aria-label="Technology stack">
-                  {[
-                    "Python",
-                    "TypeScript",
-                    "Java",
-                    "JavaScript",
-                    "SQL",
-                    "FastAPI",
-                    "React",
-                    "Next.js",
-                    "Node.js",
-                    "PostgreSQL",
-                    "Redis",
-                    "Docker",
-                    "FAISS",
-                    "PyTorch",
-                    "SQLAlchemy",
-                  ].map((name) => (
-                    <div key={name} className="toolkit-pill" role="listitem" title={name}>
-                      <ChipIcon name={name} color="currentColor" />
-                      <span className="toolkit-pill-name">{name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
-        {/* ── CONTEXTUAL END-OF-PAGE CTA ────────────────────── */}
-        <div id="divider-contact" className="section-divider" aria-hidden="true" />
-        <section id="contact-cta" className="closing-cta-section section-pad" aria-labelledby="cta-heading">
-          <div className="closing-cta-container">
-            <Reveal>
-              <span className="section-kicker">04 / NEXT STEP</span>
-              <h2 className="closing-cta-title" id="cta-heading">
-                Have something worth building?
-              </h2>
-              <p className="closing-cta-sub">
-                Open for AI/ML engineering roles, system architecture, and ambitious technical projects.
-              </p>
-              <div className="closing-cta-actions">
-                <Link href="/contact" className="closing-cta-btn">
-                  <span>Let&apos;s talk</span>
-                  <ArrowUpRight size={17} className="closing-cta-arrow" aria-hidden="true" />
-                </Link>
-                <a href="mailto:jhaharsh451@gmail.com" className="closing-cta-email">
-                  <span>jhaharsh451@gmail.com</span>
-                  <ArrowUpRight size={15} className="closing-cta-email-arrow" aria-hidden="true" />
-                </a>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-      </main>
-
-      {/* FOOTER */}
-      <footer className="site-footer" role="contentinfo">
-        <span className="footer-name">HARSH KUMAR JHA</span>
-        <span className="footer-line">Building AI systems through machine learning and engineering.</span>
-        <span className="footer-copy">© 2026</span>
-      </footer>
+        </footer>
+      </div>
     </>
   );
 }
