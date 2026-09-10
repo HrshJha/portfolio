@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, GitFork, Moon, Sun } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, GitFork } from "lucide-react";
 import { Project } from "../../data/projects";
 import ChipIcon from "../../components/ChipIcon";
-import ContourField from "../../components/ContourField";
-import CompanionPet from "../../components/CompanionPet";
+import PhysicsField from "../../components/PhysicsField";
 
 type WorkDetailClientProps = {
   project: Project;
@@ -21,29 +20,19 @@ export default function WorkDetailClient({
   nextProject,
   stackChips,
 }: WorkDetailClientProps) {
-  const [theme, setTheme] = useState("light");
   const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
-    setTheme(document.documentElement.dataset.theme || "light");
     window.scrollTo(0, 0);
   }, [project.id]);
-
-  const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("harsh-theme", next);
-    setTheme(next);
-  };
 
   return (
     <>
       <div className="grain" aria-hidden="true" />
-      <CompanionPet />
 
-      {/* Background canvas contour animation */}
+      {/* Kivi-inspired floral background */}
       <div className="work-detail-field-wrap" aria-hidden="true">
-        <ContourField />
+        <PhysicsField />
       </div>
 
       {/* Top Floating Mini-Nav */}
@@ -53,15 +42,6 @@ export default function WorkDetailClient({
           <span>Back to work</span>
         </Link>
 
-        <div className="work-detail-nav-actions">
-          <button
-            className="icon-btn"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-          >
-            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-        </div>
       </header>
 
       <main className="work-detail-main section-pad">
