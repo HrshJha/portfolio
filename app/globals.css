@@ -4476,7 +4476,7 @@ footer {
 }
 
 /* =============================================================================
-   EDITORIAL WORK / PROJECTS SECTION (ASYMMETRIC COMPOSITION MATCHING REFERENCE)
+   EDITORIAL WORK / PROJECTS SECTION (ONE CONTINUOUS WARM-IVORY CANVAS)
    ============================================================================= */
 
 .portfolio-work-section {
@@ -4488,95 +4488,103 @@ footer {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 1360px;
+  max-width: 1500px;
   margin-inline: auto;
   padding: clamp(60px, 8vw, 120px) var(--portfolio-pad);
   box-sizing: border-box;
 }
 
+/* ── One Large Continuous Warm-Ivory Canvas ── */
+.portfolio-work-canvas {
+  background: var(--project-ivory, #f3f0e7);
+  color: var(--project-text, #171814);
+  border-radius: clamp(20px, 2.4vw, 28px);
+  padding: clamp(36px, 4.5vw, 64px) clamp(28px, 4vw, 56px);
+  margin-top: clamp(32px, 4vw, 52px);
+  box-sizing: border-box;
+  position: relative;
+  border: 1px solid rgba(243, 240, 231, 0.08);
+}
+
+/* ── Project Grid inside Ivory Canvas ── */
 .portfolio-work-editorial-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.82fr);
-  column-gap: clamp(36px, 5vw, 76px);
-  align-items: stretch;
-  margin-top: clamp(32px, 4.5vw, 56px);
+  grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.8fr);
+  column-gap: clamp(48px, 6vw, 100px);
+  align-items: start;
+  margin-top: 0;
 }
 
 .portfolio-featured-col {
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  height: auto;
 }
 
 .portfolio-featured-reveal {
-  height: 100%;
+  height: auto;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 0%;
 }
 
 .portfolio-secondary-col {
   display: flex;
   flex-direction: column;
-  gap: clamp(44px, 5.5vw, 70px);
+  gap: clamp(56px, 6vw, 88px);
   width: 100%;
 }
 
-/* Project Card */
+/* Project Card — NO individual card backgrounds (transparent over parent ivory) */
 .portfolio-project-card {
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-radius: 24px;
-  background: var(--project-ivory);
-  color: var(--project-text);
+  background: transparent;
+  color: var(--project-text, #171814);
+  border-radius: 0;
+  padding: 0;
 }
 
 .portfolio-project-card--featured {
-  height: 100%;
-  flex: 1 1 0%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  height: auto;
+  flex: none;
 }
 
 .portfolio-project-card--secondary {
   /* Natural height determined by visual + info */
 }
 
-/* Visual Container */
+/* Visual Container (Dark Artwork Containers on Ivory Surface) */
 .portfolio-project-visual {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  border-radius: 22px;
-  border: 1px solid rgba(242, 240, 233, 0.1);
+  border-radius: 20px;
+  border: 1px solid rgba(23, 24, 20, 0.12);
   background:
     radial-gradient(circle at 50% 40%, rgba(242, 240, 233, 0.03), transparent 60%),
     linear-gradient(145deg, rgba(20, 23, 21, 0.95), rgba(11, 13, 11, 0.98));
   overflow: hidden;
   text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), border-color 280ms ease, box-shadow 280ms ease;
 }
 
 .portfolio-project-visual:hover {
   transform: translateY(-3px);
-  border-color: rgba(217, 133, 76, 0.4);
-  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.75), 0 0 28px rgba(217, 133, 76, 0.1);
+  border-color: rgba(217, 133, 76, 0.45);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.22), 0 0 24px rgba(217, 133, 76, 0.1);
 }
 
 .portfolio-project-visual--featured {
-  flex: 1 1 0%;
-  min-height: 520px;
-  border-radius: 24px;
+  flex: none;
+  min-height: 0;
+  aspect-ratio: 680 / 700;
+  border-radius: 22px;
 }
 
 .portfolio-project-visual--secondary {
-  aspect-ratio: 540 / 315;
+  aspect-ratio: 540 / 340;
   border-radius: 18px;
 }
 
@@ -4590,15 +4598,12 @@ footer {
   object-fit: contain;
 }
 
-/* Project Info Below Visual */
+/* Project Info Below Visual — Transparent over Ivory */
 .portfolio-project-info {
   display: flex;
   flex-direction: column;
-  padding-top: clamp(18px, 2.2vw, 26px);
-}
-
-.portfolio-project-card--featured .portfolio-project-info {
-  flex-shrink: 0;
+  padding-block: clamp(22px, 2.5vw, 32px) 0;
+  background: transparent;
 }
 
 .portfolio-project-header {
@@ -4610,7 +4615,7 @@ footer {
 
 .portfolio-project-header h3 {
   margin: 0;
-  color: var(--project-text);
+  color: var(--project-text, #171814);
   font-family: var(--font-newsreader, serif), Georgia, serif;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -4636,7 +4641,7 @@ footer {
 }
 
 .portfolio-project-gh-link {
-  color: var(--project-muted);
+  color: var(--project-muted, #66685f);
   transition: color 180ms ease, transform 180ms ease;
   display: inline-flex;
   align-items: center;
@@ -4644,13 +4649,13 @@ footer {
 }
 
 .portfolio-project-gh-link:hover {
-  color: var(--project-text);
+  color: var(--project-text, #171814);
   transform: translateY(-1px);
 }
 
 .portfolio-project-eyebrow {
   margin: 8px 0 0;
-  color: var(--project-muted);
+  color: var(--project-muted, #66685f);
   font-family: var(--font-mono, monospace);
   font-size: clamp(8.5px, 0.8vw, 10.5px);
   font-weight: 600;
@@ -4660,7 +4665,7 @@ footer {
 
 .portfolio-project-desc {
   margin: 14px 0 0;
-  color: var(--project-muted);
+  color: var(--project-muted, #66685f);
   font-size: clamp(12.5px, 1vw, 14.5px);
   line-height: 1.58;
   letter-spacing: 0.01em;
@@ -4684,9 +4689,9 @@ footer {
 
 .portfolio-project-tags span {
   padding: 4px 9px;
-  border: 1px solid var(--project-border);
+  border: 1px solid var(--project-border, rgba(23, 24, 20, 0.12));
   border-radius: 6px;
-  color: var(--project-muted);
+  color: var(--project-muted, #66685f);
   font-family: var(--font-mono, monospace);
   font-size: clamp(8.5px, 0.75vw, 10px);
   font-weight: 500;
@@ -4704,7 +4709,7 @@ footer {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--project-text);
+  color: var(--project-text, #171814);
   font-family: var(--font-mono, monospace);
   font-size: clamp(9.5px, 0.82vw, 11.5px);
   font-weight: 600;
@@ -4719,17 +4724,18 @@ footer {
   transform: translateX(3px);
 }
 
-/* Footer Action: SEE EVERYTHING (3 MORE) */
+/* Footer Action: SEE EVERYTHING (3 MORE) inside Ivory Canvas */
 .portfolio-work-see-all {
-  margin-top: clamp(48px, 6vw, 84px);
+  margin-top: clamp(36px, 4.5vw, 60px);
   padding-top: 24px;
+  border-top: 1px solid var(--project-border, rgba(23, 24, 20, 0.12));
 }
 
 .portfolio-see-all-action {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--portfolio-muted, #8a8f85);
+  color: var(--project-text, #171814);
   font-family: var(--font-mono, monospace);
   font-size: clamp(10px, 0.88vw, 12px);
   font-weight: 600;
@@ -4746,9 +4752,13 @@ footer {
 
 /* ── TABLET BREAKPOINT (<= 960px) ── */
 @media (max-width: 960px) {
+  .portfolio-work-canvas {
+    padding: clamp(24px, 3.5vw, 40px) clamp(20px, 3vw, 36px);
+  }
+
   .portfolio-work-editorial-grid {
     grid-template-columns: 1fr;
-    row-gap: 56px;
+    row-gap: 48px;
     align-items: start;
   }
 
@@ -4772,23 +4782,28 @@ footer {
 
 /* ── MOBILE BREAKPOINT (<= 580px) ── */
 @media (max-width: 580px) {
+  .portfolio-work-canvas {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
   .portfolio-work-editorial-grid {
-    row-gap: 44px;
-    margin-top: 28px;
+    row-gap: 36px;
+    margin-top: 0;
   }
 
   .portfolio-secondary-col {
-    gap: 44px;
+    gap: 36px;
   }
 
   .portfolio-project-visual--featured {
     aspect-ratio: 680 / 700;
-    border-radius: 18px;
+    border-radius: 16px;
   }
 
   .portfolio-project-visual--secondary {
     aspect-ratio: 540 / 320;
-    border-radius: 16px;
+    border-radius: 14px;
   }
 
   .portfolio-project-tags span {

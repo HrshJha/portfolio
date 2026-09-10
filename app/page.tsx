@@ -170,28 +170,31 @@ export default function Home() {
               <p className="portfolio-section-intro">Most of engineering is deciding what you are willing to lose.</p>
             </div>
 
-            <div className="portfolio-work-editorial-grid">
-              {/* Left Column: Featured Project (FrameOS) */}
-              <div className="portfolio-featured-col">
-                <Reveal className="portfolio-featured-reveal">
-                  <ProjectCard project={showcaseProjects[0]} isFeatured={true} />
-                </Reveal>
-              </div>
-
-              {/* Right Column: Stacked Secondary Projects (Vera, Hallucination Hunter) */}
-              <div className="portfolio-secondary-col">
-                {showcaseProjects.slice(1).map((project) => (
-                  <Reveal key={project.id}>
-                    <ProjectCard project={project} isFeatured={false} />
+            {/* ── One Large Continuous Warm-Ivory Project Canvas ── */}
+            <div className="portfolio-work-canvas">
+              <div className="portfolio-work-editorial-grid">
+                {/* Left Column: Featured Project (FrameOS) */}
+                <div className="portfolio-featured-col">
+                  <Reveal className="portfolio-featured-reveal">
+                    <ProjectCard project={showcaseProjects[0]} isFeatured={true} />
                   </Reveal>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            <div className="portfolio-work-see-all">
-              <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
-                SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
-              </a>
+                {/* Right Column: Stacked Secondary Projects (Vera, Hallucination Hunter) */}
+                <div className="portfolio-secondary-col">
+                  {showcaseProjects.slice(1).map((project) => (
+                    <Reveal key={project.id}>
+                      <ProjectCard project={project} isFeatured={false} />
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+
+              <div className="portfolio-work-see-all">
+                <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
+                  SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
+                </a>
+              </div>
             </div>
           </section>
 
