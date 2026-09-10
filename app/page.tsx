@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import NavBar from "./components/NavBar";
+import KiviBackground from "./components/KiviBackground";
 import { projects, type Project } from "./data/projects";
 
 const toolkit = [
@@ -68,6 +69,7 @@ function ProjectFeature({ project, index }: { project: Project; index: number })
 export default function Home() {
   return (
     <>
+      <KiviBackground />
       <div className="site-shell">
         <div className="grain" aria-hidden="true" />
         <NavBar />

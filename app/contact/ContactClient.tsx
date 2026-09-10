@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import KiviBackground from "../components/KiviBackground";
 
 export default function ContactClient() {
   useEffect(() => {
@@ -20,6 +21,7 @@ export default function ContactClient() {
 
   return (
     <>
+      <KiviBackground />
       <div className="grain" aria-hidden="true" />
 
       {/* Top Floating Mini-Nav */}

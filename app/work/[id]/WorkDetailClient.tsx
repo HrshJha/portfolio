@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, GitFork } from "lucide-react";
 import { Project } from "../../data/projects";
 import ChipIcon from "../../components/ChipIcon";
+import KiviBackground from "../../components/KiviBackground";
 
 type WorkDetailClientProps = {
   project: Project;
@@ -27,6 +28,7 @@ export default function WorkDetailClient({
 
   return (
     <>
+      <KiviBackground />
       <div className="grain" aria-hidden="true" />
 
       {/* Top Floating Mini-Nav */}
