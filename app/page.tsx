@@ -40,52 +40,79 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
   );
 }
 
-function ProjectFeature({ project, index }: { project: Project; index: number }) {
+function GithubMark({ size = 16 }: { size?: number }) {
   return (
-    <Reveal className={index === 0 ? "portfolio-project-featured-wrap" : "portfolio-project-tile-wrap"}>
-      <article className={`portfolio-work-item${index === 0 ? " portfolio-work-item--featured" : " portfolio-work-item--tile"}`}>
-        <Link
-          href={`/work/${project.id}`}
-          className="portfolio-work-media"
-          aria-label={`Open ${project.title} case study`}
-        >
-          {index === 0 ? <FrameOSPipeline /> : project.id === "vera" ? <VeraPipeline /> : project.id === "hallucination-hunter" ? <HallucinationPipeline /> : (
-            <video autoPlay muted loop playsInline preload="metadata" poster={project.poster}>
-              <source src={project.video} type="video/mp4" />
-            </video>
-          )}
-          <span className="portfolio-media-link">Open case study <ArrowUpRight size={15} aria-hidden="true" /></span>
-        </Link>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+    </svg>
+  );
+}
 
-        <div className="portfolio-work-copy">
-          <p className="portfolio-eyebrow">{project.category}</p>
+function ProjectCard({
+  project,
+  isFeatured = false,
+}: {
+  project: Project;
+  isFeatured?: boolean;
+}) {
+  return (
+    <article className={`portfolio-project-card ${isFeatured ? "portfolio-project-card--featured" : "portfolio-project-card--secondary"}`}>
+      <Link
+        href={`/work/${project.id}`}
+        className={`portfolio-project-visual ${isFeatured ? "portfolio-project-visual--featured" : "portfolio-project-visual--secondary"}`}
+        aria-label={`Open ${project.title} case study`}
+      >
+        {project.id === "frameos" ? (
+          <FrameOSPipeline />
+        ) : project.id === "vera" ? (
+          <VeraPipeline />
+        ) : (
+          <HallucinationPipeline />
+        )}
+      </Link>
+
+      <div className="portfolio-project-info">
+        <div className="portfolio-project-header">
           <h3>
-            <Link href={`/work/${project.id}`} className="portfolio-title-link">
+            <Link href={`/work/${project.id}`} className="portfolio-project-title-link">
               {project.title}
             </Link>
           </h3>
-          <p className="portfolio-work-thesis">{project.thesis}</p>
-          {project.shortDescription && (
-            <p className="portfolio-work-description">{project.shortDescription}</p>
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noreferrer"
+              className="portfolio-project-gh-link"
+              aria-label={`${project.title} GitHub repository`}
+            >
+              <GithubMark size={isFeatured ? 18 : 16} />
+            </a>
           )}
-          <div className="portfolio-work-footer">
-            <div className="portfolio-stack" aria-label={`${project.title} technology stack`}>
-              {project.cardStack.slice(0, 4).map((item) => <span key={item}>{item}</span>)}
-            </div>
-            <div className="portfolio-work-actions">
-              <Link href={`/work/${project.id}`} className="portfolio-case-study-action">
-                Read case study <ArrowUpRight size={14} aria-hidden="true" />
-              </Link>
-              {project.github && (
-                <a href={project.github} target="_blank" rel="noreferrer" className="portfolio-inline-link">
-                  GitHub <ExternalLink size={13} aria-hidden="true" />
-                </a>
-              )}
-            </div>
-          </div>
         </div>
-      </article>
-    </Reveal>
+
+        <p className="portfolio-project-eyebrow">{project.category}</p>
+
+        <p className="portfolio-project-desc">
+          {project.shortDescription || project.thesis}
+        </p>
+
+        <div className="portfolio-project-tags" aria-label={`${project.title} technology stack`}>
+          {project.cardStack.slice(0, isFeatured ? 6 : 4).map((item) => (
+            <span key={item}>{item.toUpperCase()}</span>
+          ))}
+          {!isFeatured && project.cardStack.length > 4 && (
+            <span>+{project.cardStack.length - 4}</span>
+          )}
+        </div>
+
+        <div className="portfolio-project-action">
+          <Link href={`/work/${project.id}`} className="portfolio-writeup-link">
+            READ THE WRITE-UP <ArrowUpRight size={13} aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+    </article>
   );
 }
 
@@ -137,13 +164,34 @@ export default function Home() {
           <section id="work" data-section="work" className="portfolio-section portfolio-work-section" aria-labelledby="work-heading">
             <div className="portfolio-section-heading">
               <div>
-                <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
-                <h2 id="work-heading">AI systems, software<br />and useful products.</h2>
+                <p className="portfolio-eyebrow">SELECTED</p>
+                <h2 id="work-heading">Here&apos;s what I have been<br />engineering..</h2>
               </div>
-              <p className="portfolio-section-intro">Selected work across AI infrastructure, product software, and model evaluation.</p>
+              <p className="portfolio-section-intro">Most of engineering is deciding what you are willing to lose.</p>
             </div>
-            <div className="portfolio-work-list">
-              {showcaseProjects.map((project, index) => <ProjectFeature key={project.id} project={project} index={index} />)}
+
+            <div className="portfolio-work-editorial-grid">
+              {/* Left Column: Featured Project (FrameOS) */}
+              <div className="portfolio-featured-col">
+                <Reveal className="portfolio-featured-reveal">
+                  <ProjectCard project={showcaseProjects[0]} isFeatured={true} />
+                </Reveal>
+              </div>
+
+              {/* Right Column: Stacked Secondary Projects (Vera, Hallucination Hunter) */}
+              <div className="portfolio-secondary-col">
+                {showcaseProjects.slice(1).map((project) => (
+                  <Reveal key={project.id}>
+                    <ProjectCard project={project} isFeatured={false} />
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+
+            <div className="portfolio-work-see-all">
+              <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
+                SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
+              </a>
             </div>
           </section>
 
