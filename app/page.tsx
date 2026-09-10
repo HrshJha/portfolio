@@ -53,26 +53,127 @@ function FrameOSPipeline() {
       </div>
 
       <div className="frameos-pipeline-flow">
-        {frameosStages.map(([label, detail], index) => (
+        {frameosStages.slice(0, 3).map(([label, detail], index) => (
           <div className="frameos-stage-wrap" key={label} style={{ "--stage-delay": `${index * 0.35}s` } as React.CSSProperties}>
-            <div className={`frameos-stage${label === "GENERATE" ? " frameos-stage--branch" : ""}`}>
-              <span>{label}</span>
-              <small>{detail}</small>
-              {label === "GENERATE" && (
-                <div className="frameos-branch-list">
-                  <span>VOICE</span><span>VISUALS</span><span>ASSEMBLY</span>
-                </div>
-              )}
+            <div className={`frameos-stage${label === "SCRIPT" ? " frameos-stage--active" : ""}`}>
+              <span>{label}</span><small>{detail}</small>
             </div>
-            {index < frameosStages.length - 1 && <div className="frameos-connector"><b /></div>}
+            <div className="frameos-connector"><b /></div>
           </div>
         ))}
+
+        <div className="frameos-content-engine">
+          <div className="frameos-content-engine-head"><span>CONTENT ENGINE</span><small>ASSEMBLE / GENERATE</small></div>
+          <div className="frameos-branch-list">
+            <span>VOICE</span><span>VISUALS</span><span>ASSEMBLY</span>
+          </div>
+        </div>
+        <div className="frameos-connector"><b /></div>
+
+        {frameosStages.slice(4, 6).map(([label, detail], index) => (
+          <div className="frameos-stage-wrap" key={label} style={{ "--stage-delay": `${(index + 4) * 0.35}s` } as React.CSSProperties}>
+            <div className="frameos-stage"><span>{label}</span><small>{detail}</small></div>
+            <div className="frameos-connector"><b /></div>
+          </div>
+        ))}
+
+        <div className="frameos-feedback-row">
+          <div className="frameos-feedback-node"><span>ANALYTICS</span><small>MEASURE</small></div>
+          <div className="frameos-feedback-node frameos-feedback-node--active"><span>FEEDBACK</span><small>LEARN</small></div>
+          <div className="frameos-loop-path"><span>↺ FEEDBACK LOOP / BACK TO TREND DETECTION</span></div>
+        </div>
       </div>
 
       <div className="frameos-pipeline-footer">
-        <span>FEEDBACK INTELLIGENCE</span>
-        <span className="frameos-loop-arrow">↺</span>
-        <span>BACK TO TREND DETECTION</span>
+        <span>AUTONOMOUS MEDIA LOOP</span>
+        <span className="frameos-loop-arrow">TREND → RESEARCH → CREATE → DISTRIBUTE → LEARN</span>
+      </div>
+    </div>
+  );
+}
+
+function VeraPipeline() {
+  return (
+    <div className="vera-pipeline" aria-hidden="true">
+      <div className="vera-pipeline-header">
+        <span>VERA / MERCHANT GROWTH ENGINE</span>
+        <span>DECISION → MESSAGE → VERIFY</span>
+      </div>
+
+      <div className="vera-pipeline-map">
+        <div className="vera-input-column">
+          <span>TRIGGER</span>
+          <span>MERCHANT CONTEXT</span>
+          <span>TIME + HISTORY</span>
+        </div>
+
+        <div className="vera-main-lane">
+          <div className="vera-node vera-node--decision">
+            <strong>DECISION ENGINE</strong>
+            <small>7 HARD GATES · 10-FACTOR PRIORITY</small>
+            <div className="vera-control-list"><span>TIME</span><span>DEDUP</span><span>AUTO-REPLY</span><span>SUPPRESS</span></div>
+          </div>
+          <div className="vera-connector"><b /></div>
+          <div className="vera-node">
+            <strong>FACT PACKET</strong>
+            <small>GROUNDED + PROVENANCE TAGGED</small>
+          </div>
+          <div className="vera-connector"><b /></div>
+          <div className="vera-node vera-node--composer">
+            <strong>MESSAGE COMPOSER</strong>
+            <small>GEMINI FLASH · WHATSAPP DRAFT</small>
+          </div>
+          <div className="vera-connector"><b /></div>
+          <div className="vera-node vera-node--validator">
+            <strong>OUTPUT VALIDATOR</strong>
+            <small>GROUNDING · SAFETY · SINGLE CTA</small>
+            <div className="vera-control-list"><span>FACT CHECK</span><span>TONE</span><span>CTA</span></div>
+          </div>
+        </div>
+
+        <div className="vera-side-node">
+          <span>KEY POOL</span>
+          <small>AUTO-ROTATE<br />COOLDOWN + FAILOVER</small>
+        </div>
+      </div>
+
+      <div className="vera-pipeline-footer">
+        <span>THE DETERMINISTIC SYSTEM DECIDES.</span>
+        <span>THE LLM WRITES.</span>
+      </div>
+    </div>
+  );
+}
+
+function HallucinationPipeline() {
+  return (
+    <div className="hallucination-pipeline" aria-hidden="true">
+      <div className="hallucination-pipeline-header">
+        <span>HALLUCINATION HUNTER / CLAIM VERIFICATION</span>
+        <span>NLI + EMBEDDINGS</span>
+      </div>
+
+      <div className="hallucination-flow">
+        <div className="hallucination-node hallucination-node--wide"><strong>INPUT TEXT</strong><small>ANSWER + SOURCE DOCUMENTS</small></div>
+        <div className="hallucination-line"><b /></div>
+        <div className="hallucination-node hallucination-node--wide"><strong>CLAIM EXTRACTION</strong><small>SPLIT RESPONSE INTO ATOMIC CLAIMS</small></div>
+        <div className="hallucination-line"><b /></div>
+        <div className="hallucination-branches">
+          <div className="hallucination-branch hallucination-branch--embedding">
+            <span>EMBEDDING LAYER</span>
+            <div className="hallucination-node"><strong>SEMANTIC SEARCH</strong><small>SENTENCE-TRANSFORMERS</small></div>
+            <div className="hallucination-line"><b /></div>
+            <div className="hallucination-node"><strong>CLAIM ↔ EVIDENCE</strong><small>SIMILARITY PAIRS</small></div>
+          </div>
+          <div className="hallucination-branch hallucination-branch--nli">
+            <span>NLI VERIFICATION LAYER</span>
+            <div className="hallucination-node"><strong>CROSS-ENCODER</strong><small>DEBERTA-V3</small></div>
+            <div className="hallucination-line"><b /></div>
+            <div className="hallucination-node"><strong>ENTAILMENT</strong><small>CONTRADICTION · UNCERTAINTY</small></div>
+          </div>
+        </div>
+        <div className="hallucination-merge-line"><b /></div>
+        <div className="hallucination-node hallucination-node--result"><strong>VERIFICATION HEATMAP</strong><small>HALLUCINATION SCORE + EXPLANATION</small></div>
       </div>
     </div>
   );
@@ -87,7 +188,7 @@ function ProjectFeature({ project, index }: { project: Project; index: number })
           className="portfolio-work-media"
           aria-label={`Open ${project.title} case study`}
         >
-          {index === 0 ? <FrameOSPipeline /> : (
+          {index === 0 ? <FrameOSPipeline /> : project.id === "vera" ? <VeraPipeline /> : project.id === "hallucination-hunter" ? <HallucinationPipeline /> : (
             <video autoPlay muted loop playsInline preload="metadata" poster={project.poster}>
               <source src={project.video} type="video/mp4" />
             </video>
@@ -205,27 +306,9 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="portfolio-film-section" aria-labelledby="film-heading">
-            <div className="portfolio-film-copy">
-              <p className="portfolio-eyebrow">04 — FILM</p>
-              <h2 id="film-heading">The other<br /><span>way I think.</span></h2>
-              <p>I also work with moving images — looking for rhythm, atmosphere, and the detail that makes a place feel present.</p>
-              <div className="portfolio-film-tags">
-                <span>CINEMATOGRAPHY</span>
-                <span>VISUAL STORYTELLING</span>
-              </div>
-            </div>
-            <div className="portfolio-film-media">
-              <video autoPlay muted loop playsInline preload="metadata" poster="/posters/frameos.jpg" aria-label="Cinematic moving image study">
-                <source src="/videos/frameos.mp4" type="video/mp4" />
-              </video>
-              <span>Moving image study / 2026</span>
-            </div>
-          </section>
-
           <section id="about" data-section="about" className="portfolio-section portfolio-about-section" aria-labelledby="about-heading">
             <div className="portfolio-about-label">
-              <p className="portfolio-eyebrow">05 — ABOUT</p>
+              <p className="portfolio-eyebrow">04 — ABOUT</p>
               <span>A SHORT VERSION</span>
             </div>
             <div className="portfolio-about-content">
@@ -256,7 +339,7 @@ export default function Home() {
               aria-labelledby="contact-heading"
               style={{ position: 'relative', zIndex: 3 }}
             >
-              <p className="portfolio-eyebrow">06 — CONTACT</p>
+              <p className="portfolio-eyebrow">05 — CONTACT</p>
               <div className="portfolio-contact-grid">
                 <h2 id="contact-heading">Let&apos;s make<br /><span>something useful.</span></h2>
                 <div>
