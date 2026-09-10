@@ -5613,3 +5613,55 @@ body:has(.work-detail-page--frameos) .v19-grain {
     scroll-behavior: auto;
   }
 }
+
+/*
+ * Experience composition
+ * Keep the navigation and experience on one continuous dark/floral stage.
+ * The section height should come from its content instead of a viewport-sized
+ * spacer, while the artwork stays richer at the edges and quieter behind copy.
+ */
+.portfolio-nav {
+  background: rgba(9, 11, 9, 0.42);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.portfolio-experience-band {
+  min-height: 0;
+  display: block;
+  padding-bottom: 0;
+  background: #090b09;
+}
+
+.portfolio-experience-band::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(9, 11, 9, 0.58) 0%,
+    rgba(9, 11, 9, 0.3) 43%,
+    rgba(9, 11, 9, 0.06) 100%
+  );
+}
+
+.portfolio-experience-section {
+  box-sizing: border-box;
+  width: min(var(--portfolio-max, 1320px), calc(100% - (var(--portfolio-pad) * 2)));
+  max-width: var(--portfolio-max, 1320px);
+  margin-inline: auto;
+  padding-block: clamp(56px, 7vw, 92px) clamp(80px, 9vw, 126px);
+}
+
+.portfolio-experience-surface {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.portfolio-experience-overview,
+.portfolio-experience-entry--secondary .portfolio-experience-overview {
+  max-width: 760px;
+}
