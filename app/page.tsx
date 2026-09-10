@@ -9,8 +9,28 @@ import { DitherArt, HeroProximityWave } from "./components/KiviBackground";
 import { projects, type Project } from "./data/projects";
 
 const toolkit = [
-  "Python", "TypeScript", "JavaScript", "FastAPI", "React", "Next.js",
-  "Node.js", "PostgreSQL", "Redis", "Docker", "FAISS", "PyTorch",
+  "Python",
+  "PyTorch",
+  "scikit-learn",
+  "Transformers (Hugging Face)",
+  "NumPy",
+  "Pandas",
+  "XGBoost",
+  "FAISS",
+  "spaCy",
+  "SQL",
+  "PostgreSQL",
+  "DuckDB",
+  "Redis",
+  "FastAPI",
+  "TypeScript",
+  "JavaScript",
+  "Next.js",
+  "React",
+  "Node.js",
+  "Docker",
+  "Git",
+  "REST APIs",
 ];
 
 const domainLabsMeta = ["AI SAFETY", "LLM EVALUATION", "RED TEAMING", "BAYORA", "ROBUSTNESS"];

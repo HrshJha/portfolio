@@ -5437,7 +5437,6 @@ body:has(.work-detail-page--frameos) .v19-grain {
   width: 100%;
   height: auto;
   max-width: none;
-  aspect-ratio: 680 / 700;
   border-radius: 20px;
 }
 

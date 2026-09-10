@@ -6,7 +6,11 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, GitFork } from "lucide-react";
 import { Project } from "../../data/projects";
 import ChipIcon from "../../components/ChipIcon";
 import KiviBackground from "../../components/KiviBackground";
-import { FrameOSPipeline } from "../../components/ProjectArchitectureDiagrams";
+import {
+  FrameOSPipeline,
+  HallucinationPipeline,
+  VeraPipeline,
+} from "../../components/ProjectArchitectureDiagrams";
 
 const frameosStages = [
   ["RESEARCH", "Content enters the research stage before downstream production work begins."],
@@ -15,6 +19,24 @@ const frameosStages = [
   ["RENDER", "The assembled content is produced into a final rendered output."],
   ["DISTRIBUTE", "Rendered output moves into publishing and distribution."],
   ["ANALYTICS + FEEDBACK", "Performance feeds the learning loop back toward the next trend cycle."],
+] as const;
+
+const veraStages = [
+  ["INPUTS", "Triggers, merchant context, and time history enter the decision layer."],
+  ["DECISION ENGINE", "Seven hard gates and priority ranking determine whether outreach should exist."],
+  ["FACT PACKET", "Sourced context is grounded and provenance tagged before drafting."],
+  ["MESSAGE COMPOSER", "Gemini Flash drafts a WhatsApp message after deterministic decisions."],
+  ["OUTPUT VALIDATOR", "Grounding, safety, tone, and a single CTA are checked before shipping."],
+  ["KEY POOL", "Model keys rotate with cooldown and failover as part of the service."],
+] as const;
+
+const hallucinationStages = [
+  ["INPUT TEXT", "Answer and source documents enter the verification pipeline."],
+  ["CLAIM EXTRACTION", "The response is split into atomic claims for claim-level checking."],
+  ["EMBEDDING LAYER", "Semantic search pairs claims with relevant evidence from the source."],
+  ["NLI VERIFICATION", "DeBERTa-v3 evaluates entailment, contradiction, and uncertainty."],
+  ["VERIFICATION HEATMAP", "Evidence is aggregated into an explainable verification result."],
+  ["EXPLANATION", "Users can inspect which claims are supported, contradicted, or unsupported."],
 ] as const;
 
 type WorkDetailClientProps = {
@@ -46,14 +68,22 @@ export default function WorkDetailClient({
   stackChips,
 }: WorkDetailClientProps) {
   const [videoError, setVideoError] = useState(false);
+  const isEditorialCaseStudy = ["frameos", "vera", "hallucination-hunter"].includes(project.id);
   const isFrameOS = project.id === "frameos";
+  const caseStudyStages = isFrameOS ? frameosStages : project.id === "vera" ? veraStages : hallucinationStages;
+  const caseStudyPipelineDescription = isFrameOS
+    ? "Autonomous stages move content from trend detection through production, distribution, and feedback learning."
+    : project.id === "vera"
+      ? "Vera separates deterministic decisioning from generative drafting, then validates every outbound message before it ships."
+      : "Hallucination Hunter decomposes answers into claims, grounds them against evidence, and verifies each claim with embeddings and NLI.";
+  const caseStudyPipeline = isFrameOS ? <FrameOSPipeline /> : project.id === "vera" ? <VeraPipeline /> : <HallucinationPipeline />;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [project.id]);
 
   return (
-    <div className={`work-detail-page${isFrameOS ? " work-detail-page--frameos" : ""}`}>
+    <div className={`work-detail-page${isEditorialCaseStudy ? " work-detail-page--frameos" : ""}`}>
       <KiviBackground />
       <div className="grain" aria-hidden="true" />
 
@@ -66,7 +96,7 @@ export default function WorkDetailClient({
 
       </header>
 
-      <main className={`work-detail-main section-pad${isFrameOS ? " work-detail-main--frameos" : ""}`}>
+      <main className={`work-detail-main section-pad${isEditorialCaseStudy ? " work-detail-main--frameos" : ""}`}>
         {/* Project Header */}
         <section className="work-detail-header">
           <div className="work-detail-meta-row">
@@ -77,7 +107,7 @@ export default function WorkDetailClient({
           </div>
 
           <h1 className="work-detail-title">{project.title}</h1>
-          <p className="work-detail-thesis">{isFrameOS ? project.shortDescription : project.thesis}</p>
+          <p className="work-detail-thesis">{isEditorialCaseStudy ? project.shortDescription : project.thesis}</p>
         </section>
 
         {/* Primary Large Project Media — editorial full-bleed frame */}
@@ -113,15 +143,15 @@ export default function WorkDetailClient({
             )}
           </div>
 
-          {!isFrameOS && <ProjectActions project={project} />}
+          {!isEditorialCaseStudy && <ProjectActions project={project} />}
         </section>
 
-        {isFrameOS ? (
+        {isEditorialCaseStudy ? (
           <>
-            <section className="work-detail-frameos-overview" aria-labelledby="frameos-overview-heading">
+            <section className="work-detail-frameos-overview" aria-labelledby="case-study-overview-heading">
               <div>
-                <span className="work-detail-frameos-label">FRAMEOS</span>
-                <h2 id="frameos-overview-heading">AI INFRASTRUCTURE</h2>
+                <span className="work-detail-frameos-label">{project.title.toUpperCase()}</span>
+                <h2 id="case-study-overview-heading">{project.category}</h2>
               </div>
               <div className="work-detail-frameos-overview-copy">
                 <p>{project.shortDescription}</p>
@@ -129,29 +159,29 @@ export default function WorkDetailClient({
               </div>
             </section>
 
-            <section className="work-detail-frameos-pipeline" aria-labelledby="frameos-pipeline-heading">
+            <section className="work-detail-frameos-pipeline" aria-labelledby="case-study-pipeline-heading">
               <div className="work-detail-frameos-section-heading">
                 <div>
                   <span className="work-detail-frameos-label">SYSTEM / MEDIA LOOP</span>
-                  <h2 id="frameos-pipeline-heading">THE PIPELINE</h2>
+                  <h2 id="case-study-pipeline-heading">THE PIPELINE</h2>
                 </div>
-                <p>Autonomous stages move content from trend detection through production, distribution, and feedback learning.</p>
+                <p>{caseStudyPipelineDescription}</p>
               </div>
               <div className="work-detail-frameos-pipeline-art">
-                <FrameOSPipeline />
+                {caseStudyPipeline}
               </div>
             </section>
 
-            <section className="work-detail-frameos-system" aria-labelledby="frameos-system-heading">
+            <section className="work-detail-frameos-system" aria-labelledby="case-study-system-heading">
               <div className="work-detail-frameos-section-heading">
                 <div>
                   <span className="work-detail-frameos-label">SYSTEM NOTES</span>
-                  <h2 id="frameos-system-heading">HOW IT WORKS</h2>
+                  <h2 id="case-study-system-heading">HOW IT WORKS</h2>
                 </div>
                 <p>The pipeline keeps research, creation, publishing, and learning inspectable as one operating loop.</p>
               </div>
               <div className="work-detail-frameos-stage-grid">
-                {frameosStages.map(([title, description], index) => (
+                {caseStudyStages.map(([title, description], index) => (
                   <article key={title} className="work-detail-frameos-stage">
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <h3>{title}</h3>
@@ -161,11 +191,11 @@ export default function WorkDetailClient({
               </div>
             </section>
 
-            <section className="work-detail-frameos-details" aria-labelledby="frameos-details-heading">
+            <section className="work-detail-frameos-details" aria-labelledby="case-study-details-heading">
               <div className="work-detail-frameos-section-heading">
                 <div>
                   <span className="work-detail-frameos-label">TECHNICAL CONTEXT</span>
-                  <h2 id="frameos-details-heading">THE SYSTEM, BRIEFLY</h2>
+                  <h2 id="case-study-details-heading">THE SYSTEM, BRIEFLY</h2>
                 </div>
               </div>
               <div className="work-detail-frameos-detail-grid">
