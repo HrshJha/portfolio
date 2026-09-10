@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import PhysicsField from "../components/PhysicsField";
 
 export default function ContactClient() {
   useEffect(() => {
@@ -22,11 +21,6 @@ export default function ContactClient() {
   return (
     <>
       <div className="grain" aria-hidden="true" />
-
-      {/* Kivi-inspired floral background */}
-      <div className="work-detail-field-wrap" aria-hidden="true">
-        <PhysicsField />
-      </div>
 
       {/* Top Floating Mini-Nav */}
       <header className="work-detail-nav section-pad">
