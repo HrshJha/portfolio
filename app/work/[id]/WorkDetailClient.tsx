@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, GitFork } from "lucide-react";
 import { Project } from "../../data/projects";
 import ChipIcon from "../../components/ChipIcon";
-import PhysicsField from "../../components/PhysicsField";
 
 type WorkDetailClientProps = {
   project: Project;
@@ -29,11 +28,6 @@ export default function WorkDetailClient({
   return (
     <>
       <div className="grain" aria-hidden="true" />
-
-      {/* Kivi-inspired floral background */}
-      <div className="work-detail-field-wrap" aria-hidden="true">
-        <PhysicsField />
-      </div>
 
       {/* Top Floating Mini-Nav */}
       <header className="work-detail-nav section-pad">
