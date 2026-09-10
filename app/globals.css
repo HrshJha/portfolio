@@ -4480,6 +4480,11 @@ footer {
    ============================================================================= */
 
 .portfolio-work-section {
+  --page-black: #090b09;
+  --project-ivory: #f3f0e7;
+  --project-text: #171814;
+  --project-muted: #66685f;
+  --project-border: rgba(23, 24, 20, 0.12);
   position: relative;
   z-index: 2;
   width: 100%;
@@ -4524,8 +4529,9 @@ footer {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background: transparent;
-  color: inherit;
+  border-radius: 24px;
+  background: var(--project-ivory);
+  color: var(--project-text);
 }
 
 .portfolio-project-card--featured {
@@ -4604,7 +4610,7 @@ footer {
 
 .portfolio-project-header h3 {
   margin: 0;
-  color: var(--portfolio-soft, #f2f0e9);
+  color: var(--project-text);
   font-family: var(--font-newsreader, serif), Georgia, serif;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -4630,7 +4636,7 @@ footer {
 }
 
 .portfolio-project-gh-link {
-  color: var(--portfolio-muted, #8a8f85);
+  color: var(--project-muted);
   transition: color 180ms ease, transform 180ms ease;
   display: inline-flex;
   align-items: center;
@@ -4638,13 +4644,13 @@ footer {
 }
 
 .portfolio-project-gh-link:hover {
-  color: var(--portfolio-soft, #f2f0e9);
+  color: var(--project-text);
   transform: translateY(-1px);
 }
 
 .portfolio-project-eyebrow {
   margin: 8px 0 0;
-  color: var(--portfolio-muted, #8a8f85);
+  color: var(--project-muted);
   font-family: var(--font-mono, monospace);
   font-size: clamp(8.5px, 0.8vw, 10.5px);
   font-weight: 600;
@@ -4654,7 +4660,7 @@ footer {
 
 .portfolio-project-desc {
   margin: 14px 0 0;
-  color: #a4a99e;
+  color: var(--project-muted);
   font-size: clamp(12.5px, 1vw, 14.5px);
   line-height: 1.58;
   letter-spacing: 0.01em;
@@ -4678,14 +4684,14 @@ footer {
 
 .portfolio-project-tags span {
   padding: 4px 9px;
-  border: 1px solid rgba(242, 240, 233, 0.12);
+  border: 1px solid var(--project-border);
   border-radius: 6px;
-  color: #a4a99e;
+  color: var(--project-muted);
   font-family: var(--font-mono, monospace);
   font-size: clamp(8.5px, 0.75vw, 10px);
   font-weight: 500;
   letter-spacing: 0.08em;
-  background: rgba(242, 240, 233, 0.035);
+  background: rgba(23, 24, 20, 0.035);
   text-transform: uppercase;
 }
 
@@ -4698,7 +4704,7 @@ footer {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--portfolio-soft, #f2f0e9);
+  color: var(--project-text);
   font-family: var(--font-mono, monospace);
   font-size: clamp(9.5px, 0.82vw, 11.5px);
   font-weight: 600;
