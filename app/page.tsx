@@ -397,7 +397,7 @@ export default function Home() {
 
                 <ExperienceEntry
                   id="domalynlabs"
-                  company="DOMALYNLABS LLP"
+                  company="domaiynlabs LLP"
                   role="AI / ML INTERN · AI SAFETY & EVALUATION RESEARCH"
                   date="JUN 2026 — AUG 2026"
                   overview="Worked on AI safety, adversarial evaluation, LLM robustness, and automated red-teaming research."
