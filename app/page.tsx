@@ -18,15 +18,11 @@ const showcaseProjects = projects.filter(
   (project) => project.id !== "candidate-intelligence-system" && project.id !== "appforge-ai",
 );
 
-const frameosStages = [
-  ["TREND", "DISCOVER"],
-  ["RESEARCH", "EXTRACT + SYNTHESIZE"],
-  ["SCRIPT", "GENERATE"],
-  ["GENERATE", "VOICE · VISUALS · ASSEMBLY"],
-  ["RENDER", "PRODUCE"],
-  ["DISTRIBUTE", "PUBLISH"],
-  ["LEARN", "FEEDBACK INTELLIGENCE"],
-] as const;
+import {
+  FrameOSPipeline,
+  VeraPipeline,
+  HallucinationPipeline,
+} from "./components/ProjectArchitectureDiagrams";
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const reduceMotion = useReducedMotion();
@@ -41,141 +37,6 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
     >
       {children}
     </motion.div>
-  );
-}
-
-function FrameOSPipeline() {
-  return (
-    <div className="frameos-pipeline" aria-hidden="true">
-      <div className="frameos-pipeline-header">
-        <span>FRAMEOS / MEDIA LOOP</span>
-        <span className="frameos-pipeline-live"><i /> LIVE PIPELINE</span>
-      </div>
-
-      <div className="frameos-pipeline-flow">
-        {frameosStages.slice(0, 3).map(([label, detail], index) => (
-          <div className="frameos-stage-wrap" key={label} style={{ "--stage-delay": `${index * 0.35}s` } as React.CSSProperties}>
-            <div className={`frameos-stage${label === "SCRIPT" ? " frameos-stage--active" : ""}`}>
-              <span>{label}</span><small>{detail}</small>
-            </div>
-            <div className="frameos-connector"><b /></div>
-          </div>
-        ))}
-
-        <div className="frameos-content-engine">
-          <div className="frameos-content-engine-head"><span>CONTENT ENGINE</span><small>ASSEMBLE / GENERATE</small></div>
-          <div className="frameos-branch-list">
-            <span>VOICE</span><span>VISUALS</span><span>ASSEMBLY</span>
-          </div>
-        </div>
-        <div className="frameos-connector"><b /></div>
-
-        {frameosStages.slice(4, 6).map(([label, detail], index) => (
-          <div className="frameos-stage-wrap" key={label} style={{ "--stage-delay": `${(index + 4) * 0.35}s` } as React.CSSProperties}>
-            <div className="frameos-stage"><span>{label}</span><small>{detail}</small></div>
-            <div className="frameos-connector"><b /></div>
-          </div>
-        ))}
-
-        <div className="frameos-feedback-row">
-          <div className="frameos-feedback-node"><span>ANALYTICS</span><small>MEASURE</small></div>
-          <div className="frameos-feedback-node frameos-feedback-node--active"><span>FEEDBACK</span><small>LEARN</small></div>
-          <div className="frameos-loop-path"><span>↺ FEEDBACK LOOP / BACK TO TREND DETECTION</span></div>
-        </div>
-      </div>
-
-      <div className="frameos-pipeline-footer">
-        <span>AUTONOMOUS MEDIA LOOP</span>
-        <span className="frameos-loop-arrow">TREND → RESEARCH → CREATE → DISTRIBUTE → LEARN</span>
-      </div>
-    </div>
-  );
-}
-
-function VeraPipeline() {
-  return (
-    <div className="vera-pipeline" aria-hidden="true">
-      <div className="vera-pipeline-header">
-        <span>VERA / MERCHANT GROWTH ENGINE</span>
-        <span>DECISION → MESSAGE → VERIFY</span>
-      </div>
-
-      <div className="vera-pipeline-map">
-        <div className="vera-input-column">
-          <span>TRIGGER</span>
-          <span>MERCHANT CONTEXT</span>
-          <span>TIME + HISTORY</span>
-        </div>
-
-        <div className="vera-main-lane">
-          <div className="vera-node vera-node--decision">
-            <strong>DECISION ENGINE</strong>
-            <small>7 HARD GATES · 10-FACTOR PRIORITY</small>
-            <div className="vera-control-list"><span>TIME</span><span>DEDUP</span><span>AUTO-REPLY</span><span>SUPPRESS</span></div>
-          </div>
-          <div className="vera-connector"><b /></div>
-          <div className="vera-node">
-            <strong>FACT PACKET</strong>
-            <small>GROUNDED + PROVENANCE TAGGED</small>
-          </div>
-          <div className="vera-connector"><b /></div>
-          <div className="vera-node vera-node--composer">
-            <strong>MESSAGE COMPOSER</strong>
-            <small>GEMINI FLASH · WHATSAPP DRAFT</small>
-          </div>
-          <div className="vera-connector"><b /></div>
-          <div className="vera-node vera-node--validator">
-            <strong>OUTPUT VALIDATOR</strong>
-            <small>GROUNDING · SAFETY · SINGLE CTA</small>
-            <div className="vera-control-list"><span>FACT CHECK</span><span>TONE</span><span>CTA</span></div>
-          </div>
-        </div>
-
-        <div className="vera-side-node">
-          <span>KEY POOL</span>
-          <small>AUTO-ROTATE<br />COOLDOWN + FAILOVER</small>
-        </div>
-      </div>
-
-      <div className="vera-pipeline-footer">
-        <span>THE DETERMINISTIC SYSTEM DECIDES.</span>
-        <span>THE LLM WRITES.</span>
-      </div>
-    </div>
-  );
-}
-
-function HallucinationPipeline() {
-  return (
-    <div className="hallucination-pipeline" aria-hidden="true">
-      <div className="hallucination-pipeline-header">
-        <span>HALLUCINATION HUNTER / CLAIM VERIFICATION</span>
-        <span>NLI + EMBEDDINGS</span>
-      </div>
-
-      <div className="hallucination-flow">
-        <div className="hallucination-node hallucination-node--wide"><strong>INPUT TEXT</strong><small>ANSWER + SOURCE DOCUMENTS</small></div>
-        <div className="hallucination-line"><b /></div>
-        <div className="hallucination-node hallucination-node--wide"><strong>CLAIM EXTRACTION</strong><small>SPLIT RESPONSE INTO ATOMIC CLAIMS</small></div>
-        <div className="hallucination-line"><b /></div>
-        <div className="hallucination-branches">
-          <div className="hallucination-branch hallucination-branch--embedding">
-            <span>EMBEDDING LAYER</span>
-            <div className="hallucination-node"><strong>SEMANTIC SEARCH</strong><small>SENTENCE-TRANSFORMERS</small></div>
-            <div className="hallucination-line"><b /></div>
-            <div className="hallucination-node"><strong>CLAIM ↔ EVIDENCE</strong><small>SIMILARITY PAIRS</small></div>
-          </div>
-          <div className="hallucination-branch hallucination-branch--nli">
-            <span>NLI VERIFICATION LAYER</span>
-            <div className="hallucination-node"><strong>CROSS-ENCODER</strong><small>DEBERTA-V3</small></div>
-            <div className="hallucination-line"><b /></div>
-            <div className="hallucination-node"><strong>ENTAILMENT</strong><small>CONTRADICTION · UNCERTAINTY</small></div>
-          </div>
-        </div>
-        <div className="hallucination-merge-line"><b /></div>
-        <div className="hallucination-node hallucination-node--result"><strong>VERIFICATION HEATMAP</strong><small>HALLUCINATION SCORE + EXPLANATION</small></div>
-      </div>
-    </div>
   );
 }
 
