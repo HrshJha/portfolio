@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import KiviBackground from "./components/KiviBackground";
+import CursorOwl from "./components/CursorOwl";
 
 export const metadata: Metadata = {
   title: "Harsh Kumar Jha — Engineer / AI Builder",
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body>
         <KiviBackground />
+        <CursorOwl />
         {children}
       </body>
     </html>

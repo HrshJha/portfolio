@@ -5665,3 +5665,140 @@ body:has(.work-detail-page--frameos) .v19-grain {
 .portfolio-experience-entry--secondary .portfolio-experience-overview {
   max-width: 760px;
 }
+
+/* ========================================================
+   CURSOR OWL — tiny, quiet decorative companion
+   Cream silhouette + amber eyes. Follows the shared pointer
+   field; never replaces or hides the native cursor.
+   ======================================================== */
+.cursor-owl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 27px;
+  z-index: 30; /* above footprints (15) / grain (20), below nav (50) */
+  pointer-events: none;
+  opacity: 0; /* JS fades it in on first pointer activity */
+  transform: translate3d(-100px, -100px, 0);
+  will-change: transform, opacity;
+  contain: layout style;
+  --owl-cream: #f1e9d8;
+  --owl-cream-shade: #e4d8bf;
+  --owl-amber: #c9823f;
+  --owl-ink: #171814;
+}
+
+.cursor-owl__tilt {
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 62%;
+  will-change: transform;
+}
+
+.cursor-owl__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+.cursor-owl__body,
+.cursor-owl__ear {
+  fill: var(--owl-cream);
+}
+
+.cursor-owl__wing {
+  fill: var(--owl-cream-shade);
+  transform-box: fill-box;
+  transform-origin: 50% 12%;
+}
+.cursor-owl__wing--l {
+  transform-origin: 85% 12%;
+}
+.cursor-owl__wing--r {
+  transform-origin: 15% 12%;
+}
+
+.cursor-owl__iris {
+  fill: var(--owl-amber);
+}
+.cursor-owl__pupil {
+  fill: var(--owl-ink);
+}
+.cursor-owl__beak {
+  fill: var(--owl-amber);
+}
+
+.cursor-owl__eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.cursor-owl__eyes.is-blinking {
+  animation: owl-blink 160ms ease-in-out;
+}
+
+@keyframes owl-blink {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.12);
+  }
+}
+
+.cursor-owl.is-fluttering .cursor-owl__wing--l {
+  animation: owl-flutter-l 500ms ease-in-out;
+}
+.cursor-owl.is-fluttering .cursor-owl__wing--r {
+  animation: owl-flutter-r 500ms ease-in-out;
+}
+
+@keyframes owl-flutter-l {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-13deg);
+  }
+  50% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(-13deg);
+  }
+}
+@keyframes owl-flutter-r {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(13deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+  75% {
+    transform: rotate(13deg);
+  }
+}
+
+/* Pointer-capable devices only. */
+@media (hover: none), (pointer: coarse) {
+  .cursor-owl {
+    display: none !important;
+  }
+}
+
+/* Respect reduced motion: still positions, but no decorative animation. */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-owl__eyes.is-blinking,
+  .cursor-owl.is-fluttering .cursor-owl__wing--l,
+  .cursor-owl.is-fluttering .cursor-owl__wing--r {
+    animation: none;
+  }
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { pointerField } from './cursorField';
 
 export const WAVE_HEIGHTS = [
   0.242, 0.285, 0.293, 0.277, 0.265, 0.283, 0.330, 0.379, 0.398, 0.369,
@@ -308,6 +309,12 @@ export default function KiviBackground() {
       targetX = e.clientX;
       targetY = e.clientY;
 
+      // Feed the shared pointer field so decorative subscribers (CursorOwl)
+      // can follow the cursor without adding their own pointermove listener.
+      pointerField.x = e.clientX;
+      pointerField.y = e.clientY;
+      pointerField.active = true;
+
       if (!lensArmed) {
         lensArmed = true;
         lensX = targetX;
@@ -350,6 +357,7 @@ export default function KiviBackground() {
     const handleScroll = () => wakeLens(220);
     const handleMouseLeave = () => {
       lensArmed = false;
+      pointerField.active = false;
       document.documentElement.classList.remove('v19-lens');
       if (lensFrame) cancelAnimationFrame(lensFrame);
       lensFrame = 0;
