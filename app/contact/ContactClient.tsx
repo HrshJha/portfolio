@@ -1,25 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowUpRight, Moon, Sun } from "lucide-react";
-import ContourField from "../components/ContourField";
-import CompanionPet from "../components/CompanionPet";
+import { useEffect } from "react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import PhysicsField from "../components/PhysicsField";
 
 export default function ContactClient() {
-  const [theme, setTheme] = useState("light");
-
   useEffect(() => {
-    setTheme(document.documentElement.dataset.theme || "light");
     window.scrollTo(0, 0);
   }, []);
-
-  const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("harsh-theme", next);
-    setTheme(next);
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,11 +22,10 @@ export default function ContactClient() {
   return (
     <>
       <div className="grain" aria-hidden="true" />
-      <CompanionPet />
 
-      {/* Contour field background */}
+      {/* Kivi-inspired floral background */}
       <div className="work-detail-field-wrap" aria-hidden="true">
-        <ContourField />
+        <PhysicsField />
       </div>
 
       {/* Top Floating Mini-Nav */}
@@ -47,15 +35,6 @@ export default function ContactClient() {
           <span>Back to portfolio</span>
         </Link>
 
-        <div className="work-detail-nav-actions">
-          <button
-            className="icon-btn"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-          >
-            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-        </div>
       </header>
 
       {/* Main Dedicated Contact View */}
