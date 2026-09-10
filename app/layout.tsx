@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Harsh Kumar Jha — AI/ML Engineering Student & Builder",
-  description: "Harsh Kumar Jha is an AI/ML engineering student building machine learning systems through engineering.",
+  title: "Harsh Kumar Jha — Engineer + Filmmaker",
+  description: "Harsh Kumar Jha builds AI systems and makes films from Delhi, India.",
 };
 
 const themeScript = `document.documentElement.dataset.theme = 'dark';`;
