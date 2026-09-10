@@ -234,29 +234,25 @@ export default function Home() {
             </div>
             <HeroProximityWave />
 
-            <div className="portfolio-hero" aria-labelledby="hero-heading" style={{ position: 'relative', zIndex: 3 }}>
-              <div className="portfolio-hero-topline">
+            <div className="portfolio-hero" aria-labelledby="hero-heading">
+              <div className="portfolio-hero-edge portfolio-hero-edge--top">
                 <span>HARSH KUMAR JHA</span>
                 <span>DELHI · INDIA</span>
               </div>
 
-              <div className="portfolio-hero-grid">
-                <div className="portfolio-hero-statement">
-                  <p className="portfolio-eyebrow">ENGINEERING / AI / FILM</p>
-                  <h1 id="hero-heading">I build systems.<br /><span>I shoot stories.</span></h1>
-                </div>
-
-                <div className="portfolio-hero-aside">
-                  <p>
-                    AI/ML engineering student interested in the distance between a good idea and a working system.
-                  </p>
-                  <a href="#work" className="portfolio-inline-link portfolio-inline-link--hero">
-                    See selected work <ArrowUpRight size={15} aria-hidden="true" />
+              <div className="portfolio-hero-composition">
+                <p className="portfolio-hero-kicker">ENGINEERING / AI / FILM</p>
+                <h1 id="hero-heading">I build<br /><span>systems.</span><br />I shoot<br /><span>stories.</span></h1>
+                <div className="portfolio-hero-support">
+                  <p>AI / ML ENGINEERING<br /><span>+ FILM / VISUAL STORYTELLING</span></p>
+                  <p className="portfolio-hero-support-copy">Systems with a point of view. Stories with a working spine.</p>
+                  <a href="#work" className="portfolio-inline-link">
+                    View selected work <ArrowUpRight size={15} aria-hidden="true" />
                   </a>
                 </div>
               </div>
 
-              <div className="portfolio-hero-baseline">
+              <div className="portfolio-hero-edge portfolio-hero-edge--bottom">
                 <span>01 — INTRO</span>
                 <span>AI SYSTEMS · BACKEND · VISUAL STORYTELLING</span>
                 <a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a>
