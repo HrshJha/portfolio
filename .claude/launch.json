@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "portfolio-prod",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["next", "start"],
-      "port": 3187
+      "name": "portfolio-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }
