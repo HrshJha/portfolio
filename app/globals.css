@@ -5244,23 +5244,23 @@ footer {
    ============================================================================ */
 
 .work-detail-page--frameos {
-  --frameos-primary: #f1e9d8;
-  --frameos-secondary: #e7e9e1;
-  --frameos-text: #171814;
-  --frameos-secondary-text: #62645c;
-  --frameos-muted: #7a7b73;
-  --frameos-accent: #c9823f;
-  --frameos-accent-light: #e2a166;
-  --frameos-video: #111310;
-  --frameos-border-dark: rgba(23, 24, 20, 0.12);
+  --frameos-primary: #0e1a2b;
+  --frameos-secondary: #14263d;
+  --frameos-text: #edf3f7;
+  --frameos-secondary-text: #b7c5d3;
+  --frameos-muted: #8294a8;
+  --frameos-accent: #9ebbd3;
+  --frameos-accent-light: #bfd4e4;
+  --frameos-video: #080f1c;
+  --frameos-border-dark: rgba(237, 243, 247, 0.14);
   min-height: 100vh;
   background: var(--frameos-primary);
   color: var(--frameos-text);
 }
 
 body:has(.work-detail-page--frameos) {
-  background: #f1e9d8 !important;
-  color: #171814;
+  background: #0e1a2b !important;
+  color: #edf3f7;
 }
 
 body:has(.work-detail-page--frameos) .v19-footprints,
@@ -5282,7 +5282,7 @@ body:has(.work-detail-page--frameos) .v19-grain {
 
 .work-detail-page--frameos .work-detail-back-link {
   color: var(--frameos-secondary-text);
-  border-bottom-color: rgba(23, 24, 20, 0.28);
+  border-bottom-color: rgba(237, 243, 247, 0.28);
 }
 
 .work-detail-page--frameos .work-detail-back-link:hover {
@@ -5332,7 +5332,7 @@ body:has(.work-detail-page--frameos) .v19-grain {
   width: 100%;
   height: auto;
   aspect-ratio: auto;
-  border: 1px solid rgba(23, 24, 20, 0.12);
+  border: 1px solid rgba(237, 243, 247, 0.14);
   border-radius: 26px;
   background: var(--frameos-video);
   box-shadow: none;
@@ -5521,7 +5521,7 @@ body:has(.work-detail-page--frameos) .v19-grain {
 .work-detail-page--frameos .tech-pill {
   color: var(--frameos-secondary-text);
   border-color: var(--frameos-border-dark);
-  background: rgba(241, 233, 216, 0.5);
+  background: rgba(237, 243, 247, 0.045);
 }
 
 .work-detail-page--frameos .tech-pill:hover {
@@ -5563,6 +5563,10 @@ body:has(.work-detail-page--frameos) .v19-grain {
 .work-detail-page--frameos .site-footer .footer-line,
 .work-detail-page--frameos .site-footer .footer-copy {
   color: inherit;
+}
+
+.work-detail-page--frameos .work-detail-frameos-detail-grid article > p {
+  color: var(--frameos-secondary-text);
 }
 
 @media (max-width: 760px) {
