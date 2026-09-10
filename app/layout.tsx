@@ -3,8 +3,8 @@ import "./globals.css";
 import KiviBackground from "./components/KiviBackground";
 
 export const metadata: Metadata = {
-  title: "Harsh Kumar Jha — Engineer + Filmmaker",
-  description: "Harsh Kumar Jha builds AI systems and makes films from Delhi, India.",
+  title: "Harsh Kumar Jha — Engineer / AI Builder",
+  description: "Harsh Kumar Jha builds AI systems, software, and products from Delhi, India.",
 };
 
 const themeScript = `document.documentElement.dataset.theme = 'dark';`;

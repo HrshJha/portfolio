@@ -59,16 +59,29 @@ function ProjectFeature({ project, index }: { project: Project; index: number })
 
         <div className="portfolio-work-copy">
           <p className="portfolio-eyebrow">{project.category}</p>
-          <h3>{project.title}</h3>
+          <h3>
+            <Link href={`/work/${project.id}`} className="portfolio-title-link">
+              {project.title}
+            </Link>
+          </h3>
           <p className="portfolio-work-thesis">{project.thesis}</p>
-          <p className="portfolio-work-description">{project.shortDescription}</p>
+          {project.shortDescription && (
+            <p className="portfolio-work-description">{project.shortDescription}</p>
+          )}
           <div className="portfolio-work-footer">
             <div className="portfolio-stack" aria-label={`${project.title} technology stack`}>
               {project.cardStack.slice(0, 4).map((item) => <span key={item}>{item}</span>)}
             </div>
-            <a href={project.github} target="_blank" rel="noreferrer" className="portfolio-inline-link">
-              GitHub <ExternalLink size={13} aria-hidden="true" />
-            </a>
+            <div className="portfolio-work-actions">
+              <Link href={`/work/${project.id}`} className="portfolio-case-study-action">
+                Read case study <ArrowUpRight size={14} aria-hidden="true" />
+              </Link>
+              {project.github && (
+                <a href={project.github} target="_blank" rel="noreferrer" className="portfolio-inline-link">
+                  GitHub <ExternalLink size={13} aria-hidden="true" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </article>
@@ -82,7 +95,7 @@ export default function Home() {
       <NavBar />
 
         <main id="top" className="portfolio-main">
-          {/* ── Hero Band — 1:1 heykivi.ai s1-hero floral dither artwork + proximity wave ── */}
+          {/* ── Hero Band — existing floral dither artwork + proximity wave ── */}
           <section className="portfolio-hero-band" id="hero-band">
             <div className="hero-media-slot" aria-hidden="true">
               <DitherArt
@@ -102,21 +115,21 @@ export default function Home() {
               </div>
 
               <div className="portfolio-hero-composition">
-                <p className="portfolio-hero-kicker">ENGINEERING / AI / FILM</p>
-                <h1 id="hero-heading">I build<br /><span>systems.</span><br />I shoot<br /><span>stories.</span></h1>
+                <p className="portfolio-hero-kicker">ENGINEER / AI BUILDER</p>
+                <h1 id="hero-heading">I build AI systems,<br /><span>software and products.</span></h1>
                 <div className="portfolio-hero-support">
-                  <p>AI / ML ENGINEERING<br /><span>+ FILM / VISUAL STORYTELLING</span></p>
-                  <p className="portfolio-hero-support-copy">Systems with a point of view. Stories with a working spine.</p>
+                  <p>HARSH KUMAR JHA · DELHI, INDIA<br /><span>ECE @ MSIT · AI / ML · SOFTWARE</span></p>
+                  <p className="portfolio-hero-support-copy">I build practical AI systems, software and product experiments. Film and visual work are a secondary practice.</p>
                   <a href="#work" className="portfolio-inline-link">
-                    View selected work <ArrowUpRight size={15} aria-hidden="true" />
+                    View work <ArrowUpRight size={15} aria-hidden="true" />
                   </a>
                 </div>
               </div>
 
               <div className="portfolio-hero-edge portfolio-hero-edge--bottom">
                 <span>01 — INTRO</span>
-                <span>AI SYSTEMS · BACKEND · VISUAL STORYTELLING</span>
-                <a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a>
+                <span>AI SYSTEMS · SOFTWARE · PRODUCTS</span>
+                <a href="#work">Explore projects <span aria-hidden="true">↓</span></a>
               </div>
             </div>
           </section>
@@ -125,9 +138,9 @@ export default function Home() {
             <div className="portfolio-section-heading">
               <div>
                 <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
-                <h2 id="work-heading">Built to hold up<br />after the demo.</h2>
+                <h2 id="work-heading">AI systems, software<br />and useful products.</h2>
               </div>
-              <p className="portfolio-section-intro">Systems shaped around orchestration, evaluation, and evidence.</p>
+              <p className="portfolio-section-intro">Selected work across AI infrastructure, product software, and model evaluation.</p>
             </div>
             <div className="portfolio-work-list">
               {showcaseProjects.map((project, index) => <ProjectFeature key={project.id} project={project} index={index} />)}
@@ -138,9 +151,9 @@ export default function Home() {
             <div className="portfolio-section-heading portfolio-section-heading--compact">
               <div>
                 <p className="portfolio-eyebrow">03 — EXPERIENCE</p>
-                <h2 id="experience-heading">Questions got sharper.</h2>
+                <h2 id="experience-heading">Engineering experience.</h2>
               </div>
-              <p className="portfolio-section-intro">Places where research had to become something useful.</p>
+              <p className="portfolio-section-intro">AI safety, evaluation, and data quality work.</p>
             </div>
 
             <div className="portfolio-experience-list">
@@ -169,11 +182,27 @@ export default function Home() {
               <span>A SHORT VERSION</span>
             </div>
             <div className="portfolio-about-content">
-              <h2 id="about-heading">I build things.<br />I care how they work.<br /><span>I make films, too.</span></h2>
-              <p>I&apos;m an ECE student at MSIT, usually somewhere between backend systems, machine learning, and a camera. The common thread is attention: to the logic under the surface, and to the feeling it leaves behind.</p>
+              <h2 id="about-heading">AI systems.<br />Software products.<br /><span>Visual work, too.</span></h2>
+              <p>I&apos;m an ECE student at MSIT focused on AI/ML, backend systems, and product engineering. I like taking ideas from prototype to software people can use. Outside engineering, I work with film and visual media.</p>
               <div className="portfolio-toolkit" aria-label="Technology stack">
                 <span className="portfolio-eyebrow">CURRENT TOOLKIT</span>
                 <div>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
+              </div>
+            </div>
+          </section>
+
+          <section id="film" data-section="film" className="portfolio-section portfolio-film-note" aria-labelledby="film-heading">
+            <div className="portfolio-about-label">
+              <p className="portfolio-eyebrow">05 — FILM / VISUAL WORK</p>
+              <span>SECONDARY PRACTICE</span>
+            </div>
+            <div className="portfolio-about-content">
+              <h2 id="film-heading">A separate<br /><span>visual practice.</span></h2>
+              <p>Film and visual media sit alongside my engineering work as a second craft. This is where I experiment with images, editing, and composition.</p>
+              <div className="portfolio-film-tags" aria-label="Visual work interests">
+                <span>FILM</span>
+                <span>PHOTOGRAPHY</span>
+                <span>EDITING</span>
               </div>
             </div>
           </section>
@@ -196,11 +225,11 @@ export default function Home() {
               aria-labelledby="contact-heading"
               style={{ position: 'relative', zIndex: 3 }}
             >
-              <p className="portfolio-eyebrow">05 — CONTACT</p>
+              <p className="portfolio-eyebrow">06 — CONTACT</p>
               <div className="portfolio-contact-grid">
-                <h2 id="contact-heading">Let&apos;s make<br /><span>something useful.</span></h2>
+                <h2 id="contact-heading">Let&apos;s build<br /><span>something useful.</span></h2>
                 <div>
-                  <p>Have a system to build, a story to shape, or just a good question?</p>
+                  <p>Have a project, idea, or opportunity?</p>
                   <a href="mailto:jhaharsh451@gmail.com" className="portfolio-contact-link">jhaharsh451@gmail.com <ArrowUpRight size={17} aria-hidden="true" /></a>
                 </div>
               </div>
@@ -210,7 +239,7 @@ export default function Home() {
 
         <footer className="portfolio-footer" role="contentinfo">
           <span>HARSH KUMAR JHA</span>
-          <span>AI systems / visual storytelling</span>
+          <span>AI systems / software / visual work</span>
           <div>
             <a href="mailto:jhaharsh451@gmail.com">EMAIL</a>
             <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer">GITHUB</a>

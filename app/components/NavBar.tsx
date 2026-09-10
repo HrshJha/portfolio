@@ -7,6 +7,7 @@ const links = [
   { label: "Work", href: "#work", id: "work" },
   { label: "Experience", href: "#experience", id: "experience" },
   { label: "About", href: "#about", id: "about" },
+  { label: "Film", href: "#film", id: "film" },
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 
@@ -41,7 +42,7 @@ export default function NavBar() {
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
     >
       <a href="#top" className="portfolio-wordmark" aria-label="Harsh Kumar Jha — home">
-        <span>HKJ</span><i aria-hidden="true">/</i><small>ENGINEER + FILMMAKER</small>
+        <span>HKJ</span><i aria-hidden="true">/</i><small>ENGINEER / AI BUILDER</small>
       </a>
 
       <nav className="portfolio-nav-links" aria-label="Primary navigation">

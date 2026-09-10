@@ -37,10 +37,10 @@ export default function ContactClient() {
       <main className="contact-page-main section-pad">
         <div className="contact-container">
           <div className="contact-page-header">
-            <span className="section-kicker">04 / CONTACT</span>
+            <span className="section-kicker">06 / CONTACT</span>
             <h1 className="contact-title" id="contact-heading">
               Let&apos;s build something<br />
-              <em>that holds up.</em>
+              <em>useful.</em>
             </h1>
           </div>
 
@@ -129,7 +129,7 @@ export default function ContactClient() {
       {/* Minimal Site Footer */}
       <footer className="site-footer" role="contentinfo">
         <span className="footer-name">HARSH KUMAR JHA</span>
-        <span className="footer-line">Building AI systems through machine learning and engineering.</span>
+        <span className="footer-line">AI systems / software / visual work.</span>
         <span className="footer-copy">© 2026</span>
       </footer>
     </>

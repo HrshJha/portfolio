@@ -171,7 +171,7 @@ export default function WorkDetailClient({
       {/* Minimal Footer */}
       <footer className="site-footer" role="contentinfo">
         <span className="footer-name">HARSH KUMAR JHA</span>
-        <span className="footer-line">Building AI systems through machine learning and engineering.</span>
+        <span className="footer-line">AI systems / software / visual work.</span>
         <span className="footer-copy">© 2026</span>
       </footer>
     </>
