@@ -1,14 +1,10 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import NavBar from "./components/NavBar";
-import KiviBackground from "./components/KiviBackground";
-import { CursorFieldProvider } from "./components/cursor-field/CursorFieldProvider";
-import { HalftoneReveal } from "./components/cursor-field/HalftoneReveal";
-import { ParticleTrail } from "./components/cursor-field/ParticleTrail";
+import KiviBackground, { DitherArt, HeroProximityWave } from "./components/KiviBackground";
 import { projects, type Project } from "./data/projects";
 
 const toolkit = [
@@ -16,7 +12,21 @@ const toolkit = [
   "Node.js", "PostgreSQL", "Redis", "Docker", "FAISS", "PyTorch",
 ];
 
-const showcaseProjects = projects.filter((project) => project.id !== "candidate-intelligence-system");
+// Keep the project data and case-study route intact; this only disconnects
+// AppForge from the homepage showcase until the next project direction is set.
+const showcaseProjects = projects.filter(
+  (project) => project.id !== "candidate-intelligence-system" && project.id !== "appforge-ai",
+);
+
+const frameosStages = [
+  ["TREND", "DISCOVER"],
+  ["RESEARCH", "EXTRACT + SYNTHESIZE"],
+  ["SCRIPT", "GENERATE"],
+  ["GENERATE", "VOICE · VISUALS · ASSEMBLY"],
+  ["RENDER", "PRODUCE"],
+  ["DISTRIBUTE", "PUBLISH"],
+  ["LEARN", "FEEDBACK INTELLIGENCE"],
+] as const;
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const reduceMotion = useReducedMotion();
@@ -34,6 +44,40 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
   );
 }
 
+function FrameOSPipeline() {
+  return (
+    <div className="frameos-pipeline" aria-hidden="true">
+      <div className="frameos-pipeline-header">
+        <span>FRAMEOS / MEDIA LOOP</span>
+        <span className="frameos-pipeline-live"><i /> LIVE PIPELINE</span>
+      </div>
+
+      <div className="frameos-pipeline-flow">
+        {frameosStages.map(([label, detail], index) => (
+          <div className="frameos-stage-wrap" key={label} style={{ "--stage-delay": `${index * 0.35}s` } as React.CSSProperties}>
+            <div className={`frameos-stage${label === "GENERATE" ? " frameos-stage--branch" : ""}`}>
+              <span>{label}</span>
+              <small>{detail}</small>
+              {label === "GENERATE" && (
+                <div className="frameos-branch-list">
+                  <span>VOICE</span><span>VISUALS</span><span>ASSEMBLY</span>
+                </div>
+              )}
+            </div>
+            {index < frameosStages.length - 1 && <div className="frameos-connector"><b /></div>}
+          </div>
+        ))}
+      </div>
+
+      <div className="frameos-pipeline-footer">
+        <span>FEEDBACK INTELLIGENCE</span>
+        <span className="frameos-loop-arrow">↺</span>
+        <span>BACK TO TREND DETECTION</span>
+      </div>
+    </div>
+  );
+}
+
 function ProjectFeature({ project, index }: { project: Project; index: number }) {
   return (
     <Reveal className={index === 0 ? "portfolio-project-featured-wrap" : "portfolio-project-tile-wrap"}>
@@ -43,9 +87,11 @@ function ProjectFeature({ project, index }: { project: Project; index: number })
           className="portfolio-work-media"
           aria-label={`Open ${project.title} case study`}
         >
-          <video autoPlay muted loop playsInline preload="metadata" poster={project.poster}>
-            <source src={project.video} type="video/mp4" />
-          </video>
+          {index === 0 ? <FrameOSPipeline /> : (
+            <video autoPlay muted loop playsInline preload="metadata" poster={project.poster}>
+              <source src={project.video} type="video/mp4" />
+            </video>
+          )}
           <span className="portfolio-media-link">Open case study <ArrowUpRight size={15} aria-hidden="true" /></span>
         </Link>
 
@@ -69,30 +115,27 @@ function ProjectFeature({ project, index }: { project: Project; index: number })
 }
 
 export default function Home() {
-  const heroRef = useRef<HTMLElement>(null);
-  const contactRef = useRef<HTMLElement>(null);
-
   return (
     <>
       <KiviBackground />
       <div className="site-shell">
-        <div className="grain" aria-hidden="true" />
         <NavBar />
 
         <main id="top" className="portfolio-main">
-          {/* ── Hero — cursor-reactive halftone field ── */}
-          <CursorFieldProvider fieldRootRef={heroRef}>
-            {/* Effects are absolutely positioned inside the section via heroRef */}
-            <HalftoneReveal />
-            <ParticleTrail />
-          </CursorFieldProvider>
+          {/* ── Hero Band — 1:1 heykivi.ai s1-hero floral dither artwork + proximity wave ── */}
+          <section className="portfolio-hero-band" id="hero-band">
+            <div className="hero-media-slot" aria-hidden="true">
+              <DitherArt
+                region="hero"
+                src="/assets/art/dither/s1-hero.png"
+                position="50% 46%"
+                seam="bottom"
+                restOpacity={0.16}
+              />
+            </div>
+            <HeroProximityWave />
 
-          <section
-            ref={heroRef}
-            className="portfolio-hero"
-            aria-labelledby="hero-heading"
-            style={{ position: 'relative', overflow: 'hidden' }}
-          >
+            <div className="portfolio-hero" aria-labelledby="hero-heading" style={{ position: 'relative', zIndex: 3 }}>
               <div className="portfolio-hero-topline">
                 <span>HARSH KUMAR JHA</span>
                 <span>DELHI · INDIA</span>
@@ -119,6 +162,7 @@ export default function Home() {
                 <span>AI SYSTEMS · BACKEND · VISUAL STORYTELLING</span>
                 <a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a>
               </div>
+            </div>
           </section>
 
           <section id="work" data-section="work" className="portfolio-section portfolio-work-section" aria-labelledby="work-heading">
@@ -127,7 +171,7 @@ export default function Home() {
                 <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
                 <h2 id="work-heading">Built to hold up<br />after the demo.</h2>
               </div>
-              <p className="portfolio-section-intro">Three systems shaped around orchestration, evaluation, and evidence.</p>
+              <p className="portfolio-section-intro">Systems shaped around orchestration, evaluation, and evidence.</p>
             </div>
             <div className="portfolio-work-list">
               {showcaseProjects.map((project, index) => <ProjectFeature key={project.id} project={project} index={index} />)}
@@ -196,20 +240,24 @@ export default function Home() {
             </div>
           </section>
 
-          {/* ── Contact — cursor-reactive halftone field ── */}
-          <CursorFieldProvider fieldRootRef={contactRef}>
-            <HalftoneReveal />
-            <ParticleTrail />
-          </CursorFieldProvider>
-
-          <section
-            ref={contactRef}
-            id="contact"
-            data-section="contact"
-            className="portfolio-contact-section"
-            aria-labelledby="contact-heading"
-            style={{ position: 'relative', overflow: 'hidden' }}
-          >
+          {/* ── Contact Band — 1:1 heykivi.ai s4-nest floral/nest artwork ── */}
+          <section className="portfolio-contact-band" id="contact-band">
+            <div className="contact-media-slot" aria-hidden="true">
+              <DitherArt
+                region="closing"
+                src="/assets/art/dither/s4-nest.png"
+                position="50% 50%"
+                seam="top"
+                restOpacity={0.16}
+              />
+            </div>
+            <div
+              id="contact"
+              data-section="contact"
+              className="portfolio-contact-section"
+              aria-labelledby="contact-heading"
+              style={{ position: 'relative', zIndex: 3 }}
+            >
               <p className="portfolio-eyebrow">06 — CONTACT</p>
               <div className="portfolio-contact-grid">
                 <h2 id="contact-heading">Let&apos;s make<br /><span>something useful.</span></h2>
@@ -218,6 +266,7 @@ export default function Home() {
                   <a href="mailto:jhaharsh451@gmail.com" className="portfolio-contact-link">jhaharsh451@gmail.com <ArrowUpRight size={17} aria-hidden="true" /></a>
                 </div>
               </div>
+            </div>
           </section>
         </main>
 
