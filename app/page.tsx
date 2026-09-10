@@ -4,8 +4,12 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import NavBar from "./components/NavBar";
-import PhysicsField from "./components/PhysicsField";
 import { projects, type Project } from "./data/projects";
+
+const toolkit = [
+  "Python", "TypeScript", "Java", "JavaScript", "SQL", "FastAPI", "React", "Next.js",
+  "Node.js", "PostgreSQL", "Redis", "Docker", "FAISS", "PyTorch", "SQLAlchemy",
+];
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const reduceMotion = useReducedMotion();
@@ -64,7 +68,6 @@ function ProjectFeature({ project, index }: { project: Project; index: number })
 export default function Home() {
   return (
     <>
-      <PhysicsField />
       <div className="site-shell">
         <div className="grain" aria-hidden="true" />
         <NavBar />
@@ -124,7 +127,7 @@ export default function Home() {
                   <p className="editorial-meta">2026 · AI/ML INTERN</p>
                   <h3>DomainLabs</h3>
                 </div>
-                <p>AI safety, adversarial testing, LLM evaluation, and Bayora — an automated red-teaming platform.</p>
+                <p>Researched AI safety, adversarial testing, and LLM evaluation; built evaluation pipelines and benchmarks; contributed to Bayora, an automated red-teaming platform.</p>
               </article>
               <article className="editorial-experience-row">
                 <div className="editorial-experience-index">02</div>
@@ -132,7 +135,7 @@ export default function Home() {
                   <p className="editorial-meta">2025 · R&amp;D INTERN</p>
                   <h3>MathonGo</h3>
                 </div>
-                <p>Validated and structured 2,000+ Physics questions with AI-assisted QA for JEE/NEET datasets.</p>
+                <p>Validated and structured 2,000+ Physics questions for JEE/NEET question banks and applied AI-assisted QA to improve dataset quality and retrieval efficiency.</p>
               </article>
             </div>
           </section>
@@ -153,6 +156,10 @@ export default function Home() {
                 <span>MACHINE LEARNING</span>
                 <span>VISUAL STORYTELLING</span>
               </div>
+              <div className="editorial-toolkit" aria-label="Technology stack">
+                <span className="editorial-toolkit-label">STACK</span>
+                <div>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
+              </div>
             </div>
           </section>
 
@@ -170,7 +177,7 @@ export default function Home() {
 
         <footer className="editorial-footer" role="contentinfo">
           <span>HARSH KUMAR JHA</span>
-          <span>AI / SYSTEMS / FILM</span>
+          <span>Building AI systems through machine learning and engineering.</span>
           <div>
             <a href="mailto:jhaharsh451@gmail.com">EMAIL</a>
             <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer">GITHUB</a>
