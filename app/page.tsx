@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowUp, ArrowUpRight, ExternalLink } from "lucide-react";
+import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { DitherArt, HeroProximityWave } from "./components/KiviBackground";
 import { projects, type Project } from "./data/projects";
@@ -11,6 +12,27 @@ const toolkit = [
   "Python", "TypeScript", "JavaScript", "FastAPI", "React", "Next.js",
   "Node.js", "PostgreSQL", "Redis", "Docker", "FAISS", "PyTorch",
 ];
+
+const domainLabsMeta = ["AI SAFETY", "LLM EVALUATION", "RED TEAMING", "BAYORA", "ROBUSTNESS"];
+const mathonGoMeta = ["CONTENT TAGGING", "RESEARCH", "CONTENT DEVELOPMENT", "QUALITY"];
+
+const domainLabsDetails = [
+  ["AI SAFETY", "Researched adversarial testing and LLM evaluation methodologies."],
+  ["MODEL EVALUATION", "Assisted with experiments and benchmarks for evaluating AI-system behaviour."],
+  ["RED TEAMING", "Worked on adversarial threat taxonomies and LLM red-teaming frameworks."],
+  ["BAYORA", "Contributed to Bayora, an automated adversarial red-teaming platform, through model integration and testing."],
+  ["ROBUSTNESS", "Explored model alignment, robustness, and interpretability techniques."],
+  ["RESEARCH", "Prepared technical documentation, research summaries, and internal reports on AI/ML experiments."],
+] as const;
+
+const domainLabsDetailMeta = ["AI SAFETY", "LLM EVALUATION", "ADVERSARIAL TESTING", "RED TEAMING", "MODEL ROBUSTNESS", "INTERPRETABILITY", "RESEARCH"];
+
+const mathonGoDetails = [
+  ["CONTENT TAGGING", "Classified and structured content for systematic organization."],
+  ["RESEARCH", "Researched and validated information used in content development."],
+  ["CONTENT DEVELOPMENT", "Created and refined academic content with emphasis on clarity."],
+  ["QUALITY", "Reviewed content for consistency, correctness, and detail."],
+] as const;
 
 // Keep the project data and case-study route intact; this only disconnects
 // AppForge from the homepage showcase until the next project direction is set.
@@ -108,10 +130,99 @@ function ProjectCard({
 
         <div className="portfolio-project-action">
           <Link href={`/work/${project.id}`} className="portfolio-writeup-link">
-            READ THE WRITE-UP <ArrowUpRight size={13} aria-hidden="true" />
+            SEE WHAT&apos;S UNDERNEATH <ArrowUpRight size={13} aria-hidden="true" />
           </Link>
         </div>
       </div>
+    </article>
+  );
+}
+
+function ExperienceEntry({
+  id,
+  company,
+  role,
+  date,
+  overview,
+  meta,
+  details,
+  detailMeta,
+  primary = false,
+}: {
+  id: string;
+  company: string;
+  role: string;
+  date: string;
+  overview: string;
+  meta: readonly string[];
+  details: readonly (readonly [string, string])[];
+  detailMeta?: readonly string[];
+  primary?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const detailsId = `${id}-details`;
+
+  return (
+    <article className={`portfolio-experience-entry${primary ? " portfolio-experience-entry--primary" : " portfolio-experience-entry--secondary"}`}>
+      <header className="portfolio-experience-entry-header">
+        <div>
+          <h3>{company}</h3>
+          <p>{role}</p>
+        </div>
+        <time>{date}</time>
+      </header>
+
+      <p className="portfolio-experience-overview">{overview}</p>
+
+      <div className="portfolio-experience-meta-row" aria-label={`${company} focus areas`}>
+        {meta.map((item) => <span key={item}>{item}</span>)}
+      </div>
+
+      <button
+        type="button"
+        className="portfolio-experience-toggle"
+        aria-expanded={isOpen}
+        aria-controls={detailsId}
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        {isOpen ? "HIDE DETAILS" : "VIEW DETAILED WORK"}
+        {isOpen ? <ArrowUp size={14} aria-hidden="true" /> : <ArrowUpRight size={14} aria-hidden="true" />}
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id={detailsId}
+            className="portfolio-experience-details"
+            initial={reduceMotion ? { opacity: 1, height: "auto", y: 0 } : { opacity: 0, height: 0, y: -8 }}
+            animate={{ opacity: 1, height: "auto", y: 0 }}
+            exit={reduceMotion ? { opacity: 1, height: 0, y: 0 } : { opacity: 0, height: 0, y: -8 }}
+            transition={{ duration: reduceMotion ? 0.01 : 0.48, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="portfolio-experience-detail-overview">
+              <span>OVERVIEW</span>
+              <p>{overview}</p>
+            </div>
+
+            <div className="portfolio-experience-detail-grid">
+              {details.map(([title, description], index) => (
+                <article key={title} className={`portfolio-experience-detail-item${title === "BAYORA" ? " portfolio-experience-detail-item--emphasis" : ""}`}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <h4>{title}</h4>
+                  <p>{description}</p>
+                </article>
+              ))}
+            </div>
+
+            {detailMeta && (
+              <div className="portfolio-experience-detail-meta" aria-label={`${company} detailed focus areas`}>
+                {detailMeta.map((item) => <span key={item}>{item}</span>)}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </article>
   );
 }
@@ -146,7 +257,7 @@ export default function Home() {
                 <h1 id="hero-heading">I build AI systems,<br /><span>software and products.</span></h1>
                 <div className="portfolio-hero-support">
                   <p>HARSH KUMAR JHA · DELHI, INDIA<br /><span>ECE @ MSIT · AI / ML · SOFTWARE</span></p>
-                  <p className="portfolio-hero-support-copy">I build practical AI systems, software and product experiments. Film and visual work are a secondary practice.</p>
+                  <p className="portfolio-hero-support-copy">I build practical AI systems, software and product experiments with robust architecture and clean interfaces.</p>
                   <a href="#work" className="portfolio-inline-link">
                     View work <ArrowUpRight size={15} aria-hidden="true" />
                   </a>
@@ -161,114 +272,140 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="work" data-section="work" className="portfolio-section portfolio-work-section" aria-labelledby="work-heading">
-            <div className="portfolio-section-heading">
-              <div>
-                <p className="portfolio-eyebrow">SELECTED</p>
-                <h2 id="work-heading">Here&apos;s what I have been<br />engineering..</h2>
-              </div>
-              <p className="portfolio-section-intro">Most of engineering is deciding what you are willing to lose.</p>
+          {/* ── 02. Work Band — clearing dither artwork (s2-clearing.png) ── */}
+          <section className="portfolio-work-band" id="work-band">
+            <div className="work-media-slot" aria-hidden="true">
+              <DitherArt
+                region="clearing"
+                src="/assets/art/dither/s2-clearing.png"
+                position="50% 20%"
+                seam="both"
+                restOpacity={0.14}
+              />
             </div>
 
-            {/* ── One Large Continuous Warm-Ivory Project Canvas ── */}
-            <div className="portfolio-work-canvas">
-              <div className="portfolio-work-editorial-grid">
-                {/* Left Column: Featured Project (FrameOS) */}
-                <div className="portfolio-featured-col">
-                  <Reveal className="portfolio-featured-reveal">
-                    <ProjectCard project={showcaseProjects[0]} isFeatured={true} />
-                  </Reveal>
+            <div id="work" data-section="work" className="portfolio-section portfolio-work-section" aria-labelledby="work-heading">
+              <div className="portfolio-section-heading">
+                <div>
+                  <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
+                  <h2 id="work-heading">Here&apos;s what I have been<br />engineering..</h2>
                 </div>
+                <p className="portfolio-section-intro">Most of engineering is deciding what you are willing to lose.</p>
+              </div>
 
-                {/* Right Column: Stacked Secondary Projects (Vera, Hallucination Hunter) */}
-                <div className="portfolio-secondary-col">
-                  {showcaseProjects.slice(1).map((project) => (
-                    <Reveal key={project.id}>
-                      <ProjectCard project={project} isFeatured={false} />
+              {/* ── One Large Continuous Warm-Ivory Project Canvas ── */}
+              <div className="portfolio-work-canvas">
+                <div className="portfolio-work-editorial-grid">
+                  {/* Left Column: Featured Project (FrameOS) */}
+                  <div className="portfolio-featured-col">
+                    <Reveal className="portfolio-featured-reveal">
+                      <ProjectCard project={showcaseProjects[0]} isFeatured={true} />
                     </Reveal>
-                  ))}
+                  </div>
+
+                  {/* Right Column: Stacked Secondary Projects (Vera, Hallucination Hunter) */}
+                  <div className="portfolio-secondary-col">
+                    {showcaseProjects.slice(1).map((project) => (
+                      <Reveal key={project.id}>
+                        <ProjectCard project={project} isFeatured={false} />
+                      </Reveal>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="portfolio-work-see-all">
+                  <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
+                    SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
+                  </a>
                 </div>
               </div>
+            </div>
+          </section>
 
-              <div className="portfolio-work-see-all">
-                <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
-                  SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
-                </a>
+          {/* ── 03. Experience Band — meadow dither artwork (s3-meadow.png) ── */}
+          <section className="portfolio-experience-band" id="experience-band">
+            <div className="experience-media-slot" aria-hidden="true">
+              <DitherArt
+                region="meadow"
+                src="/assets/art/dither/s3-meadow.png"
+                position="50% 35%"
+                seam="both"
+                restOpacity={0.14}
+              />
+            </div>
+            <div
+              id="experience"
+              data-section="experience"
+              className="portfolio-section portfolio-experience-section"
+              aria-labelledby="experience-heading"
+              style={{ position: 'relative', zIndex: 3 }}
+            >
+              <div className="portfolio-experience-surface">
+                <header className="portfolio-experience-header">
+                  <div>
+                    <p className="portfolio-experience-kicker">03 — EXPERIENCE</p>
+                    <h2 id="experience-heading">Experience</h2>
+                  </div>
+                </header>
+
+                <ExperienceEntry
+                  id="domalynlabs"
+                  company="DOMALYNLABS LLP"
+                  role="AI / ML INTERN · AI SAFETY & EVALUATION RESEARCH"
+                  date="JUN 2026 — AUG 2026"
+                  overview="Worked on AI safety, adversarial evaluation, LLM robustness, and automated red-teaming research."
+                  meta={domainLabsMeta}
+                  details={domainLabsDetails}
+                  detailMeta={domainLabsDetailMeta}
+                  primary
+                />
+
+                <ExperienceEntry
+                  id="mathongo"
+                  company="MATHONGO"
+                  role="CONTENT DEVELOPER INTERN · CONTENT TAGGING, RESEARCH & DEVELOPMENT"
+                  date="JUN 2025 — AUG 2025"
+                  overview="Worked on content tagging, research, and academic content development with a focus on accuracy, structure, and quality."
+                  meta={mathonGoMeta}
+                  details={mathonGoDetails}
+                />
               </div>
             </div>
           </section>
 
-          <section id="experience" data-section="experience" className="portfolio-section portfolio-experience-section" aria-labelledby="experience-heading">
-            <div className="portfolio-section-heading portfolio-section-heading--compact">
-              <div>
-                <p className="portfolio-eyebrow">03 — EXPERIENCE</p>
-                <h2 id="experience-heading">Engineering experience.</h2>
-              </div>
-              <p className="portfolio-section-intro">AI safety, evaluation, and data quality work.</p>
-            </div>
-
-            <div className="portfolio-experience-list">
-              <article className="portfolio-experience-row">
-                <span className="portfolio-experience-number">01</span>
-                <div className="portfolio-experience-role">
-                  <p className="portfolio-eyebrow">2026 · AI/ML INTERN</p>
-                  <h3>DomainLabs</h3>
-                </div>
-                <p>Researched AI safety, adversarial testing, and LLM evaluation; built evaluation pipelines and benchmarks for Bayora, an automated red-teaming platform.</p>
-              </article>
-              <article className="portfolio-experience-row">
-                <span className="portfolio-experience-number">02</span>
-                <div className="portfolio-experience-role">
-                  <p className="portfolio-eyebrow">2025 · R&amp;D INTERN</p>
-                  <h3>MathonGo</h3>
-                </div>
-                <p>Validated and structured 2,000+ Physics questions for JEE/NEET question banks, using AI-assisted QA to improve dataset quality and retrieval.</p>
-              </article>
-            </div>
-          </section>
-
-          <section id="about" data-section="about" className="portfolio-section portfolio-about-section" aria-labelledby="about-heading">
-            <div className="portfolio-about-label">
-              <p className="portfolio-eyebrow">04 — ABOUT</p>
-              <span>A SHORT VERSION</span>
-            </div>
-            <div className="portfolio-about-content">
-              <h2 id="about-heading">AI systems.<br />Software products.<br /><span>Visual work, too.</span></h2>
-              <p>I&apos;m an ECE student at MSIT focused on AI/ML, backend systems, and product engineering. I like taking ideas from prototype to software people can use. Outside engineering, I work with film and visual media.</p>
-              <div className="portfolio-toolkit" aria-label="Technology stack">
-                <span className="portfolio-eyebrow">CURRENT TOOLKIT</span>
-                <div>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
-              </div>
-            </div>
-          </section>
-
-          <section id="film" data-section="film" className="portfolio-section portfolio-film-note" aria-labelledby="film-heading">
-            <div className="portfolio-about-label">
-              <p className="portfolio-eyebrow">05 — FILM / VISUAL WORK</p>
-              <span>SECONDARY PRACTICE</span>
-            </div>
-            <div className="portfolio-about-content">
-              <h2 id="film-heading">A separate<br /><span>visual practice.</span></h2>
-              <p>Film and visual media sit alongside my engineering work as a second craft. This is where I experiment with images, editing, and composition.</p>
-              <div className="portfolio-film-tags" aria-label="Visual work interests">
-                <span>FILM</span>
-                <span>PHOTOGRAPHY</span>
-                <span>EDITING</span>
-              </div>
-            </div>
-          </section>
-
-          {/* ── Contact Band — 1:1 heykivi.ai s4-nest floral/nest artwork ── */}
-          <section className="portfolio-contact-band" id="contact-band">
-            <div className="contact-media-slot" aria-hidden="true">
+          {/* ── 04 & 05. Closing Band (About + Contact) — nest dither artwork (s4-nest.png) ── */}
+          <section className="portfolio-closing-band" id="closing-band">
+            <div className="closing-media-slot" aria-hidden="true">
               <DitherArt
                 region="closing"
                 src="/assets/art/dither/s4-nest.png"
                 position="50% 50%"
                 seam="top"
-                restOpacity={0.16}
+                restOpacity={0.25}
               />
             </div>
+
+            <div
+              id="about"
+              data-section="about"
+              className="portfolio-section portfolio-about-section"
+              aria-labelledby="about-heading"
+              style={{ position: 'relative', zIndex: 3 }}
+            >
+              <div className="portfolio-about-label">
+                <p className="portfolio-eyebrow">04 — ABOUT</p>
+                <span>A SHORT VERSION</span>
+              </div>
+              <div className="portfolio-about-content">
+                <h2 id="about-heading">AI systems.<br />Software products.<br /><span>Engineering-led.</span></h2>
+                <p>I&apos;m an ECE student at MSIT focused on AI/ML, backend systems, and product engineering. I like taking ideas from prototype to software people can use with a focus on speed, reliability, and precision.</p>
+                <div className="portfolio-toolkit" aria-label="Technology stack">
+                  <span className="portfolio-eyebrow">CURRENT TOOLKIT</span>
+                  <div>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
+                </div>
+              </div>
+            </div>
+
             <div
               id="contact"
               data-section="contact"
@@ -276,7 +413,7 @@ export default function Home() {
               aria-labelledby="contact-heading"
               style={{ position: 'relative', zIndex: 3 }}
             >
-              <p className="portfolio-eyebrow">06 — CONTACT</p>
+              <p className="portfolio-eyebrow">05 — CONTACT</p>
               <div className="portfolio-contact-grid">
                 <h2 id="contact-heading">Let&apos;s build<br /><span>something useful.</span></h2>
                 <div>
@@ -290,7 +427,7 @@ export default function Home() {
 
         <footer className="portfolio-footer" role="contentinfo">
           <span>HARSH KUMAR JHA</span>
-          <span>AI systems / software / visual work</span>
+          <span>AI systems / software / products</span>
           <div>
             <a href="mailto:jhaharsh451@gmail.com">EMAIL</a>
             <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer">GITHUB</a>

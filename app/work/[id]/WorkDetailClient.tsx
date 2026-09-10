@@ -54,27 +54,36 @@ export default function WorkDetailClient({
           <p className="work-detail-thesis">{project.thesis}</p>
         </section>
 
-        {/* Primary Large Project Media */}
-        <section className="work-detail-media-wrap" aria-label={`${project.title} video demonstration`}>
+        {/* Primary Large Project Media — editorial full-bleed frame */}
+        <section className="work-detail-media-wrap" aria-label={`${project.title} demonstration`}>
           <div className="work-detail-media-frame">
-            {!videoError ? (
+            {project.video && !videoError ? (
               <video
                 autoPlay
                 muted
                 loop
                 playsInline
                 preload="metadata"
-                poster={project.poster}
+                poster={project.poster || undefined}
                 className="work-detail-video"
                 onError={() => setVideoError(true)}
               >
                 <source src={project.video} type="video/mp4" />
               </video>
-            ) : (
-              <div
-                className="work-detail-fallback-poster"
-                style={{ backgroundImage: `url(${project.poster})` }}
+            ) : project.poster ? (
+              /* Poster-only project (e.g. Vera) — use img for natural contain sizing */
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={project.poster}
+                alt={`${project.title} project preview`}
+                className="work-detail-video"
+                draggable={false}
               />
+            ) : (
+              /* No media — render the SVG architecture diagram banner */
+              <div className="work-detail-no-media-banner">
+                <span>{project.title}</span>
+              </div>
             )}
           </div>
 
