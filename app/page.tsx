@@ -270,16 +270,16 @@ export default function Home() {
       <NavBar />
 
         <main id="top" className="portfolio-main">
-          {/* ── 01. Hero Band — PRIMARY ARTWORK: 1-s4 (s4-nest.png) ── */}
+          {/* ── 01. Hero Band — s1 artwork (s1-hero.png) ── */}
           <section className="portfolio-hero-band" id="hero-band">
             <div className="hero-media-slot" aria-hidden="true">
               <DitherArt
                 region="hero"
-                src="/assets/art/dither/s4-nest.png"
+                src="/assets/art/dither/s1-hero.png"
                 position="50% 50%"
-                fit="contain"
+                fit="cover"
                 seam="none"
-                restOpacity={0.28}
+                restOpacity={0.24}
               />
             </div>
             <HeroProximityWave />
@@ -355,9 +355,9 @@ export default function Home() {
                 region="meadow"
                 src="/assets/art/dither/s3-meadow.png"
                 position="50% 50%"
-                fit="contain"
-                seam="none"
-                restOpacity={0.16}
+                fit="cover"
+                seam="bottom"
+                restOpacity={0.22}
               />
             </div>
             <div
@@ -407,9 +407,9 @@ export default function Home() {
                 region="clearing"
                 src="/assets/art/dither/s2-clearing.png"
                 position="50% 50%"
-                fit="contain"
-                seam="none"
-                restOpacity={0.18}
+                fit="cover"
+                seam="top"
+                restOpacity={0.22}
               />
             </div>
 

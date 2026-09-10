@@ -10,7 +10,7 @@ import React from 'react';
 export function FrameOSPipeline() {
   return (
     <svg
-      viewBox="0 0 680 700"
+      viewBox="0 0 680 880"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="portfolio-architecture-svg"
@@ -47,176 +47,176 @@ export function FrameOSPipeline() {
       </defs>
 
       {/* Outer Card Background */}
-      <rect width="680" height="700" rx="20" fill="url(#frameos-card-bg)" stroke="rgba(242, 240, 233, 0.12)" strokeWidth="1" />
-      <rect width="680" height="700" rx="20" fill="url(#frameos-bg-glow)" />
-      <rect width="680" height="700" rx="20" fill="url(#frameos-grid)" />
+      <rect width="680" height="880" rx="22" fill="url(#frameos-card-bg)" stroke="rgba(242, 240, 233, 0.12)" strokeWidth="1" />
+      <rect width="680" height="880" rx="22" fill="url(#frameos-bg-glow)" />
+      <rect width="680" height="880" rx="22" fill="url(#frameos-grid)" />
 
       {/* ── HEADER ── */}
       <g className="frameos-header">
-        <text x="32" y="38" fill="#8a8f85" fontSize="11" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.14em">
+        <text x="28" y="38" fill="#9aa095" fontSize="12" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.14em">
           FRAMEOS / MEDIA LOOP
         </text>
         
         {/* Live indicator badge */}
-        <g transform="translate(540, 26)">
-          <circle cx="8" cy="11" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
+        <g transform="translate(528, 24)">
+          <circle cx="8" cy="12" r="4" fill="#d9854c" filter="url(#frameos-orange-glow)">
             <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite" />
           </circle>
-          <text x="18" y="14.5" fill="#c5c9be" fontSize="10.5" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.12em">
+          <text x="20" y="16" fill="#dce0d6" fontSize="11" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.12em">
             LIVE PIPELINE
           </text>
         </g>
 
         {/* Divider */}
-        <line x1="32" y1="52" x2="648" y2="52" stroke="rgba(242, 240, 233, 0.08)" strokeWidth="1" />
+        <line x1="28" y1="52" x2="652" y2="52" stroke="rgba(242, 240, 233, 0.1)" strokeWidth="1" />
       </g>
 
       {/* ── STAGE 1: TREND ── */}
       <g className="frameos-node">
-        <rect x="70" y="68" width="540" height="40" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.26)" strokeWidth="1" />
-        <text x="94" y="93" fill="#f2f0e9" fontSize="13" fontWeight="600" letterSpacing="0.08em">TREND</text>
-        <text x="586" y="93" textAnchor="end" fill="#8a8f85" fontSize="10" letterSpacing="0.1em">DISCOVER</text>
+        <rect x="54" y="72" width="572" height="46" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1.1" />
+        <text x="80" y="101" fill="#f2f0e9" fontSize="14" fontWeight="700" letterSpacing="0.08em">TREND</text>
+        <text x="602" y="101" textAnchor="end" fill="#9aa095" fontSize="11" fontWeight="600" letterSpacing="0.1em">DISCOVER</text>
       </g>
 
       {/* Connector 1 */}
-      <line x1="340" y1="108" x2="340" y2="128" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1" />
-      <polygon points="336.5,125 340,129 343.5,125" fill="rgba(242, 240, 233, 0.5)" />
-      <circle cx="340" cy="108" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
-        <animate attributeName="cy" values="108;128" dur="1.8s" repeatCount="indefinite" />
+      <line x1="340" y1="118" x2="340" y2="162" stroke="rgba(242, 240, 233, 0.35)" strokeWidth="1.3" />
+      <polygon points="335,157 340,163 345,157" fill="rgba(242, 240, 233, 0.7)" />
+      <circle cx="340" cy="118" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
+        <animate attributeName="cy" values="118;162" dur="1.8s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.8s" repeatCount="indefinite" />
       </circle>
 
       {/* ── STAGE 2: RESEARCH ── */}
       <g className="frameos-node">
-        <rect x="70" y="128" width="540" height="40" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.26)" strokeWidth="1" />
-        <text x="94" y="153" fill="#f2f0e9" fontSize="13" fontWeight="600" letterSpacing="0.08em">RESEARCH</text>
-        <text x="586" y="153" textAnchor="end" fill="#8a8f85" fontSize="10" letterSpacing="0.1em">EXTRACT + SYNTHESIZE</text>
+        <rect x="54" y="162" width="572" height="46" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1.1" />
+        <text x="80" y="191" fill="#f2f0e9" fontSize="14" fontWeight="700" letterSpacing="0.08em">RESEARCH</text>
+        <text x="602" y="191" textAnchor="end" fill="#9aa095" fontSize="11" fontWeight="600" letterSpacing="0.1em">EXTRACT + SYNTHESIZE</text>
       </g>
 
       {/* Connector 2 */}
-      <line x1="340" y1="168" x2="340" y2="188" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1" />
-      <polygon points="336.5,185 340,189 343.5,185" fill="rgba(242, 240, 233, 0.5)" />
-      <circle cx="340" cy="168" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
-        <animate attributeName="cy" values="168;188" dur="1.8s" begin="0.3s" repeatCount="indefinite" />
+      <line x1="340" y1="208" x2="340" y2="252" stroke="rgba(242, 240, 233, 0.35)" strokeWidth="1.3" />
+      <polygon points="335,247 340,253 345,247" fill="rgba(242, 240, 233, 0.7)" />
+      <circle cx="340" cy="208" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
+        <animate attributeName="cy" values="208;252" dur="1.8s" begin="0.3s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.8s" begin="0.3s" repeatCount="indefinite" />
       </circle>
 
       {/* ── STAGE 3: SCRIPT ── */}
       <g className="frameos-node">
-        <rect x="70" y="188" width="540" height="40" rx="10" fill="#181a16" stroke="rgba(217, 133, 76, 0.65)" strokeWidth="1" />
-        <text x="94" y="213" fill="#f2f0e9" fontSize="13" fontWeight="600" letterSpacing="0.08em">SCRIPT</text>
-        <text x="586" y="213" textAnchor="end" fill="#d9854c" fontSize="10" fontWeight="500" letterSpacing="0.1em">GENERATE</text>
+        <rect x="54" y="252" width="572" height="46" rx="10" fill="#181a16" stroke="rgba(217, 133, 76, 0.75)" strokeWidth="1.2" />
+        <text x="80" y="281" fill="#f2f0e9" fontSize="14" fontWeight="700" letterSpacing="0.08em">SCRIPT</text>
+        <text x="602" y="281" textAnchor="end" fill="#d9854c" fontSize="11" fontWeight="600" letterSpacing="0.1em">GENERATE</text>
       </g>
 
       {/* Connector 3 */}
-      <line x1="340" y1="228" x2="340" y2="248" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1" />
-      <polygon points="336.5,245 340,249 343.5,245" fill="rgba(242, 240, 233, 0.5)" />
-      <circle cx="340" cy="228" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
-        <animate attributeName="cy" values="228;248" dur="1.8s" begin="0.6s" repeatCount="indefinite" />
+      <line x1="340" y1="298" x2="340" y2="344" stroke="rgba(242, 240, 233, 0.35)" strokeWidth="1.3" />
+      <polygon points="335,339 340,345 345,339" fill="rgba(242, 240, 233, 0.7)" />
+      <circle cx="340" cy="298" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
+        <animate attributeName="cy" values="298;344" dur="1.8s" begin="0.6s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.8s" begin="0.6s" repeatCount="indefinite" />
       </circle>
 
       {/* ── STAGE 4: CONTENT ENGINE (Branch Box) ── */}
       <g className="frameos-content-engine">
-        <rect x="70" y="248" width="540" height="88" rx="12" fill="url(#frameos-engine-bg)" stroke="rgba(217, 133, 76, 0.75)" strokeWidth="1.2" />
+        <rect x="54" y="344" width="572" height="116" rx="12" fill="url(#frameos-engine-bg)" stroke="rgba(217, 133, 76, 0.85)" strokeWidth="1.3" />
         
         {/* Engine Header */}
-        <text x="94" y="271" fill="#f2f0e9" fontSize="13" fontWeight="600" letterSpacing="0.08em">CONTENT ENGINE</text>
-        <text x="586" y="271" textAnchor="end" fill="#d9854c" fontSize="9.5" fontWeight="600" letterSpacing="0.09em">ASSEMBLE / GENERATE</text>
+        <text x="80" y="372" fill="#f2f0e9" fontSize="14" fontWeight="700" letterSpacing="0.08em">CONTENT ENGINE</text>
+        <text x="602" y="372" textAnchor="end" fill="#d9854c" fontSize="10.5" fontWeight="600" letterSpacing="0.09em">ASSEMBLE / GENERATE</text>
 
         {/* 3 Sub-Boxes: Voice, Visuals, Assembly */}
         {/* Branch 1: Voice */}
-        <rect x="88" y="284" width="154" height="38" rx="7" fill="#141613" stroke="rgba(242, 240, 233, 0.2)" strokeWidth="1" />
-        <text x="165" y="308" textAnchor="middle" fill="#c5c9be" fontSize="10.5" fontWeight="600" letterSpacing="0.08em">VOICE</text>
-        <path d="M 340 274 L 165 284" stroke="rgba(217, 133, 76, 0.4)" strokeWidth="1" strokeDasharray="3 2" />
+        <rect x="74" y="390" width="160" height="48" rx="8" fill="#141613" stroke="rgba(242, 240, 233, 0.24)" strokeWidth="1" />
+        <text x="154" y="420" textAnchor="middle" fill="#dce0d6" fontSize="11.5" fontWeight="600" letterSpacing="0.08em">VOICE</text>
+        <path d="M 340 376 L 154 390" stroke="rgba(217, 133, 76, 0.45)" strokeWidth="1.1" strokeDasharray="3 2" />
 
         {/* Branch 2: Visuals */}
-        <rect x="263" y="284" width="154" height="38" rx="7" fill="#141613" stroke="rgba(242, 240, 233, 0.2)" strokeWidth="1" />
-        <text x="340" y="308" textAnchor="middle" fill="#c5c9be" fontSize="10.5" fontWeight="600" letterSpacing="0.08em">VISUALS</text>
-        <path d="M 340 274 L 340 284" stroke="rgba(217, 133, 76, 0.6)" strokeWidth="1" />
+        <rect x="260" y="390" width="160" height="48" rx="8" fill="#141613" stroke="rgba(242, 240, 233, 0.24)" strokeWidth="1" />
+        <text x="340" y="420" textAnchor="middle" fill="#dce0d6" fontSize="11.5" fontWeight="600" letterSpacing="0.08em">VISUALS</text>
+        <path d="M 340 376 L 340 390" stroke="rgba(217, 133, 76, 0.7)" strokeWidth="1.1" />
 
         {/* Branch 3: Assembly */}
-        <rect x="438" y="284" width="154" height="38" rx="7" fill="#141613" stroke="rgba(242, 240, 233, 0.2)" strokeWidth="1" />
-        <text x="515" y="308" textAnchor="middle" fill="#c5c9be" fontSize="10.5" fontWeight="600" letterSpacing="0.08em">ASSEMBLY</text>
-        <path d="M 340 274 L 515 284" stroke="rgba(217, 133, 76, 0.4)" strokeWidth="1" strokeDasharray="3 2" />
+        <rect x="446" y="390" width="160" height="48" rx="8" fill="#141613" stroke="rgba(242, 240, 233, 0.24)" strokeWidth="1" />
+        <text x="526" y="420" textAnchor="middle" fill="#dce0d6" fontSize="11.5" fontWeight="600" letterSpacing="0.08em">ASSEMBLY</text>
+        <path d="M 340 376 L 526 390" stroke="rgba(217, 133, 76, 0.45)" strokeWidth="1.1" strokeDasharray="3 2" />
       </g>
 
       {/* Connector 4 */}
-      <line x1="340" y1="336" x2="340" y2="356" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1" />
-      <polygon points="336.5,353 340,357 343.5,353" fill="rgba(242, 240, 233, 0.5)" />
-      <circle cx="340" cy="336" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
-        <animate attributeName="cy" values="336;356" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
+      <line x1="340" y1="460" x2="340" y2="506" stroke="rgba(242, 240, 233, 0.35)" strokeWidth="1.3" />
+      <polygon points="335,501 340,507 345,501" fill="rgba(242, 240, 233, 0.7)" />
+      <circle cx="340" cy="460" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
+        <animate attributeName="cy" values="460;506" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.8s" begin="0.9s" repeatCount="indefinite" />
       </circle>
 
       {/* ── STAGE 5: RENDER ── */}
       <g className="frameos-node">
-        <rect x="70" y="356" width="540" height="40" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.26)" strokeWidth="1" />
-        <text x="94" y="381" fill="#f2f0e9" fontSize="13" fontWeight="600" letterSpacing="0.08em">RENDER</text>
-        <text x="586" y="381" textAnchor="end" fill="#8a8f85" fontSize="10" letterSpacing="0.1em">PRODUCE</text>
+        <rect x="54" y="506" width="572" height="46" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1.1" />
+        <text x="80" y="535" fill="#f2f0e9" fontSize="14" fontWeight="700" letterSpacing="0.08em">RENDER</text>
+        <text x="602" y="535" textAnchor="end" fill="#9aa095" fontSize="11" fontWeight="600" letterSpacing="0.1em">PRODUCE</text>
       </g>
 
       {/* Connector 5 */}
-      <line x1="340" y1="396" x2="340" y2="416" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1" />
-      <polygon points="336.5,413 340,417 343.5,413" fill="rgba(242, 240, 233, 0.5)" />
-      <circle cx="340" cy="396" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
-        <animate attributeName="cy" values="396;416" dur="1.8s" begin="1.2s" repeatCount="indefinite" />
+      <line x1="340" y1="552" x2="340" y2="598" stroke="rgba(242, 240, 233, 0.35)" strokeWidth="1.3" />
+      <polygon points="335,593 340,599 345,593" fill="rgba(242, 240, 233, 0.7)" />
+      <circle cx="340" cy="552" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
+        <animate attributeName="cy" values="552;598" dur="1.8s" begin="1.2s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.8s" begin="1.2s" repeatCount="indefinite" />
       </circle>
 
       {/* ── STAGE 6: DISTRIBUTE ── */}
       <g className="frameos-node">
-        <rect x="70" y="416" width="540" height="40" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.26)" strokeWidth="1" />
-        <text x="94" y="441" fill="#f2f0e9" fontSize="13" fontWeight="600" letterSpacing="0.08em">DISTRIBUTE</text>
-        <text x="586" y="441" textAnchor="end" fill="#8a8f85" fontSize="10" letterSpacing="0.1em">PUBLISH</text>
+        <rect x="54" y="598" width="572" height="46" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1.1" />
+        <text x="80" y="627" fill="#f2f0e9" fontSize="14" fontWeight="700" letterSpacing="0.08em">DISTRIBUTE</text>
+        <text x="602" y="627" textAnchor="end" fill="#9aa095" fontSize="11" fontWeight="600" letterSpacing="0.1em">PUBLISH</text>
       </g>
 
       {/* Connector 6 */}
-      <line x1="340" y1="456" x2="340" y2="476" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1" />
-      <polygon points="336.5,473 340,477 343.5,473" fill="rgba(242, 240, 233, 0.5)" />
-      <circle cx="340" cy="456" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
-        <animate attributeName="cy" values="456;476" dur="1.8s" begin="1.5s" repeatCount="indefinite" />
+      <line x1="340" y1="644" x2="340" y2="690" stroke="rgba(242, 240, 233, 0.35)" strokeWidth="1.3" />
+      <polygon points="335,685 340,691 345,685" fill="rgba(242, 240, 233, 0.7)" />
+      <circle cx="340" cy="644" r="3.5" fill="#d9854c" filter="url(#frameos-orange-glow)">
+        <animate attributeName="cy" values="644;690" dur="1.8s" begin="1.5s" repeatCount="indefinite" />
         <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.8s" begin="1.5s" repeatCount="indefinite" />
       </circle>
 
       {/* ── STAGE 7: ANALYTICS & FEEDBACK ── */}
       <g className="frameos-feedback-row">
         {/* Analytics Box */}
-        <rect x="70" y="476" width="260" height="52" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1" />
-        <text x="94" y="500" fill="#f2f0e9" fontSize="12" fontWeight="600" letterSpacing="0.08em">ANALYTICS</text>
-        <text x="94" y="516" fill="#8a8f85" fontSize="9.5" letterSpacing="0.08em">MEASURE</text>
+        <rect x="54" y="690" width="276" height="58" rx="10" fill="#181a16" stroke="rgba(242, 240, 233, 0.28)" strokeWidth="1.1" />
+        <text x="78" y="717" fill="#f2f0e9" fontSize="13" fontWeight="700" letterSpacing="0.08em">ANALYTICS</text>
+        <text x="78" y="736" fill="#9aa095" fontSize="10.5" fontWeight="600" letterSpacing="0.08em">MEASURE</text>
 
         {/* Feedback Box */}
-        <rect x="350" y="476" width="260" height="52" rx="10" fill="#1b1814" stroke="rgba(217, 133, 76, 0.85)" strokeWidth="1.2" />
-        <text x="374" y="500" fill="#f2f0e9" fontSize="12" fontWeight="600" letterSpacing="0.08em">FEEDBACK</text>
-        <text x="374" y="516" fill="#d9854c" fontSize="9.5" fontWeight="500" letterSpacing="0.08em">LEARN</text>
+        <rect x="350" y="690" width="276" height="58" rx="10" fill="#1b1814" stroke="rgba(217, 133, 76, 0.9)" strokeWidth="1.3" />
+        <text x="374" y="717" fill="#f2f0e9" fontSize="13" fontWeight="700" letterSpacing="0.08em">FEEDBACK</text>
+        <text x="374" y="736" fill="#d9854c" fontSize="10.5" fontWeight="600" letterSpacing="0.08em">LEARN</text>
       </g>
 
       {/* ── FEEDBACK LOOP (Complete and 100% visible) ── */}
       <g className="frameos-loop">
         {/* Loop Path from Feedback around to Trend */}
         <path
-          d="M 480 528 V 554 C 480 568, 470 574, 455 574 H 56 C 42 574, 34 566, 34 550 V 96 C 34 78, 44 72, 60 72 H 68"
+          d="M 488 748 V 772 C 488 786, 476 792, 456 792 H 42 C 26 792, 18 782, 18 764 V 104 C 18 84, 28 76, 46 76 H 52"
           fill="none"
-          stroke="rgba(217, 133, 76, 0.72)"
-          strokeWidth="1.2"
+          stroke="rgba(217, 133, 76, 0.8)"
+          strokeWidth="1.3"
           strokeDasharray="5 3"
         />
-        <polygon points="68,69 74,72 68,75" fill="#d9854c" />
+        <polygon points="52,73 58,76 52,79" fill="#d9854c" />
 
         {/* Loop Label */}
-        <text x="340" y="596" textAnchor="middle" fill="#d9854c" fontSize="10.5" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.1em">
+        <text x="340" y="818" textAnchor="middle" fill="#d9854c" fontSize="11.5" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.1em">
           ↺ FEEDBACK LOOP / BACK TO TREND DETECTION
         </text>
       </g>
 
       {/* ── FOOTER ── */}
       <g className="frameos-footer">
-        <line x1="32" y1="632" x2="648" y2="632" stroke="rgba(242, 240, 233, 0.08)" strokeWidth="1" />
-        <text x="32" y="662" fill="#8a8f85" fontSize="10" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.1em">
+        <line x1="28" y1="846" x2="652" y2="846" stroke="rgba(242, 240, 233, 0.1)" strokeWidth="1" />
+        <text x="28" y="868" fill="#9aa095" fontSize="10.5" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.1em">
           AUTONOMOUS MEDIA LOOP
         </text>
-        <text x="648" y="662" textAnchor="end" fill="#d9854c" fontSize="10" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.08em">
+        <text x="652" y="868" textAnchor="end" fill="#d9854c" fontSize="10.5" fontFamily="var(--font-mono, monospace)" fontWeight="600" letterSpacing="0.08em">
           TREND → RESEARCH → CREATE → DISTRIBUTE → LEARN
         </text>
       </g>

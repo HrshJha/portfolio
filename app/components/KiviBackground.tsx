@@ -48,17 +48,17 @@ export function DitherArt({
   let seamRepeat = 'no-repeat';
 
   if (seam === 'bottom') {
-    seamImage = 'linear-gradient(to bottom, #000 0%, #000 calc(100% - 140px), transparent 100%)';
+    seamImage = 'linear-gradient(to bottom, #000 0%, #000 calc(100% - 180px), transparent 100%)';
     seamSize = '100% 100%';
     seamPos = 'top left';
     seamRepeat = 'no-repeat';
   } else if (seam === 'top') {
-    seamImage = 'linear-gradient(to bottom, transparent 0%, #000 140px, #000 100%)';
+    seamImage = 'linear-gradient(to bottom, transparent 0%, #000 180px, #000 100%)';
     seamSize = '100% 100%';
     seamPos = 'top left';
     seamRepeat = 'no-repeat';
   } else if (seam === 'both') {
-    seamImage = 'linear-gradient(to bottom, transparent 0%, #000 140px, #000 calc(100% - 140px), transparent 100%)';
+    seamImage = 'linear-gradient(to bottom, transparent 0%, #000 180px, #000 calc(100% - 180px), transparent 100%)';
     seamSize = '100% 100%';
     seamPos = 'top left';
     seamRepeat = 'no-repeat';
