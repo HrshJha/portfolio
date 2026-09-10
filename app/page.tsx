@@ -1,16 +1,22 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import NavBar from "./components/NavBar";
 import KiviBackground from "./components/KiviBackground";
+import { CursorFieldProvider } from "./components/cursor-field/CursorFieldProvider";
+import { HalftoneReveal } from "./components/cursor-field/HalftoneReveal";
+import { ParticleTrail } from "./components/cursor-field/ParticleTrail";
 import { projects, type Project } from "./data/projects";
 
 const toolkit = [
   "Python", "TypeScript", "JavaScript", "FastAPI", "React", "Next.js",
   "Node.js", "PostgreSQL", "Redis", "Docker", "FAISS", "PyTorch",
 ];
+
+const showcaseProjects = projects.filter((project) => project.id !== "candidate-intelligence-system");
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const reduceMotion = useReducedMotion();
@@ -30,13 +36,8 @@ function Reveal({ children, className = "" }: { children: React.ReactNode; class
 
 function ProjectFeature({ project, index }: { project: Project; index: number }) {
   return (
-    <Reveal>
-      <article className={`portfolio-work-item${index % 2 === 1 ? " portfolio-work-item--reverse" : ""}`}>
-        <div className="portfolio-work-index">
-          <span>{project.index}</span>
-          <span>{project.year}</span>
-        </div>
-
+    <Reveal className={index === 0 ? "portfolio-project-featured-wrap" : "portfolio-project-tile-wrap"}>
+      <article className={`portfolio-work-item${index === 0 ? " portfolio-work-item--featured" : " portfolio-work-item--tile"}`}>
         <Link
           href={`/work/${project.id}`}
           className="portfolio-work-media"
@@ -68,6 +69,9 @@ function ProjectFeature({ project, index }: { project: Project; index: number })
 }
 
 export default function Home() {
+  const heroRef = useRef<HTMLElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
+
   return (
     <>
       <KiviBackground />
@@ -76,33 +80,45 @@ export default function Home() {
         <NavBar />
 
         <main id="top" className="portfolio-main">
-          <section className="portfolio-hero" aria-labelledby="hero-heading">
-            <div className="portfolio-hero-topline">
-              <span>HARSH KUMAR JHA</span>
-              <span>DELHI · INDIA</span>
-            </div>
+          {/* ── Hero — cursor-reactive halftone field ── */}
+          <CursorFieldProvider fieldRootRef={heroRef}>
+            {/* Effects are absolutely positioned inside the section via heroRef */}
+            <HalftoneReveal />
+            <ParticleTrail />
+          </CursorFieldProvider>
 
-            <div className="portfolio-hero-grid">
-              <div className="portfolio-hero-statement">
-                <p className="portfolio-eyebrow">ENGINEERING / AI / FILM</p>
-                <h1 id="hero-heading">I build systems.<br /><span>I shoot stories.</span></h1>
+          <section
+            ref={heroRef}
+            className="portfolio-hero"
+            aria-labelledby="hero-heading"
+            style={{ position: 'relative', overflow: 'hidden' }}
+          >
+              <div className="portfolio-hero-topline">
+                <span>HARSH KUMAR JHA</span>
+                <span>DELHI · INDIA</span>
               </div>
 
-              <div className="portfolio-hero-aside">
-                <p>
-                  AI/ML engineering student interested in the distance between a good idea and a working system.
-                </p>
-                <a href="#work" className="portfolio-inline-link portfolio-inline-link--hero">
-                  See selected work <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-              </div>
-            </div>
+              <div className="portfolio-hero-grid">
+                <div className="portfolio-hero-statement">
+                  <p className="portfolio-eyebrow">ENGINEERING / AI / FILM</p>
+                  <h1 id="hero-heading">I build systems.<br /><span>I shoot stories.</span></h1>
+                </div>
 
-            <div className="portfolio-hero-baseline">
-              <span>01 — INTRO</span>
-              <span>AI SYSTEMS · BACKEND · VISUAL STORYTELLING</span>
-              <a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a>
-            </div>
+                <div className="portfolio-hero-aside">
+                  <p>
+                    AI/ML engineering student interested in the distance between a good idea and a working system.
+                  </p>
+                  <a href="#work" className="portfolio-inline-link portfolio-inline-link--hero">
+                    See selected work <ArrowUpRight size={15} aria-hidden="true" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="portfolio-hero-baseline">
+                <span>01 — INTRO</span>
+                <span>AI SYSTEMS · BACKEND · VISUAL STORYTELLING</span>
+                <a href="#work">Scroll to explore <span aria-hidden="true">↓</span></a>
+              </div>
           </section>
 
           <section id="work" data-section="work" className="portfolio-section portfolio-work-section" aria-labelledby="work-heading">
@@ -111,10 +127,10 @@ export default function Home() {
                 <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
                 <h2 id="work-heading">Built to hold up<br />after the demo.</h2>
               </div>
-              <p className="portfolio-section-intro">Four systems shaped around retrieval, evaluation, orchestration, and evidence.</p>
+              <p className="portfolio-section-intro">Three systems shaped around orchestration, evaluation, and evidence.</p>
             </div>
             <div className="portfolio-work-list">
-              {projects.map((project, index) => <ProjectFeature key={project.id} project={project} index={index} />)}
+              {showcaseProjects.map((project, index) => <ProjectFeature key={project.id} project={project} index={index} />)}
             </div>
           </section>
 
@@ -180,15 +196,28 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="contact" data-section="contact" className="portfolio-contact-section" aria-labelledby="contact-heading">
-            <p className="portfolio-eyebrow">06 — CONTACT</p>
-            <div className="portfolio-contact-grid">
-              <h2 id="contact-heading">Let&apos;s make<br /><span>something useful.</span></h2>
-              <div>
-                <p>Have a system to build, a story to shape, or just a good question?</p>
-                <a href="mailto:jhaharsh451@gmail.com" className="portfolio-contact-link">jhaharsh451@gmail.com <ArrowUpRight size={17} aria-hidden="true" /></a>
+          {/* ── Contact — cursor-reactive halftone field ── */}
+          <CursorFieldProvider fieldRootRef={contactRef}>
+            <HalftoneReveal />
+            <ParticleTrail />
+          </CursorFieldProvider>
+
+          <section
+            ref={contactRef}
+            id="contact"
+            data-section="contact"
+            className="portfolio-contact-section"
+            aria-labelledby="contact-heading"
+            style={{ position: 'relative', overflow: 'hidden' }}
+          >
+              <p className="portfolio-eyebrow">06 — CONTACT</p>
+              <div className="portfolio-contact-grid">
+                <h2 id="contact-heading">Let&apos;s make<br /><span>something useful.</span></h2>
+                <div>
+                  <p>Have a system to build, a story to shape, or just a good question?</p>
+                  <a href="mailto:jhaharsh451@gmail.com" className="portfolio-contact-link">jhaharsh451@gmail.com <ArrowUpRight size={17} aria-hidden="true" /></a>
+                </div>
               </div>
-            </div>
           </section>
         </main>
 

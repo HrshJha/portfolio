@@ -1838,7 +1838,7 @@ body:has(.portfolio-main) { color: var(--portfolio-cream); }
 .portfolio-work-media {
   position: relative;
   display: block;
-  aspect-ratio: 1.56 / 1;
+  height: clamp(250px, 32vw, 500px);
   overflow: hidden;
   background: rgba(242, 240, 233, 0.06);
 }
@@ -2030,7 +2030,7 @@ body:has(.portfolio-main) { color: var(--portfolio-cream); }
   .portfolio-about-content h2,
   .portfolio-contact-grid h2 { font-size: clamp(2.7rem, 12vw, 4.8rem); }
   .portfolio-work-item { padding-block: 34px 52px; }
-  .portfolio-work-media { aspect-ratio: 1.18 / 1; }
+  .portfolio-work-media { height: auto; aspect-ratio: 1.18 / 1; }
   .portfolio-work-copy h3 { font-size: 2.5rem; }
   .portfolio-work-footer { align-items: flex-start; flex-direction: column; }
   .portfolio-experience-row { grid-template-columns: 32px 1fr; gap: 14px; }
@@ -4302,4 +4302,118 @@ footer {
     gap: 14px;
     flex-wrap: wrap;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CURSOR FIELD — stacking context + accessibility guards
+   ═══════════════════════════════════════════════════════════════════ */
+
+/*
+  The CursorFieldProvider wrapper divs use inline position:relative +
+  overflow:hidden. The sections inside them already have position:relative
+  and z-index:10 via inline style, so content is always above the effects.
+  These rules are just safety nets for any inherited overflow/position.
+*/
+.portfolio-hero {
+  isolation: isolate;
+}
+
+.portfolio-contact-section {
+  isolation: isolate;
+}
+
+/* Hide the particle canvas on touch/coarse-pointer devices */
+@media (hover: none), (pointer: coarse) {
+  canvas[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* Suppress dynamic cursor effects when reduced motion is requested */
+@media (prefers-reduced-motion: reduce) {
+  canvas[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* Project showcase composition: one large FrameOS feature, then a vertical stack. */
+.portfolio-work-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.portfolio-project-featured-wrap { grid-column: 1 / -1; width: 100%; }
+.portfolio-project-tile-wrap { width: 100%; }
+
+.portfolio-work-item--featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  padding-block: clamp(42px, 6vw, 88px);
+  border-bottom: 1px solid var(--portfolio-line);
+}
+
+.portfolio-work-item--featured .portfolio-work-media,
+.portfolio-work-item--featured .portfolio-work-copy {
+  grid-column: 1;
+}
+
+.portfolio-work-item--featured .portfolio-work-media {
+  height: clamp(260px, 30vw, 440px);
+}
+
+.portfolio-work-item--featured .portfolio-work-copy {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(240px, 1fr);
+  column-gap: clamp(28px, 7vw, 120px);
+  align-items: start;
+  padding-top: 8px;
+}
+
+.portfolio-work-item--featured .portfolio-work-copy > .portfolio-eyebrow,
+.portfolio-work-item--featured .portfolio-work-copy > h3 { grid-column: 1; }
+.portfolio-work-item--featured .portfolio-work-copy > .portfolio-work-thesis { grid-column: 1; }
+.portfolio-work-item--featured .portfolio-work-copy > .portfolio-work-description { grid-column: 2; grid-row: 1 / span 3; align-self: end; }
+.portfolio-work-item--featured .portfolio-work-footer { grid-column: 1 / -1; width: 100%; }
+
+.portfolio-work-item--tile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  height: 100%;
+  margin-top: 0;
+  padding: 24px 24px 28px;
+  border: 1px solid var(--portfolio-line);
+  background: rgba(242, 240, 233, 0.035);
+}
+
+.portfolio-work-item--tile .portfolio-work-media,
+.portfolio-work-item--tile .portfolio-work-copy { grid-column: 1; }
+.portfolio-work-item--tile .portfolio-work-media {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: rgba(10, 12, 6, 0.72);
+}
+
+.portfolio-work-item--tile .portfolio-work-media video {
+  object-fit: cover;
+  object-position: center;
+  background: rgba(10, 12, 6, 0.72);
+}
+.portfolio-work-item--tile .portfolio-work-copy { padding-top: 6px; }
+
+@media (max-width: 900px) {
+  .portfolio-work-list { grid-template-columns: 1fr; }
+  .portfolio-project-featured-wrap { grid-column: auto; }
+  .portfolio-work-item--featured .portfolio-work-copy { grid-template-columns: 1fr; gap: 0; }
+  .portfolio-work-item--featured .portfolio-work-copy > .portfolio-work-description { grid-column: 1; grid-row: auto; align-self: auto; }
+  .portfolio-work-item--featured .portfolio-work-footer { grid-column: 1; }
+}
+
+@media (max-width: 560px) {
+  .portfolio-work-item--featured { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .portfolio-work-item--featured .portfolio-work-media { height: auto; aspect-ratio: 1.18 / 1; }
+  .portfolio-work-item--tile { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 16px 16px 22px; }
+  .portfolio-work-item--tile .portfolio-work-media { height: auto; aspect-ratio: 16 / 9; }
 }
