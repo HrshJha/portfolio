@@ -60,6 +60,48 @@ const showcaseProjects = projects.filter(
   (project) => project.id !== "candidate-intelligence-system" && project.id !== "appforge-ai",
 );
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://hrshjha.vercel.app/#person",
+      name: "Harsh Kumar Jha",
+      url: "https://hrshjha.vercel.app/",
+      jobTitle: "Engineer / AI Builder",
+      description: "Harsh Kumar Jha builds AI systems, software, and products from Delhi, India.",
+      email: "mailto:jhaharsh451@gmail.com",
+      homeLocation: {
+        "@type": "Place",
+        name: "Delhi, India",
+      },
+      sameAs: [
+        "https://github.com/HrshJha",
+        "https://www.linkedin.com/in/hrshjha",
+        "https://x.com/haarshjha",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://hrshjha.vercel.app/#website",
+      url: "https://hrshjha.vercel.app/",
+      name: "Harsh Kumar Jha — Engineer / AI Builder",
+      description: "Harsh Kumar Jha builds AI systems, software, and products from Delhi, India.",
+      publisher: { "@id": "https://hrshjha.vercel.app/#person" },
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://hrshjha.vercel.app/#webpage",
+      url: "https://hrshjha.vercel.app/",
+      name: "Harsh Kumar Jha — Engineer / AI Builder",
+      description: "Harsh Kumar Jha builds AI systems, software, and products from Delhi, India.",
+      isPartOf: { "@id": "https://hrshjha.vercel.app/#website" },
+      about: { "@id": "https://hrshjha.vercel.app/#person" },
+      mainEntity: { "@id": "https://hrshjha.vercel.app/#person" },
+    },
+  ],
+};
+
 import {
   FrameOSPipeline,
   VeraPipeline,
@@ -287,6 +329,7 @@ function ExperienceEntry({
 export default function Home() {
   return (
     <div className="site-shell">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <NavBar />
 
         <main id="top" className="portfolio-main">
@@ -315,7 +358,7 @@ export default function Home() {
                 <h1 id="hero-heading">I build AI systems,<br /><span>software and products.</span></h1>
                 <div className="portfolio-hero-support">
                   <p>HARSH KUMAR JHA · DELHI, INDIA<br /><span>ECE @ MSIT · AI / ML · SOFTWARE</span></p>
-                  <p className="portfolio-hero-support-copy">I build practical AI systems, software and product experiments with robust architecture and clean interfaces.</p>
+                  <p className="portfolio-hero-support-copy">Harsh Kumar Jha is an engineer and AI builder in Delhi, India. He builds practical AI systems, software, and product experiments with robust architecture and clean interfaces.</p>
                   <a href="#work" className="portfolio-inline-link">
                     View work <ArrowUpRight size={15} aria-hidden="true" />
                   </a>
