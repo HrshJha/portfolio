@@ -274,7 +274,7 @@ function ExperienceEntry({
       <header className="portfolio-experience-entry-header">
         <div>
           <h3>{company}</h3>
-          <p>{role}</p>
+          <div className="portfolio-experience-entry-role">{role}</div>
         </div>
         <time>{date}</time>
       </header>
@@ -357,7 +357,7 @@ export default function Home() {
                 <p className="portfolio-hero-kicker">ENGINEER / AI BUILDER</p>
                 <h1 id="hero-heading">I build AI systems,<br /><span>software and products.</span></h1>
                 <div className="portfolio-hero-support">
-                  <p>HARSH KUMAR JHA · DELHI, INDIA<br /><span>ECE @ MSIT · AI / ML · SOFTWARE</span></p>
+                  <div className="portfolio-hero-support-meta">HARSH KUMAR JHA · DELHI, INDIA<br /><span>ECE @ MSIT · AI / ML · SOFTWARE</span></div>
                   <p className="portfolio-hero-support-copy">Harsh Kumar Jha is an engineer and AI builder in Delhi, India. He builds practical AI systems, software, and product experiments with robust architecture and clean interfaces.</p>
                   <a href="#work" className="portfolio-inline-link">
                     View work <ArrowUpRight size={15} aria-hidden="true" />
@@ -436,6 +436,11 @@ export default function Home() {
                     <p className="portfolio-experience-kicker">03 — EXPERIENCE</p>
                     <h2 id="experience-heading">Experience</h2>
                   </div>
+                  <div className="portfolio-experience-proof" aria-label="Verify Harsh Kumar Jha's work">
+                    <span>VERIFY THE WORK</span>
+                    <a href="/harshaha.pdf" target="_blank" rel="noreferrer">RESUME <ArrowUpRight size={12} aria-hidden="true" /></a>
+                    <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer">GITHUB <ArrowUpRight size={12} aria-hidden="true" /></a>
+                  </div>
                 </header>
 
                 <ExperienceEntry
@@ -489,7 +494,7 @@ export default function Home() {
               </div>
               <div className="portfolio-about-content">
                 <h2 id="about-heading">AI systems.<br />Software products.<br /><span>Engineering-led.</span></h2>
-                <p>I&apos;m an ECE student at MSIT focused on AI/ML, backend systems, and product engineering. I like taking ideas from prototype to software people can use with a focus on speed, reliability, and precision.</p>
+                <p>I&apos;m Harsh Kumar Jha, an engineer and AI builder focused on AI/ML, backend systems, and product engineering. My work includes AI safety and evaluation research at domaiynlabs LLP, content development at MathonGo, and projects such as FrameOS, Vera, and Hallucination Hunter.</p>
                 <div className="portfolio-toolkit" aria-label="Technology stack">
                   <span className="portfolio-eyebrow">CURRENT TOOLKIT</span>
                   <div>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
