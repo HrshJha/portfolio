@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://hrshjha.vercel.app/sitemap.xml",
+    sitemap: "https://contactharsh.in/sitemap.xml",
   };
 }
