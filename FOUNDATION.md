@@ -228,7 +228,7 @@ Key Responsibilities:
 - Connected evaluation work to source-backed portfolio themes around AI reliability.
 
 Key Project: Hallucination Hunter
-(https://hrshjha.vercel.app/projects/hallucination-hunter)
+(https://contactharsh.in/work/hallucination-hunter)
 
 What I Learned:
 - LLM outputs need evaluation methods that make failures inspectable.
