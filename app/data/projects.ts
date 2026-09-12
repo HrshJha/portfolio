@@ -103,7 +103,7 @@ export const projects: Project[] = [
     video: "/videos/hallucination-hunter.mp4",
     poster: "/posters/hallucination-hunter.jpg",
     github: "https://github.com/HrshJha/Hallucination-Hunter",
-    cardStack: ["Python", "FastAPI", "PyTorch", "DeBERTa-v3", "Hugging Face"],
+    cardStack: ["Python", "FastAPI", "PyTorch", "DeBERTa-v3+"],
     fullStack: ["Python", "FastAPI", "PyTorch", "DeBERTa-v3", "Hugging Face", "scikit-learn", "Docker"],
     problem: "AI-generated answers can sound confident while containing unsupported or contradictory claims. Whole-response checks are too coarse: partial hallucinations can hide inside otherwise accurate answers.",
     approach: "The pipeline decomposes an AI answer into individual claims, grounds each claim against source text using NLI and semantic similarity, then presents readable evidence so users can see which parts are supported, contradicted, or unsupported — without relying on a single opaque score.",
