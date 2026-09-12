@@ -1841,6 +1841,14 @@ body:has(.portfolio-main) { color: var(--portfolio-cream); }
   letter-spacing: -0.03em;
 }
 
+.portfolio-logo {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  align-self: center;
+  object-fit: contain;
+}
+
 .portfolio-wordmark i {
   color: var(--portfolio-orange);
   font-style: normal;
@@ -2216,6 +2224,7 @@ body:has(.portfolio-main) { color: var(--portfolio-cream); }
 
 @media (max-width: 560px) {
   .portfolio-nav { padding-top: 14px; padding-bottom: 8px; gap: 4px 14px; }
+  .portfolio-logo { width: 28px; height: 28px; flex-basis: 28px; }
   .portfolio-wordmark small { display: none; }
   .portfolio-nav-actions { gap: 12px; font-size: 12px; }
   .portfolio-nav-links { gap: 18px; font-size: 12px; }
