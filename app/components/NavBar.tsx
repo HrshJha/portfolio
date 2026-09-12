@@ -41,6 +41,7 @@ export default function NavBar() {
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
     >
       <a href="#top" className="portfolio-wordmark" aria-label="Harsh Kumar Jha — home">
+        <img src="/assets/brand/hkj-logo.png" alt="" className="portfolio-logo" />
         <span>HKJ</span><i aria-hidden="true">/</i><small>ENGINEER / AI BUILDER</small>
       </a>
 
