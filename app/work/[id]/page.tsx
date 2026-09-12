@@ -16,6 +16,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: `${project.title} — Harsh Kumar Jha`,
     description: project.thesis,
+    alternates: {
+      canonical: `/work/${project.id}`,
+    },
   };
 }
 
