@@ -8,26 +8,15 @@ import NavBar from "./components/NavBar";
 import { DitherArt, HeroProximityWave } from "./components/KiviBackground";
 import { projects, type Project } from "./data/projects";
 
-const toolkit = [
-  "Python",
-  "Java",
-  "C++",
-  "SQL",
-  "PyTorch",
-  "TensorFlow/Keras",
-  "scikit-learn",
-  "Transformers (Hugging Face)",
-  "Sentence Transformers",
-  "NumPy",
-  "Pandas",
-  "Matplotlib",
-  "FastAPI",
-  "REST APIs",
-  "Git",
-  "GitHub",
-  "Docker",
-  "Jupyter Notebook",
-  "PostgreSQL",
+const toolkitGroups = [
+  { label: "Languages", items: ["Python", "Java", "C++", "SQL"] },
+  {
+    label: "AI / ML",
+    items: ["PyTorch", "TensorFlow/Keras", "scikit-learn", "Transformers (Hugging Face)", "Sentence Transformers"],
+  },
+  { label: "Data / Visualization", items: ["NumPy", "Pandas", "Matplotlib"] },
+  { label: "Backend / APIs", items: ["FastAPI", "REST APIs"] },
+  { label: "Tools / Infrastructure", items: ["Git", "GitHub", "Docker", "Jupyter Notebook", "PostgreSQL"] },
 ];
 
 const domainLabsMeta = ["AI SAFETY", "LLM EVALUATION", "RED TEAMING", "BAYORA", "ROBUSTNESS"];
@@ -56,48 +45,6 @@ const mathonGoDetails = [
 const showcaseProjects = projects.filter(
   (project) => project.id !== "candidate-intelligence-system" && project.id !== "appforge-ai",
 );
-
-const structuredData = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      "@id": "https://hrshjha.vercel.app/#person",
-      name: "Harsh Kumar Jha",
-      url: "https://hrshjha.vercel.app/",
-      jobTitle: "Engineer / AI Builder",
-      description: "Harsh Kumar Jha builds AI systems, software, and products from Delhi, India.",
-      email: "mailto:jhaharsh451@gmail.com",
-      homeLocation: {
-        "@type": "Place",
-        name: "Delhi, India",
-      },
-      sameAs: [
-        "https://github.com/HrshJha",
-        "https://www.linkedin.com/in/hrshjha",
-        "https://x.com/haarshjha",
-      ],
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://hrshjha.vercel.app/#website",
-      url: "https://hrshjha.vercel.app/",
-      name: "Harsh Kumar Jha — Engineer / AI Builder",
-      description: "Harsh Kumar Jha builds AI systems, software, and products from Delhi, India.",
-      publisher: { "@id": "https://hrshjha.vercel.app/#person" },
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://hrshjha.vercel.app/#webpage",
-      url: "https://hrshjha.vercel.app/",
-      name: "Harsh Kumar Jha — Engineer / AI Builder",
-      description: "Harsh Kumar Jha builds AI systems, software, and products from Delhi, India.",
-      isPartOf: { "@id": "https://hrshjha.vercel.app/#website" },
-      about: { "@id": "https://hrshjha.vercel.app/#person" },
-      mainEntity: { "@id": "https://hrshjha.vercel.app/#person" },
-    },
-  ],
-};
 
 import {
   FrameOSPipeline,
@@ -189,7 +136,7 @@ function ProjectCard({
 
         <div className="portfolio-project-action">
           <Link href={`/work/${project.id}`} className="portfolio-writeup-link">
-            SEE WHAT&apos;S UNDERNEATH <ArrowUpRight size={13} aria-hidden="true" />
+            View {project.title} case study <ArrowUpRight size={13} aria-hidden="true" />
           </Link>
         </div>
       </div>
@@ -326,7 +273,6 @@ function ExperienceEntry({
 export default function Home() {
   return (
     <div className="site-shell">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <NavBar />
 
         <main id="top" className="portfolio-main">
@@ -352,7 +298,7 @@ export default function Home() {
 
               <div className="portfolio-hero-composition">
                 <p className="portfolio-hero-kicker">ENGINEER / AI BUILDER</p>
-                <h1 id="hero-heading">I build AI systems,<br /><span>software and products.</span></h1>
+                <h1 id="hero-heading">I&apos;m Harsh Kumar Jha, an <span>AI/ML engineer</span><br />building AI systems, software and products.</h1>
                 <div className="portfolio-hero-support">
                   <div className="portfolio-hero-support-meta">HARSH KUMAR JHA · DELHI, INDIA<br /><span>ECE @ MSIT · AI / ML · SOFTWARE</span></div>
                   <p className="portfolio-hero-support-copy">Harsh Kumar Jha is an engineer and AI builder in Delhi, India. He builds practical AI systems, software, and product experiments with robust architecture and clean interfaces.</p>
@@ -492,10 +438,19 @@ export default function Home() {
               <div className="portfolio-about-content">
                 <h2 id="about-heading">AI systems.<br />Software products.<br /><span>Engineering-led.</span></h2>
                 <p>I&apos;m Harsh Kumar Jha, an engineer and AI builder focused on AI/ML, backend systems, and product engineering. My work includes AI safety and evaluation research at domaiynlabs LLP, content development at MathonGo, and projects such as FrameOS, Vera, and Hallucination Hunter.</p>
-                <div className="portfolio-toolkit" aria-label="Technology stack">
-                  <span className="portfolio-eyebrow">CURRENT TOOLKIT</span>
-                  <div>{toolkit.map((item) => <span key={item}>{item}</span>)}</div>
-                </div>
+                <section className="portfolio-toolkit" aria-labelledby="toolkit-heading">
+                  <h2 id="toolkit-heading" className="portfolio-eyebrow">CURRENT TOOLKIT</h2>
+                  <div className="portfolio-toolkit-groups">
+                    {toolkitGroups.map((group) => (
+                      <div key={group.label} className="portfolio-toolkit-group">
+                        <h3>{group.label}</h3>
+                        <ul>
+                          {group.items.map((item) => <li key={item}>{item}</li>)}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </section>
               </div>
             </div>
 
