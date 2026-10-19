@@ -46,11 +46,7 @@ const showcaseProjects = projects.filter(
   (project) => project.id !== "candidate-intelligence-system" && project.id !== "appforge-ai",
 );
 
-import {
-  FrameOSPipeline,
-  VeraPipeline,
-  HallucinationPipeline,
-} from "./components/ProjectArchitectureDiagrams";
+import { VeraPipeline } from "./components/ProjectArchitectureDiagrams";
 
 function Reveal({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const reduceMotion = useReducedMotion();
@@ -83,6 +79,8 @@ function ProjectCard({
   project: Project;
   isFeatured?: boolean;
 }) {
+  const hasVideoPreview = project.id !== "vera";
+
   return (
     <motion.article
       className={`portfolio-project-card portfolio-project-card--video ${isFeatured ? "portfolio-project-card--featured" : "portfolio-project-card--secondary"}`}
@@ -91,30 +89,39 @@ function ProjectCard({
     >
       <Link
         href={`/work/${project.id}`}
-        className={`portfolio-project-visual portfolio-project-visual--video ${isFeatured ? "portfolio-project-visual--featured" : "portfolio-project-visual--secondary"}`}
+        className={`portfolio-project-visual ${hasVideoPreview ? "portfolio-project-visual--video" : "portfolio-project-visual--diagram"} ${isFeatured ? "portfolio-project-visual--featured" : "portfolio-project-visual--secondary"}`}
         aria-label={`Open ${project.title} case study`}
       >
-        <video
-          className="portfolio-project-preview"
-          src={project.video}
-          poster={project.poster}
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          onMouseEnter={(event) => {
-            const video = event.currentTarget;
-            void video.play().catch(() => undefined);
-          }}
-          onMouseLeave={(event) => {
-            const video = event.currentTarget;
-            video.pause();
-            video.currentTime = 0;
-          }}
-        />
-        <span className="portfolio-project-index">{project.index} / 0{projects.length}</span>
-        <span className="portfolio-project-preview-cue"><span aria-hidden="true">▶</span> PREVIEW ON HOVER</span>
+        {hasVideoPreview ? (
+          <video
+            className="portfolio-project-preview"
+            src={project.video}
+            poster={project.poster}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            onMouseEnter={(event) => {
+              void event.currentTarget.play().catch(() => undefined);
+            }}
+            onMouseLeave={(event) => {
+              event.currentTarget.pause();
+              event.currentTarget.currentTime = 0;
+            }}
+            onFocus={(event) => {
+              void event.currentTarget.play().catch(() => undefined);
+            }}
+            onBlur={(event) => {
+              event.currentTarget.pause();
+              event.currentTarget.currentTime = 0;
+            }}
+          />
+        ) : (
+          <VeraPipeline />
+        )}
+        <span className="portfolio-project-index">{project.index} <span aria-hidden="true">/</span> {project.year}</span>
+        {hasVideoPreview && <span className="portfolio-project-preview-cue"><span aria-hidden="true">▶</span> PREVIEW ON HOVER</span>}
         <span className="portfolio-project-open" aria-hidden="true"><ArrowUpRight size={19} /></span>
       </Link>
 
