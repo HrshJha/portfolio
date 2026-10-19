@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUp, ArrowUpRight, ExternalLink } from "lucide-react";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { DitherArt, HeroProximityWave } from "./components/KiviBackground";
@@ -91,6 +91,28 @@ function ProjectCard({
         href={`/work/${project.id}`}
         className={`portfolio-project-visual ${hasVideoPreview ? "portfolio-project-visual--video" : "portfolio-project-visual--diagram"} ${isFeatured ? "portfolio-project-visual--featured" : "portfolio-project-visual--secondary"}`}
         aria-label={`Open ${project.title} case study`}
+        onMouseEnter={(event) => {
+          const video = event.currentTarget.querySelector("video");
+          if (video) void video.play().catch(() => undefined);
+        }}
+        onMouseLeave={(event) => {
+          const video = event.currentTarget.querySelector("video");
+          if (video) {
+            video.pause();
+            video.currentTime = 0;
+          }
+        }}
+        onFocus={(event) => {
+          const video = event.currentTarget.querySelector("video");
+          if (video) void video.play().catch(() => undefined);
+        }}
+        onBlur={(event) => {
+          const video = event.currentTarget.querySelector("video");
+          if (video) {
+            video.pause();
+            video.currentTime = 0;
+          }
+        }}
       >
         {hasVideoPreview ? (
           <video
@@ -102,20 +124,6 @@ function ProjectCard({
             playsInline
             preload="metadata"
             aria-hidden="true"
-            onMouseEnter={(event) => {
-              void event.currentTarget.play().catch(() => undefined);
-            }}
-            onMouseLeave={(event) => {
-              event.currentTarget.pause();
-              event.currentTarget.currentTime = 0;
-            }}
-            onFocus={(event) => {
-              void event.currentTarget.play().catch(() => undefined);
-            }}
-            onBlur={(event) => {
-              event.currentTarget.pause();
-              event.currentTarget.currentTime = 0;
-            }}
           />
         ) : (
           <VeraPipeline />
