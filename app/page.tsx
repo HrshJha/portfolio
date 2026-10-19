@@ -346,9 +346,9 @@ export default function Home() {
             <div className="portfolio-section-heading">
               <div>
                 <p className="portfolio-eyebrow">02 — SELECTED WORK</p>
-                <h2 id="work-heading">Here&apos;s what I have been<br />engineering..</h2>
+                <h2 id="work-heading">Systems I&apos;ve been building.</h2>
               </div>
-              <p className="portfolio-section-intro">Most of engineering is deciding what you are willing to lose.</p>
+              <p className="portfolio-section-intro">Working prototypes, clear system boundaries, and the reasoning behind each build.</p>
             </div>
 
             {/* ── One Large Continuous Warm-Ivory Project Canvas ── */}
@@ -373,7 +373,7 @@ export default function Home() {
 
               <div className="portfolio-work-see-all">
                 <a href="https://github.com/HrshJha" target="_blank" rel="noreferrer" className="portfolio-see-all-action">
-                  SEE EVERYTHING (3 MORE) <ArrowUpRight size={14} aria-hidden="true" />
+                  MORE PROJECTS ON GITHUB <ArrowUpRight size={14} aria-hidden="true" />
                 </a>
               </div>
             </div>
