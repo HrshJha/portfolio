@@ -6,6 +6,7 @@ import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
 import { DitherArt, HeroProximityWave } from "./components/KiviBackground";
+import HeroOrbitField from "./components/HeroOrbitField";
 import { projects, type Project } from "./data/projects";
 
 const toolkitGroups = [
@@ -321,6 +322,9 @@ export default function Home() {
                 restOpacity={0.24}
               />
             </div>
+            <div className="hero-orbit-field" aria-hidden="true">
+              <HeroOrbitField />
+            </div>
             <HeroProximityWave />
 
             <div className="portfolio-hero" aria-labelledby="hero-heading">
@@ -330,26 +334,6 @@ export default function Home() {
               </div>
 
               <div className="portfolio-hero-composition">
-                <div className="hero-orbit" aria-hidden="true">
-                  <span className="hero-orbit__ring hero-orbit__ring--outer" />
-                  <span className="hero-orbit__ring hero-orbit__ring--middle" />
-                  <span className="hero-orbit__ring hero-orbit__ring--inner" />
-                  <span className="hero-orbit__core" />
-                  <div className="hero-orbit__track hero-orbit__track--outer">
-                    <span className="hero-orbit__particle hero-orbit__particle--capsule" />
-                    <span className="hero-orbit__particle hero-orbit__particle--dot" />
-                    <span className="hero-orbit__particle hero-orbit__particle--capsule hero-orbit__particle--capsule-small" />
-                  </div>
-                  <div className="hero-orbit__track hero-orbit__track--middle">
-                    <span className="hero-orbit__particle hero-orbit__particle--capsule hero-orbit__particle--capsule-wide" />
-                    <span className="hero-orbit__particle hero-orbit__particle--dot" />
-                    <span className="hero-orbit__particle hero-orbit__particle--capsule" />
-                  </div>
-                  <div className="hero-orbit__track hero-orbit__track--inner">
-                    <span className="hero-orbit__particle hero-orbit__particle--capsule hero-orbit__particle--capsule-small" />
-                    <span className="hero-orbit__particle hero-orbit__particle--dot" />
-                  </div>
-                </div>
                 <p className="portfolio-hero-kicker">ENGINEER / AI BUILDER</p>
                 <h1 id="hero-heading">I&apos;m Harsh Kumar Jha, an <span>AI/ML engineer</span><br />building AI systems, software and products.</h1>
                 <div className="portfolio-hero-support">
