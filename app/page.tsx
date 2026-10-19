@@ -84,28 +84,50 @@ function ProjectCard({
   isFeatured?: boolean;
 }) {
   return (
-    <article className={`portfolio-project-card ${isFeatured ? "portfolio-project-card--featured" : "portfolio-project-card--secondary"}`}>
+    <motion.article
+      className={`portfolio-project-card portfolio-project-card--video ${isFeatured ? "portfolio-project-card--featured" : "portfolio-project-card--secondary"}`}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 280, damping: 28 }}
+    >
       <Link
         href={`/work/${project.id}`}
-        className={`portfolio-project-visual ${isFeatured ? "portfolio-project-visual--featured" : "portfolio-project-visual--secondary"}`}
+        className={`portfolio-project-visual portfolio-project-visual--video ${isFeatured ? "portfolio-project-visual--featured" : "portfolio-project-visual--secondary"}`}
         aria-label={`Open ${project.title} case study`}
       >
-        {project.id === "frameos" ? (
-          <FrameOSPipeline />
-        ) : project.id === "vera" ? (
-          <VeraPipeline />
-        ) : (
-          <HallucinationPipeline />
-        )}
+        <video
+          className="portfolio-project-preview"
+          src={project.video}
+          poster={project.poster}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          onMouseEnter={(event) => {
+            const video = event.currentTarget;
+            void video.play().catch(() => undefined);
+          }}
+          onMouseLeave={(event) => {
+            const video = event.currentTarget;
+            video.pause();
+            video.currentTime = 0;
+          }}
+        />
+        <span className="portfolio-project-index">{project.index} / 0{projects.length}</span>
+        <span className="portfolio-project-preview-cue"><span aria-hidden="true">▶</span> PREVIEW ON HOVER</span>
+        <span className="portfolio-project-open" aria-hidden="true"><ArrowUpRight size={19} /></span>
       </Link>
 
       <div className="portfolio-project-info">
         <div className="portfolio-project-header">
-          <h3>
-            <Link href={`/work/${project.id}`} className="portfolio-project-title-link">
-              {project.title}
-            </Link>
-          </h3>
+          <div>
+            <p className="portfolio-project-eyebrow">{project.category}</p>
+            <h3>
+              <Link href={`/work/${project.id}`} className="portfolio-project-title-link">
+                {project.title}
+              </Link>
+            </h3>
+          </div>
           {project.github && (
             <a
               href={project.github}
@@ -119,15 +141,11 @@ function ProjectCard({
           )}
         </div>
 
-        <p className="portfolio-project-eyebrow">{project.category}</p>
-
-        <p className="portfolio-project-desc">
-          {project.shortDescription || project.thesis}
-        </p>
+        <p className="portfolio-project-desc">{project.shortDescription || project.thesis}</p>
 
         <div className="portfolio-project-tags" aria-label={`${project.title} technology stack`}>
-          {project.cardStack.slice(0, isFeatured ? 6 : 4).map((item) => (
-            <span key={item}>{item.toUpperCase()}</span>
+          {project.cardStack.slice(0, isFeatured ? 5 : 4).map((item) => (
+            <span key={item}>{item}</span>
           ))}
           {!isFeatured && project.cardStack.length > 4 && (
             <span>+{project.cardStack.length - 4}</span>
@@ -136,11 +154,11 @@ function ProjectCard({
 
         <div className="portfolio-project-action">
           <Link href={`/work/${project.id}`} className="portfolio-writeup-link">
-            View {project.title} case study <ArrowUpRight size={13} aria-hidden="true" />
+            Read case study <ArrowUpRight size={13} aria-hidden="true" />
           </Link>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
